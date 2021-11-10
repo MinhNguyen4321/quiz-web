@@ -1,3 +1,10 @@
+/* Reset CSS */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
 .dropdown-menu-macos {
     gap: 0.25rem;
     padding: 0.5rem;
@@ -24,7 +31,7 @@ body {
 }
 
 /* HEADER */
-header {
+.background {
     height: 130px;
     background-image: url("../img/banner.png");
     background-repeat: no-repeat;
@@ -44,6 +51,22 @@ nav .dropdown-divider {
 main {
     flex-grow: 1;
     background-color: #f1f3fe;
+}
+
+main .sub-heading {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.introduce .img-thumbnail {
+    height: 100%;
+    width: 350px;
+    margin-left: 20px;
+}
+
+.list-question .list-group-item {
+    height: 100%;
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
 }
 
 /* FOOTER */

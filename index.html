@@ -12,11 +12,13 @@
     <link rel="stylesheet" href="asset/css/style.css">
 </head>
 
-<body>
-    <header></header>
+<body ng-app="myApp" ng-controller="myCtrl">
+    <header>
+        <div class="container-fluid background"> </div>
+    </header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-2">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">FPT Polytechnic</a>
+            <a class="navbar-brand" href="#!home">FPT Polytechnic</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -25,23 +27,23 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Giới thiệu</a>
+                        <a class="nav-link" href="#!introduce"><i class="me-1 fa-solid fa-circle-info"></i> Giới thiệu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Liên hệ</a>
+                        <a class="nav-link" href="#!contact"><i class="me-1 fa-solid fa-phone"></i> Liên hệ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Góp ý</a>
+                        <a class="nav-link" href="#!feedback"><i class="me-1 fa-solid fa-comment-dots"></i> Góp ý</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Hỏi đáp</a>
+                        <a class="nav-link" href="#!q&a"><i class="me-1 fa-solid fa-comments"></i> Hỏi đáp</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Tài khoản
+                            <i class="me-1 fa-solid fa-user"></i> Tài khoản
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-macos"
                             aria-labelledby="navbarDropdown">
@@ -61,21 +63,7 @@
         </div>
     </nav>
     <main>
-        <div class="subject-list container p-4">
-            <div class="row row-cols-1 row-cols-md-4 g-4">
-                <div class="subject-item col zoom">
-                    <div class="card border-0 shadow position-relative h-100">
-                        <img src="asset/img/logos/ADAV.jpg" class="card-img-top">
-                        <div class="card-body">
-                            <a href="#" class="stretched-link"></a>
-                            <h6 class="card-title text-center">
-                                Lập trình Android nâng cao
-                            </h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div ng-view></div>
     </main>
     <footer class="container-fluid bg-light">
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3 border-top">
@@ -103,6 +91,54 @@
     <script src="https://kit.fontawesome.com/a1dd73cfa4.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.8.2/angular-route.min.js"></script>
+    <script>
+        var app = angular.module('myApp', ['ngRoute']);
+        app.config(function($routeProvider) {
+            $routeProvider
+                .when('/home', {
+                    templateUrl: 'home.html',
+                    controller: 'homeCtrl'
+                })
+                .when('/introduce', {
+                    templateUrl: 'introduce.html'
+                })
+                .when('/contact', {
+                    templateUrl: 'contact.html'
+                })
+                .when('/feedback', {
+                    templateUrl: 'contact.html'
+                })
+                .when('/q&a', {
+                    templateUrl: 'contact.html'
+                })
+                .otherwise({
+                    redirectTo: '/home'
+                });
+        });
+        app.controller('myCtrl', function ($scope, $http) {
+            $scope.subjects = [];
+            $scope.students = [];
+            $http.get("asset/js/db/Subjects.js").then(
+                function (response) {
+                    $scope.subjects= response.data;
+                },
+                function (error) {
+                    alert("Error: " + error.statusText);
+                }
+            );
+            $http.get("asset/js/db/Students.js").then(
+                function (response) {
+                    $scope.students= response.data;
+                },
+                function (error) {
+                    alert("Error: " + error.statusText);
+                }
+            );
+        });
+        app.controller('homeCtrl', function ($scope, $http) {
+            
+        })
+    </script>
 </body>
 
 </html>
