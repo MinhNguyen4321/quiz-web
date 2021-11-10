@@ -1,0 +1,48 @@
+.dropdown-menu-macos {
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.dropdown-menu-macos .dropdown-item {
+    border-radius: 0.25rem;
+}
+
+html,
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    height: 130px;
+    background-image: url("../img/banner.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+/* NAVBAR */
+nav .nav-link {
+    font-weight: 500;
+}
+
+nav .dropdown-divider {
+    height: 2px !important;
+}
+
+/* MAIN */
+main {
+    flex-grow: 1;
+    background-color: #f0f0f0;
+}
+
+/* FOOTER */
+footer .icon {
+    font-size: 20px;
+}
+
+footer .content {
+    font-weight: 500;
+}
