@@ -69,6 +69,14 @@ main .sub-heading {
     background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
 }
 
+.feedback {
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+#feedback-form {
+    width: 500px;
+}
+
 /* FOOTER */
 footer .icon {
     font-size: 20px;
