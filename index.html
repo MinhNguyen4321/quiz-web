@@ -120,6 +120,7 @@
         app.controller('myCtrl', function ($scope, $http) {
             $scope.subjects = [];
             $scope.students = [];
+            $scope.questionAnswer = [];
             $http.get("asset/js/db/Subjects.js").then(
                 function (response) {
                     $scope.subjects= response.data;
@@ -131,6 +132,14 @@
             $http.get("asset/js/db/Students.js").then(
                 function (response) {
                     $scope.students= response.data;
+                },
+                function (error) {
+                    alert("Error: " + error.statusText);
+                }
+            );
+            $http.get("asset/js/db/Q&A.js").then(
+                function (response) {
+                    $scope.questionAnswer= response.data;
                 },
                 function (error) {
                     alert("Error: " + error.statusText);

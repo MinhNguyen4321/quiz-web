@@ -3,7 +3,12 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-  }
+}
+
+pre {
+    white-space: pre-wrap;
+    margin: 0;
+}
 
 .dropdown-menu-macos {
     gap: 0.25rem;
@@ -16,11 +21,13 @@
 }
 
 .zoom {
-    transition: transform .2s; /* Animation */
+    transition: transform .2s;
+    /* Animation */
 }
 
 .zoom:hover {
-    transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    transform: scale(1.05);
+    /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 html,

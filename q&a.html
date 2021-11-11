@@ -1,0 +1,13 @@
+<div class="q&a p-3">
+    <h2 class="heading">Hỏi đáp</h2>
+    <div class="questions mb-2" ng-repeat="qa in questionAnswer">
+        <a href="#{{qa.Id}}" class="link-primary text-decoration-none" data-bs-toggle="collapse">
+            {{qa.Question}}
+        </a>
+        <div id="{{qa.Id}}" class="collapse">
+            <div class="card card-body border-0 shadow">
+                <pre class="overflow-hidden">{{qa.Answer}}</pre>
+            </div>
+        </div>
+    </div>
+</div>
