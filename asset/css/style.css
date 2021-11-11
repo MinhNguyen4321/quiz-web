@@ -61,6 +61,10 @@ nav .nav-link {
     font-weight: 500;
 }
 
+nav .nav-link {
+    width: 100px;
+}
+
 nav .dropdown-divider {
     height: 2px !important;
 }
@@ -108,6 +112,11 @@ main .sub-heading {
     margin-bottom: 0.5em;
 }
 
+#forgot-pass-form, #change-pass-form {
+    max-width: 600px; 
+    margin: 0 auto;
+}
+
 /* FOOTER */
 footer .icon {
     font-size: 20px;
@@ -116,3 +125,4 @@ footer .icon {
 footer .content {
     font-weight: 500;
 }
+

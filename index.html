@@ -25,7 +25,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-lg-2 mb-0 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="#!introduce"><i class="me-1 fa-solid fa-circle-info"></i> Giới
                             thiệu</a>
@@ -41,7 +41,7 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" ng-show="showSearch('/home', '/q&a')" ng-change="firstSubject()" ng-model="keyword" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                    <input class="form-control me-2" ng-show="showSearch('/home')" ng-change="firstSubject()" ng-model="keyword" type="search" placeholder="Tìm kiếm" aria-label="Search">
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
@@ -145,7 +145,7 @@
                     redirectTo: '/home'
                 });
         });
-        app.controller('homeCtrl', function ($scope, $http) {
+        app.controller('homeCtrl', function ($scope, $http, $location) {
             $scope.subjects = [];
             $scope.students = [];
             $scope.pageSize = 4;
@@ -167,7 +167,6 @@
                     alert("Error: " + error.statusText);
                 }
             );
-
             $scope.showSearch = function (path) {
                 return $location.path() == path;
             };
