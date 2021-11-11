@@ -61,10 +61,6 @@ nav .nav-link {
     font-weight: 500;
 }
 
-nav .nav-link {
-    width: 100px;
-}
-
 nav .dropdown-divider {
     height: 2px !important;
 }
