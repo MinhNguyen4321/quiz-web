@@ -1,6 +1,6 @@
 <div class="q&a p-3">
     <h2 class="heading">Hỏi đáp</h2>
-    <div class="questions mb-2" ng-repeat="qa in questionAnswer">
+    <div class="questions mb-2" ng-repeat="qa in questionAnswer|filter:{Question:keywordQA}:false">
         <a href="#{{qa.Id}}" class="link-primary text-decoration-none" data-bs-toggle="collapse">
             {{qa.Question}}
         </a>

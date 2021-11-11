@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="asset/css/style.css">
 </head>
 
-<body ng-app="myApp" ng-controller="myCtrl">
+<body ng-app="myApp" ng-controller="homeCtrl">
     <header>
-        <div class="container-fluid background"> </div>
+        <div class="container-fluid background"></div>
     </header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-2">
         <div class="container-fluid">
@@ -27,7 +27,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#!introduce"><i class="me-1 fa-solid fa-circle-info"></i> Giới thiệu</a>
+                        <a class="nav-link" href="#!introduce"><i class="me-1 fa-solid fa-circle-info"></i> Giới
+                            thiệu</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#!contact"><i class="me-1 fa-solid fa-phone"></i> Liên hệ</a>
@@ -39,7 +40,10 @@
                         <a class="nav-link" href="#!q&a"><i class="me-1 fa-solid fa-comments"></i> Hỏi đáp</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <form class="d-flex">
+                    <input class="form-control me-2" ng-show="showSearch('/home', '/q&a')" ng-change="firstSubject()" ng-model="keyword" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                </form>
+                <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -95,11 +99,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.8.2/angular-route.min.js"></script>
     <script>
         var app = angular.module('myApp', ['ngRoute']);
-        app.config(function($routeProvider) {
+        app.config(function ($routeProvider) {
             $routeProvider
                 .when('/home', {
-                    templateUrl: 'home.html',
-                    controller: 'homeCtrl'
+                    templateUrl: 'home.html'
                 })
                 .when('/introduce', {
                     templateUrl: 'introduce.html'
@@ -111,19 +114,22 @@
                     templateUrl: 'feedback.html'
                 })
                 .when('/q&a', {
-                    templateUrl: 'q&a.html'
+                    templateUrl: 'q&a.html',
+                    controller: 'q&aCtrl'
                 })
                 .otherwise({
                     redirectTo: '/home'
                 });
         });
-        app.controller('myCtrl', function ($scope, $http) {
+        app.controller('homeCtrl', function ($scope, $http) {
             $scope.subjects = [];
             $scope.students = [];
-            $scope.questionAnswer = [];
+            $scope.pageSize = 4;
+            $scope.start = 0;
+
             $http.get("asset/js/db/Subjects.js").then(
                 function (response) {
-                    $scope.subjects= response.data;
+                    $scope.subjects = response.data;
                 },
                 function (error) {
                     alert("Error: " + error.statusText);
@@ -131,24 +137,46 @@
             );
             $http.get("asset/js/db/Students.js").then(
                 function (response) {
-                    $scope.students= response.data;
+                    $scope.students = response.data;
                 },
                 function (error) {
                     alert("Error: " + error.statusText);
                 }
             );
+
+            $scope.showSearch = function (path) {
+                return $location.path() == path;
+            };
+            $scope.firstSubject = function () {
+                console.log($scope.keyword);
+                $scope.start = 0;
+            }
+            $scope.lastSubject = function () {
+                var soTrang = Math.ceil($scope.subjects.length / $scope.pageSize);
+                $scope.start = (soTrang - 1) * $scope.pageSize;
+            }
+            $scope.prevSubject = function () {
+                if ($scope.start > 0) {
+                    $scope.start -= $scope.pageSize;
+                }
+            }
+            $scope.nextSubject = function () {
+                if ($scope.start < $scope.subjects.length - $scope.pageSize) {
+                    $scope.start += $scope.pageSize;
+                }
+            }
+        });
+        app.controller('q&aCtrl', function ($scope, $http) {
+            $scope.questionAnswer = [];
             $http.get("asset/js/db/Q&A.js").then(
                 function (response) {
-                    $scope.questionAnswer= response.data;
+                    $scope.questionAnswer = response.data;
                 },
                 function (error) {
                     alert("Error: " + error.statusText);
                 }
             );
         });
-        app.controller('homeCtrl', function ($scope, $http) {
-            
-        })
     </script>
 </body>
 

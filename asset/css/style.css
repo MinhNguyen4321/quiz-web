@@ -65,6 +65,14 @@ main .sub-heading {
     border-bottom: 1px solid #ccc;
 }
 
+.pagination {
+    width: 300px;
+}
+
+.pagination .page-item {
+    width: calc(100% / 4);
+}
+
 .introduce .img-thumbnail {
     height: 100%;
     width: 350px;
