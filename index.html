@@ -51,15 +51,15 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-macos"
                             aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Đăng ký</a></li>
-                            <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-                            <li><a class="dropdown-item" href="#">Quên mật khẩu</a></li>
+                            <li><a class="dropdown-item" href="#!signup">Đăng ký</a></li>
+                            <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
+                            <li><a class="dropdown-item" href="#!forgotpass">Quên mật khẩu</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-                            <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
-                            <li><a class="dropdown-item" href="#">Cập nhật tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#!signout">Đăng xuất</a></li>
+                            <li><a class="dropdown-item" href="#!changepass">Đổi mật khẩu</a></li>
+                            <li><a class="dropdown-item" href="#!editprofile">Cập nhật tài khoản</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -67,11 +67,11 @@
         </div>
     </nav>
     <main>
-        <div class="container-fluid p-0">
-            <div ng-view></div>
+        <div class="container-fluid h-100 p-0">
+            <div class="view h-100" ng-view></div>
         </div>
     </main>
-    <footer class="container-fluid bg-light">
+    <footer class="container-fluid bg-secondary">
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3 border-top">
             <div class="col-md-4 d-flex align-items-center">
                 <span class="content">&copy; 2021 FPT Polytechnic</span>
@@ -116,6 +116,30 @@
                 .when('/q&a', {
                     templateUrl: 'q&a.html',
                     controller: 'q&aCtrl'
+                })
+                .when('/signup', {
+                    templateUrl: 'signup.html',
+                    controller: 'signUpCtrl'
+                })
+                .when('/signin', {
+                    templateUrl: 'signin.html',
+                    controller: 'signInCtrl'
+                })
+                .when('/signout', {
+                    templateUrl: 'signout.html',
+                    controller: 'signOutCtrl'
+                })
+                .when('/changepass', {
+                    templateUrl: 'changepass.html',
+                    controller: 'changePassCtrl'
+                })
+                .when('/forgotpass', {
+                    templateUrl: 'forgotpass.html',
+                    controller: 'forgotPassCtrl'
+                })
+                .when('/editprofile', {
+                    templateUrl: 'editprofile.html',
+                    controller: 'editProfileCtrl'
                 })
                 .otherwise({
                     redirectTo: '/home'

@@ -30,6 +30,17 @@ pre {
     /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
+.social-icon {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    font-size: 16px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
 html,
 body {
     height: 100%;
@@ -90,6 +101,11 @@ main .sub-heading {
 
 #feedback-form {
     width: 500px;
+}
+
+#login-form .label {
+    font-weight: 500;
+    margin-bottom: 0.5em;
 }
 
 /* FOOTER */
