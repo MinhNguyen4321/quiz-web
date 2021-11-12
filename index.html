@@ -136,9 +136,9 @@
                     templateUrl: 'editprofile.html',
                     controller: 'editProfileCtrl'
                 })
-                .when('/multiple-choice/:idSubject/:nameSubject', {
-                    templateUrl: 'multiplechoice.html',
-                    controller: 'multipleChoiceCtrl'
+                .when('/quiz/:idSubject/:nameSubject', {
+                    templateUrl: 'quiz.html',
+                    controller: 'quizCtrl'
                 })
                 .otherwise({
                     templateUrl: 'home.html'
@@ -199,10 +199,13 @@
                 }
             );
         });
-        app.controller('multipleChoiceCtrl', function ($scope, $http, $routeParams) {
+        app.controller('quizCtrl', function ($scope, $http, $routeParams) {
             $scope.idSubject = $routeParams.idSubject;
             $scope.nameSubject = $routeParams.nameSubject;
             $scope.questions = [];
+            $scope.pageSize = 1;
+            $scope.start = 0;
+
             $http.get("asset/js/db/quizs/" + $scope.idSubject + ".js").then(
                 function (response) {
                     $scope.questions= response.data;
@@ -212,6 +215,24 @@
                 }
             );
             
+            $scope.firstQuiz = function () {
+                console.log($scope.keyword);
+                $scope.start = 0;
+            }
+            $scope.lastQuiz = function () {
+                var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
+                $scope.start = (soTrang - 1) * $scope.pageSize;
+            }
+            $scope.prevQuiz = function () {
+                if ($scope.start > 0) {
+                    $scope.start -= $scope.pageSize;
+                }
+            }
+            $scope.nextQuiz = function () {
+                if ($scope.start < $scope.questions.length - $scope.pageSize) {
+                    $scope.start += $scope.pageSize;
+                }
+            }
         });
     </script>
 </body>
