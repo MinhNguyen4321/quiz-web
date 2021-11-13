@@ -1,0 +1,21 @@
+<div class="accordion" id="accordionSubjects">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button text-uppercase fw-bold" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseSubjects" aria-expanded="true" aria-controls="collapseSubjects">
+                <i class="fa-solid fa-book me-2"></i> Danh sách môn học
+            </button>
+        </h2>
+        <div id="collapseSubjects" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+            data-bs-parent="#accordionSubjects">
+            <div class="accordion-body p-0">
+                <div class="list-subjects list-group list-group-flush">
+                    <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="list-group-item list-group-item-action py-2"
+                        ng-repeat="s in subjects|orderBy:'Name'">
+                        {{s.Name}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
