@@ -13,12 +13,12 @@
 </head>
 
 <body ng-app="myApp" ng-controller="homeCtrl">
-    <header>
+    <!-- <header>
         <div class="container-fluid background"></div>
-    </header>
+    </header> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-2">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#!home">FPT Polytechnic</a>
+            <a class="navbar-brand" href="#!home">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -41,7 +41,8 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" ng-show="showSearch('/home')" ng-change="firstSubject()" ng-model="keyword" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                    <input class="form-control me-2" ng-show="showSearch('/home')" ng-change="firstSubject()"
+                        ng-model="keyword" type="search" placeholder="Tìm kiếm" aria-label="Search">
                 </form>
                 <ul class="navbar-nav ">
                     <li class="nav-item dropdown">
@@ -53,13 +54,13 @@
                             aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#!signup">Đăng ký</a></li>
                             <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
-                            <li><a class="dropdown-item" href="#!forgotpass">Quên mật khẩu</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#forgotPassModal">Quên mật khẩu</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="#!signout">Đăng xuất</a></li>
-                            <li><a class="dropdown-item" href="#!changepass">Đổi mật khẩu</a></li>
-                            <li><a class="dropdown-item" href="#!editprofile">Cập nhật tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePassModal">Đổi mật khẩu</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal">Cập nhật tài khoản</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -67,7 +68,7 @@
         </div>
     </nav>
     <main>
-        <div class="view h-100" ng-view></div> 
+        <div class="h-100" ng-view></div>
     </main>
     <footer class="container-fluid bg-secondary">
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3 border-top">
@@ -90,6 +91,7 @@
             </ul>
         </div>
     </footer>
+    <div ng-include="'views/modal.html'"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/a1dd73cfa4.js"></script>
@@ -109,8 +111,7 @@
                     templateUrl: 'views/feedback.html'
                 })
                 .when('/q&a', {
-                    templateUrl: 'views/q&a.html',
-                    controller: 'q&aCtrl'
+                    templateUrl: 'views/q&a.html'
                 })
                 .when('/signup', {
                     templateUrl: 'views/signup.html',
@@ -141,7 +142,7 @@
                     controller: 'quizCtrl'
                 })
                 .otherwise({
-                    templateUrl: 'views/home.html'
+                    templateUrl: 'views/listsubjects.html'
                 });
         });
         app.controller('homeCtrl', function ($scope, $http, $location) {
@@ -167,7 +168,7 @@
                 }
             );
             $scope.showSearch = function (path) {
-                return $location.path() == path;
+                return $location.path().includes(path);
             };
             $scope.firstSubject = function () {
                 console.log($scope.keyword);
@@ -188,17 +189,6 @@
                 }
             }
         });
-        app.controller('q&aCtrl', function ($scope, $http) {
-            $scope.questionAnswer = [];
-            $http.get("asset/js/db/Q&A.js").then(
-                function (response) {
-                    $scope.questionAnswer = response.data;
-                },
-                function (error) {
-                    alert("Error: " + error.statusText);
-                }
-            );
-        });
         app.controller('quizCtrl', function ($scope, $http, $routeParams) {
             $scope.idSubject = $routeParams.idSubject;
             $scope.nameSubject = $routeParams.nameSubject;
@@ -208,13 +198,13 @@
 
             $http.get("asset/js/db/quizs/" + $scope.idSubject + ".js").then(
                 function (response) {
-                    $scope.questions= response.data;
+                    $scope.questions = response.data;
                 },
                 function (error) {
                     alert("Error: " + error.statusText);
                 }
             );
-            
+
             $scope.firstQuiz = function () {
                 console.log($scope.keyword);
                 $scope.start = 0;
@@ -234,7 +224,7 @@
                 }
             }
         });
-        app.controller('changePassCtrl', function($scope) {})
+        app.controller('changePassCtrl', function ($scope) {})
     </script>
 </body>
 

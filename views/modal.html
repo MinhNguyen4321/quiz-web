@@ -1,0 +1,124 @@
+<!-- Modal -->
+<div class="modal fade" id="forgotPassModal" tabindex="-1" aria-labelledby="forgotPassModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="forgotPassModalLabel">Quên mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <form id="forgot-pass-form" class="p-3">
+                    <div class="row">
+                        <label for="emailResetPass" class="col-sm-3 col-form-label">Địa chỉ Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" id="emailResetPass" placeholder="Email" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                <button type="submit" form="forgot-pass-form" class="btn btn-primary">Đặt lại mật khẩu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changePassModal" tabindex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="changePassModalLabel">Đổi mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <form id="change-pass-form" name="changePassForm" class="p-3">
+                    <div class="row mb-3">
+                        <div class="form-group col-6">
+                            <label for="usernameChangePass" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="usernameChangePass" ng-model="userChangePass"
+                                name="userChangePass" placeholder="Username" required>
+                            <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.userChangePass.$valid">
+                                Vui lòng điền vào trường này
+                            </span> -->
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="currentPass" class="form-label">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-control" id="currentPass" ng-model="currentPass"
+                                name="currentPass" placeholder="Current Password" required>
+                            <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.currentPass.$valid">
+                                Vui lòng điền vào trường này
+                            </span> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="newPass" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass"
+                                placeholder="New Password" required>
+                            <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.newPass.$valid">
+                                Vui lòng điền vào trường này
+                            </span> -->
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="confirmPass" class="form-label">Xác nhận mật khẩu</label>
+                            <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass"
+                                name="confirmPass" placeholder="Confirm New Password" required>
+                            <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.confirmPass.$valid">
+                                Vui lòng điền vào trường này
+                            </span> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                <button type="button" form="change-pass-form" class="btn btn-primary">Đổi mật khẩu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="editProfileModalLabel">Thông tin tài khoản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <form id="edit-profile-form" class="p-3">
+                    <div class="row mb-3">
+                        <div class="form-group col-6">
+                            <label for="fullnameInfo" class="form-label">Họ và tên</label>
+                            <input type="email" class="form-control" id="fullnameInfo" placeholder="Fullname" required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="birthdayInfo" class="form-label">Ngày sinh</label>
+                            <input type="date" class="form-control" id="birthdayInfo" required>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="emailInfo" class="form-label">Địa chỉ Email</label>
+                        <input type="email" class="form-control" id="emailInfo" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label me-3">Giới tính</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="1">
+                            <label class="form-check-label" for="male">Nam</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="0">
+                            <label class="form-check-label" for="female">Nữ</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                <button type="submit" form="edit-profile-form" class="btn btn-primary">Cập nhật tài khoản</button>
+            </div>
+        </div>
+    </div>
+</div>

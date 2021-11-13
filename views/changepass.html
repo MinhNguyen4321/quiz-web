@@ -1,18 +1,19 @@
-<div class="container">
-    <div class="change-pass h-100">
+    <div class="container">
         <form id="change-pass-form" name="changePassForm" class="border bg-light border rounded-3 p-3 clearfix">
             <h3 class="border-bottom mb-3 pb-2">Đổi mật khẩu</h3>
             <div class="row mb-3">
                 <div class="form-group col-6">
                     <label for="username" class="form-label">Tên đăng nhập</label>
-                    <input type="text" class="form-control" id="username" ng-model="userChangePass" name="userChangePass" placeholder="Username" required>
+                    <input type="text" class="form-control" id="username" ng-model="userChangePass"
+                        name="userChangePass" placeholder="Username" required>
                     <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.userChangePass.$valid">
                         Vui lòng điền vào trường này
                     </span> -->
                 </div>
                 <div class="form-group col-6">
                     <label for="currentPass" class="form-label">Mật khẩu hiện tại</label>
-                    <input type="password" class="form-control" id="currentPass" ng-model="currentPass" name="currentPass" placeholder="Current Password" required>
+                    <input type="password" class="form-control" id="currentPass" ng-model="currentPass"
+                        name="currentPass" placeholder="Current Password" required>
                     <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.currentPass.$valid">
                         Vui lòng điền vào trường này
                     </span> -->
@@ -21,14 +22,16 @@
             <div class="row mb-3">
                 <div class="form-group col-6">
                     <label for="newPass" class="form-label">Mật khẩu mới</label>
-                    <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass" placeholder="New Password" required>
+                    <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass"
+                        placeholder="New Password" required>
                     <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.newPass.$valid">
                         Vui lòng điền vào trường này
                     </span> -->
                 </div>
                 <div class="form-group col-6">
                     <label for="confirmPass" class="form-label">Xác nhận mật khẩu</label>
-                    <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass" name="confirmPass" placeholder="Confirm New Password" required>
+                    <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass"
+                        name="confirmPass" placeholder="Confirm New Password" required>
                     <!-- <span class="badge bg-danger fst-italic" ng-hide="changePassForm.confirmPass.$valid">
                         Vui lòng điền vào trường này
                     </span> -->
@@ -37,4 +40,3 @@
             <button type="submit" class="btn btn-primary float-end">Đổi mật khẩu</button>
         </form>
     </div>
-</div>

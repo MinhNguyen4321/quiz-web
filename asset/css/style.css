@@ -41,6 +41,16 @@ pre {
     border-radius: 50%;
 }
 
+.heading {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.sub-heading {
+    margin-bottom: 0;
+    /* border-bottom: 1px solid #ccc; */
+}
+
 html,
 body {
     height: 100%;
@@ -48,23 +58,7 @@ body {
     flex-direction: column;
 }
 
-.container {
-    padding: 1.5rem;
-}
-
-/* HEADER */
-.background {
-    height: 80px;
-    background-image: url("../img/online-traning-banner.png");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-
 /* NAVBAR */
-nav {
-    box-shadow: 0 5px 10px -6px rgba(0, 0, 0, 0.3);
-}
-
 nav .nav-link {
     font-weight: 500;
 }
@@ -79,14 +73,9 @@ main {
     background-color: #f1f3fe;
 }
 
-.sub-heading {
-    margin-bottom: 0;
-    /* border-bottom: 1px solid #ccc; */
-}
-
-.heading {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+.subjects-list {
+    height: 100%;
+    padding: 0;
 }
 
 .pagination {
@@ -121,10 +110,6 @@ main {
 }
 
 /* FOOTER */
-footer {
-    box-shadow: 0 -5px 10px -6px rgba(0, 0, 0, 0.3);
-}
-
 footer .icon {
     font-size: 20px;
 }
