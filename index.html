@@ -100,48 +100,48 @@
         app.config(function ($routeProvider) {
             $routeProvider
                 .when('/introduce', {
-                    templateUrl: 'introduce.html'
+                    templateUrl: 'views/introduce.html'
                 })
                 .when('/contact', {
-                    templateUrl: 'contact.html'
+                    templateUrl: 'views/contact.html'
                 })
                 .when('/feedback', {
-                    templateUrl: 'feedback.html'
+                    templateUrl: 'views/feedback.html'
                 })
                 .when('/q&a', {
-                    templateUrl: 'q&a.html',
+                    templateUrl: 'views/q&a.html',
                     controller: 'q&aCtrl'
                 })
                 .when('/signup', {
-                    templateUrl: 'signup.html',
+                    templateUrl: 'views/signup.html',
                     controller: 'signUpCtrl'
                 })
                 .when('/signin', {
-                    templateUrl: 'signin.html',
+                    templateUrl: 'views/signin.html',
                     controller: 'signInCtrl'
                 })
                 .when('/signout', {
-                    templateUrl: 'signout.html',
+                    templateUrl: 'views/signout.html',
                     controller: 'signOutCtrl'
                 })
                 .when('/changepass', {
-                    templateUrl: 'changepass.html',
+                    templateUrl: 'views/changepass.html',
                     controller: 'changePassCtrl'
                 })
                 .when('/forgotpass', {
-                    templateUrl: 'forgotpass.html',
+                    templateUrl: 'views/forgotpass.html',
                     controller: 'forgotPassCtrl'
                 })
                 .when('/editprofile', {
-                    templateUrl: 'editprofile.html',
+                    templateUrl: 'views/editprofile.html',
                     controller: 'editProfileCtrl'
                 })
                 .when('/quiz/:idSubject/:nameSubject', {
-                    templateUrl: 'quiz.html',
+                    templateUrl: 'views/quiz.html',
                     controller: 'quizCtrl'
                 })
                 .otherwise({
-                    templateUrl: 'home.html'
+                    templateUrl: 'views/home.html'
                 });
         });
         app.controller('homeCtrl', function ($scope, $http, $location) {
