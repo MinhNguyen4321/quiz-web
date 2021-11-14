@@ -1,4 +1,4 @@
-<div class="accordion" id="accordionSubjects">
+<!-- <div class="accordion" id="accordionSubjects">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button text-uppercase fw-bold" type="button" data-bs-toggle="collapse"
@@ -18,4 +18,15 @@
             </div>
         </div>
     </div>
+</div> -->
+<div class="card" style="max-height: 600px;">
+    <div class="card-header text-uppercase fw-bold">
+        <i class="fa-solid fa-book me-2"></i> Danh sách môn học
+    </div>
+    <ul class="list-group list-group-flush overflow-scroll">
+        <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="list-group-item list-group-item-action py-2"
+            ng-repeat="s in subjects|orderBy:'Name'">
+            {{s.Name}}
+        </a>
+    </ul>
 </div>

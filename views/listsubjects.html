@@ -1,6 +1,6 @@
-<div class="subjects-list container d-flex flex-column align-items-center justify-content-center">
-    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4   ">
-        <div class="subject-item col zoom"
+<div class="subjects-list container d-flex flex-column align-items-center justify-content-center h-100">
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <div class="subject-item col zoom" ng-click="openQuiz(s.Id, s.Name)"
             ng-repeat="s in subjects|orderBy:'Name'|filter:keyword:false|limitTo:pageSize:start">
             <div class="card h-100 border-0 position-relative shadow p-3">
                 <div class="row g-0">
@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-8">
                         <div class="card-body">
-                            <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="stretched-link"></a>
+                            <!-- <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="stretched-link"></a> -->
                             <h5 class="card-title ">{{s.Name}}</h5>
                         </div>
                     </div>

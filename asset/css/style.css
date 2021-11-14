@@ -59,6 +59,10 @@ body {
 }
 
 /* NAVBAR */
+nav, footer {
+    background-color: #B2EBF2;
+}
+
 nav .nav-link {
     font-weight: 500;
 }
