@@ -24,7 +24,7 @@
         <i class="fa-solid fa-book me-2"></i> Danh sách môn học
     </div>
     <ul class="list-group list-group-flush overflow-scroll">
-        <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="list-group-item list-group-item-action py-2"
+        <a href="#!quiz?id={{s.Id}}&name={{s.Name}}" class="list-group-item list-group-item-action py-2"
             ng-repeat="s in subjects|orderBy:'Name'">
             {{s.Name}}
         </a>

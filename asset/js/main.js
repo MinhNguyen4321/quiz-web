@@ -37,7 +37,7 @@ app.config(function ($routeProvider) {
             templateUrl: 'views/editprofile.html',
             controller: 'editProfileCtrl'
         })
-        .when('/quiz/:idSubject/:nameSubject', {
+        .when('/quiz', {
             templateUrl: 'views/quiz.html',
             controller: 'quizCtrl'
         })
@@ -84,7 +84,7 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
             cancelButtonText: 'Huỷ bỏ',
         }).then((result) => {
             if (result.isConfirmed) {
-                $window.location.href = '#!quiz/' + idSubject + '/' + nameSubject;
+                $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
             }
         })
     };
@@ -109,8 +109,8 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
     }
 });
 app.controller('quizCtrl', function ($scope, $http, $routeParams) {
-    $scope.idSubject = $routeParams.idSubject;
-    $scope.nameSubject = $routeParams.nameSubject;
+    $scope.idSubject = $routeParams.id;
+    $scope.nameSubject = $routeParams.name;
     $scope.questions = [];
     $scope.pageSize = 1;
     $scope.start = 0;
