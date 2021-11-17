@@ -48,7 +48,7 @@ app.config(function ($routeProvider) {
 app.controller('homeCtrl', function ($scope, $http, $location, $window) {
     $scope.subjects = [];
     $scope.students = [];
-    $scope.pageSize = 4;
+    $scope.pageSize = 6;
     $scope.start = 0;
 
     $http.get("asset/js/db/Subjects.js").then(
@@ -68,6 +68,16 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
         }
     );
 
+    $scope.getNumberQuestion = function (id) {
+        var list;
+        $http.get("asset/js/db/quizs/" + id + ".js").then(
+            function (response) {
+                list = response.data;
+            }
+        );      
+        return id;
+    };
+    
     $scope.showSearch = function (path) {
         return $location.path().includes(path);
     };
