@@ -67,16 +67,6 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
             alert("Error: " + error.statusText);
         }
     );
-
-    $scope.getNumberQuestion = function (id) {
-        var list;
-        $http.get("asset/js/db/quizs/" + id + ".js").then(
-            function (response) {
-                list = response.data;
-            }
-        );      
-        return id;
-    };
     
     $scope.showSearch = function (path) {
         return $location.path().includes(path);
@@ -124,6 +114,7 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     $scope.questions = [];
     $scope.pageSize = 1;
     $scope.start = 0;
+    $scope.stt = 1;
 
     $http.get("asset/js/db/quizs/" + $scope.idSubject + ".js").then(
         function (response) {
@@ -137,20 +128,24 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     $scope.firstQuiz = function () {
         console.log($scope.keyword);
         $scope.start = 0;
-    }
-    $scope.lastQuiz = function () {
-        var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
-        $scope.start = (soTrang - 1) * $scope.pageSize;
+        $scope.stt = 1;
     }
     $scope.prevQuiz = function () {
         if ($scope.start > 0) {
             $scope.start -= $scope.pageSize;
+            $scope.stt -= 1;
         }
     }
     $scope.nextQuiz = function () {
         if ($scope.start < $scope.questions.length - $scope.pageSize) {
             $scope.start += $scope.pageSize;
+            $scope.stt += 1;
         }
+    }
+    $scope.lastQuiz = function () {
+        var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
+        $scope.start = (soTrang - 1) * $scope.pageSize;
+        $scope.stt = $scope.questions.length;
     }
 });
 app.controller('changePassCtrl', function ($scope) {})

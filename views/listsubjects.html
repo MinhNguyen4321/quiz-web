@@ -5,15 +5,14 @@
                 ng-repeat="s in subjects|orderBy:'Name'|filter:keyword:false|limitTo:pageSize:start">
                 <div class="card h-100 border-0 position-relative shadow p-3 m-0">
                     <div class="row g-0 h-100">
-                        <div class="col-4 col-md-5 d-flex justify-content-center align-items-center">
+                        <div class="col-4 d-flex justify-content-center align-items-center">
                             <img src="asset/img/logos/{{s.Logo}}" class="img-subject img-fluid rounded-start">
                         </div>
-                        <div class="col-8 col-md-7">
+                        <div class="col-8">
                             <div class="card-body">
-                                <!-- <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="stretched-link"></a> -->
-                                <h6 class="card-title fw-bold">{{s.Name}}</h6>
+                                <h6 class="card-title fw-bold">{{s.Name|uppercase}}</h6>
                                 <div class="card-body p-0">
-                                    <p>Số câu hỏi: {{getNumberQuestion(s.Id)}} câu</p>
+                                    <span class="badge bg-info rounded-pill">Tổng số câu hỏi: {{s.NumberOfQuestions}} câu</span>
                                 </div>
                             </div>
                         </div>
