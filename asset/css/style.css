@@ -14,7 +14,7 @@ pre {
     gap: 0.25rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background-color: rgba(255,255,255, 0.5);
+    background-color: rgba(255,255,255, 0.85);
 }
 
 .dropdown-menu-macos .dropdown-item {
@@ -81,11 +81,6 @@ nav .dropdown-divider {
 /* MAIN */
 main {
     flex-grow: 1;
-}
-
-.subjects-list {
-    height: 100%;
-    padding: 0;
 }
 
 .subject-item .card {
