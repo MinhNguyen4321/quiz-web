@@ -61,7 +61,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #dcddeb;
+    background-color: #c2c2ce;
 }
 
 /* NAVBAR */
@@ -116,6 +116,11 @@ main {
 #forgot-pass-form, #change-pass-form {
     max-width: 600px; 
     margin: 0 auto;
+}
+
+/* ASIDE */
+.conllapse-subjects .list-group-item {
+    background-color: rgba(0, 0, 0, 0);
 }
 
 /* FOOTER */
