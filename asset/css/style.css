@@ -14,10 +14,15 @@ pre {
     gap: 0.25rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
+    background-color: rgba(255,255,255, 0.5);
 }
 
 .dropdown-menu-macos .dropdown-item {
     border-radius: 0.25rem;
+}
+
+.page-link {
+    background-color: rgba(255,255,255, 0.5);
 }
 
 .zoom {
@@ -56,11 +61,13 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: #dcddeb;
 }
 
 /* NAVBAR */
 .navbar, footer {
-    background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+    background-color: rgba(255,255,255, 0.5);
+    position: relative;
 }
 
 nav .nav-link {
@@ -74,12 +81,15 @@ nav .dropdown-divider {
 /* MAIN */
 main {
     flex-grow: 1;
-    background-color: #f1f3fe;
 }
 
 .subjects-list {
     height: 100%;
     padding: 0;
+}
+
+.subject-item .card {
+    background-color: rgba(255,255,255, 0.5);
 }
 
 .pagination {
