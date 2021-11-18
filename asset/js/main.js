@@ -1,6 +1,10 @@
 var app = angular.module('myApp', ['ngRoute']);
 app.config(function ($routeProvider) {
     $routeProvider
+        .when('/', {
+            templateUrl: 'views/listsubjects.html',
+            controller: 'homeCtrl'
+        })
         .when('/introduce', {
             templateUrl: 'views/introduce.html'
         })
@@ -42,7 +46,7 @@ app.config(function ($routeProvider) {
             controller: 'quizCtrl'
         })
         .otherwise({
-            templateUrl: 'views/listsubjects.html'
+            redirectTo: '/'
         });
 });
 app.controller('homeCtrl', function ($scope, $http, $location, $window) {
