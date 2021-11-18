@@ -18,27 +18,21 @@ app.config(function ($routeProvider) {
         })
         .when('/signup', {
             templateUrl: 'views/signup.html',
-            controller: 'signUpCtrl'
         })
         .when('/signin', {
             templateUrl: 'views/signin.html',
-            controller: 'signInCtrl'
         })
         .when('/signout', {
             templateUrl: 'views/signout.html',
-            controller: 'signOutCtrl'
         })
         .when('/changepass', {
             templateUrl: 'views/changepass.html',
-            controller: 'changePassCtrl'
         })
         .when('/forgotpass', {
             templateUrl: 'views/forgotpass.html',
-            controller: 'forgotPassCtrl'
         })
         .when('/editprofile', {
             templateUrl: 'views/editprofile.html',
-            controller: 'editProfileCtrl'
         })
         .when('/quiz', {
             templateUrl: 'views/quiz.html',
@@ -151,4 +145,3 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
         $scope.stt = $scope.questions.length;
     }
 });
-app.controller('changePassCtrl', function ($scope) {})
