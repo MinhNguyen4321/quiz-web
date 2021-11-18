@@ -3,7 +3,6 @@ app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'views/listsubjects.html',
-            controller: 'homeCtrl'
         })
         .when('/introduce', {
             templateUrl: 'views/introduce.html'
