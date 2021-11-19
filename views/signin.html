@@ -6,7 +6,7 @@
                 </div>
                 <div class="col-md-6 p-0 p-md-5">
                     <div class="card-body">
-                        <form id="login-form">
+                        <form id="login-form" name="loginForm">
                             <div class="d-flex">
                                 <div class="w-100">
                                     <h3 class="mb-3 border-bottom pb-2">Đăng nhập</h3>
@@ -21,13 +21,20 @@
                                 </div>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label" for="fullname">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="fullname" placeholder="Username" required>
+                                <label class="label" for="userLogin">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="userLogin" name="userLogin"
+                                    ng-model="userLogin" placeholder="Username" required>
+                                <span class="badge bg-danger fst-italic" ng-hide="loginForm.userLogin.$valid">
+                                    Vui lòng nhập tên người dùng
+                                </span>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="label " for="password">Mật khẩu</label>
-                                <input type="password" id="password" class="form-control" placeholder="Password"
-                                    required>
+                                <label class="label" for="passLogin">Mật khẩu</label>
+                                <input type="password" id="passLogin" class="form-control" name="passLogin"
+                                    ng-model="passLogin" placeholder="Password" required>
+                                <span class="badge bg-danger fst-italic" ng-hide="loginForm.passLogin.$valid">
+                                    Vui lòng nhập mật khẩu
+                                </span>
                             </div>
                             <div class="form-group d-md-flex mb-3">
                                 <div class="w-50 text-start">

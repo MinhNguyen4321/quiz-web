@@ -3,33 +3,51 @@
         <div class="row g-0">
             <div class="col-md-6 p-md-4 p-0">
                 <div class="card-body">
-                    <form id="login-form">
+                    <form id="signup-form" name="signUpForm">
                         <div class="d-flex">
                             <div class="w-100">
                                 <h3 class="mb-3 border-bottom pb-2">Đăng ký</h3>
                             </div>
-                            
                         </div>
                         <div class="form-group mb-3">
-                            <label class="label" for="fullname">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="fullname" placeholder="Username" required>
+                            <label class="label" for="userSignUp">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="userSignUp" name="userSignUp"
+                                ng-model="userSignUp" placeholder="Username" required>
+                            <span class="badge bg-danger fst-italic" ng-hide="signUpForm.userSignUp.$valid">
+                                Vui lòng nhập tên người dùng
+                            </span>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="label " for="password">Mật khẩu</label>
-                            <input type="password" id="password" class="form-control" placeholder="Password"
-                                required>
+                            <label class="label " for="passSignUp">Mật khẩu</label>
+                            <input type="password" id="passSignUp" class="form-control" placeholder="Password"
+                                name="passSignUp" ng-model="passSignUp" required>
+                            <span class="badge bg-danger fst-italic" ng-hide="signUpForm.passSignUp.$valid">
+                                Vui lòng nhập mật khẩu
+                            </span>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="label " for="fullname">Họ và tên</label>
-                            <input type="text" id="fullname" class="form-control" placeholder="Fullname" required>
+                            <label class="label " for="fullnameSignUp">Họ và tên</label>
+                            <input type="text" id="fullname" class="form-control" placeholder="Fullname"
+                                name="fullnameSignUp" ng-model="fullnameSignUp" required>
+                            <span class="badge bg-danger fst-italic" ng-hide="signUpForm.fullnameSignUp.$valid">
+                                Vui lòng nhập họ và tên
+                            </span>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="label " for="email">Địa chỉ email</label>
-                            <input type="email" id="email" class="form-control" placeholder="Email" required>
+                            <label class="label " for="emailSignUp">Địa chỉ email</label>
+                            <input type="email" id="emailSignUp" class="form-control" placeholder="Email"
+                                name="emailSignUp" ng-model="emailSignUp" required>
+                            <span class="badge bg-danger fst-italic" ng-hide="signUpForm.userSignUp.$valid">
+                                Vui lòng nhập tên người dùng
+                            </span>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="label " for="birthday">Ngày sinh</label>
-                            <input type="date" id="birthday" class="form-control" placeholder="Email" required>
+                            <label class="label " for="birthdaySignUp">Ngày sinh</label>
+                            <input type="text" id="birthdaySignUp" class="form-control" placeholder="Birthday"
+                                name="birthdaySignUp" ng-model="birthdaySignUp" datetime="dd-MM-yyyy" required>
+                            <span class="badge bg-danger fst-italic" ng-hide="signUpForm.birthdaySignUp.$valid">
+                                Vui lòng nhập tên người dùng
+                            </span>
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label me-3">Giới tính</label>
@@ -53,7 +71,7 @@
                 </div>
             </div>
             <div class="col-md-6 bg-black">
-                <img src="asset/img/signup2.jpg" class="img rounded-start" style="width: 100%; max-height: 700px;">
+                <img src="asset/img/signUp2.jpg" class="img rounded-start" style="width: 100%; max-height: 700px;">
             </div>
         </div>
     </div>
