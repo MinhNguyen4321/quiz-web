@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute']);
+var app = angular.module('myApp', ['ngRoute', 'datetime']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -18,6 +18,7 @@ app.config(function ($routeProvider) {
         })
         .when('/signup', {
             templateUrl: 'views/signup.html',
+            controller: 'signUpCtrl'
         })
         .when('/signin', {
             templateUrl: 'views/signin.html',
@@ -144,4 +145,8 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
         $scope.start = (soTrang - 1) * $scope.pageSize;
         $scope.stt = $scope.questions.length;
     }
+});
+
+app.controller('signUpCtrl', function ($scope) {
+    $scope.genderSignUp = 0;
 });
