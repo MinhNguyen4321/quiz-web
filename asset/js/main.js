@@ -149,4 +149,7 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
 
 app.controller('signUpCtrl', function ($scope) {
     $scope.genderSignUp = 0;
+    $scope.signUp = function () {
+        alert("Đăng ký thành công!");
+    }
 });
