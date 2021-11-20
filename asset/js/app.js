@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute', 'datetime']);
+var app = angular.module('myApp', ['ngRoute', 'datetime', 'firebase']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
