@@ -7,11 +7,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <form id="forgot-pass-form" class="p-3">
+                <form id="forgot-pass-form" name="forgotPassForm" class="p-3" novalidate>
                     <div class="row">
                         <label for="emailResetPass" class="col-sm-3 col-form-label">Địa chỉ Email</label>
                         <div class="col-sm-9">
-                            <input type="email" class="form-control" id="emailResetPass" placeholder="Email" required>
+                            <input type="email" class="form-control" id="emailResetPass" name="emailResetPass"
+                                ng-model="emailResetPass" placeholder="Email" required>
+                            <div ng-show="forgotPassForm.$submitted || forgotPassForm.emailResetPass.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="forgotPassForm.emailResetPass.$error.email">
+                                    Địa chỉ email không hợp lệ!
+                                </span>
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="forgotPassForm.emailResetPass.$error.required">
+                                    Vui lòng nhập địa chỉ email!
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -32,23 +43,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <form id="change-pass-form" name="changePassForm" class="p-3">
+                <form id="change-pass-form" name="changePassForm" class="p-3" novalidate>
                     <div class="row mb-3">
                         <div class="form-group col-6">
-                            <label for="usernameChangePass" class="form-label">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="usernameChangePass" ng-model="userChangePass"
+                            <label for="user-change-pass" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="user-change-pass" ng-model="userChangePass"
                                 name="userChangePass" placeholder="Username" required>
-                            <span class="badge bg-danger fst-italic" ng-hide="changePassForm.userChangePass.$valid">
-                                Vui lòng nhập vào trường này
-                            </span>
+                            <div ng-show="changePassForm.$submitted || changePassForm.userChangePass.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="changePassForm.userChangePass.$error.required">
+                                    Vui lòng nhập tên người dùng!
+                                </span>
+                            </div>
                         </div>
                         <div class="form-group col-6">
                             <label for="currentPass" class="form-label">Mật khẩu hiện tại</label>
                             <input type="password" class="form-control" id="currentPass" ng-model="currentPass"
                                 name="currentPass" placeholder="Current Password" required>
-                            <span class="badge bg-danger fst-italic" ng-hide="changePassForm.currentPass.$valid">
-                                Vui lòng nhập vào trường này
-                            </span>
+                            <div ng-show="changePassForm.$submitted || changePassForm.currentPass.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="changePassForm.currentPass.$error.required">
+                                    Vui lòng nhập mật khẩu hiện tại!
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -56,17 +73,23 @@
                             <label for="newPass" class="form-label">Mật khẩu mới</label>
                             <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass"
                                 placeholder="New Password" required>
-                            <span class="badge bg-danger fst-italic" ng-hide="changePassForm.newPass.$valid">
-                                Vui lòng nhập vào trường này
-                            </span>
+                            <div ng-show="changePassForm.$submitted || changePassForm.newPass.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="changePassForm.newPass.$error.required">
+                                    Vui lòng nhập mật khẩu mới!
+                                </span>
+                            </div>
                         </div>
                         <div class="form-group col-6">
                             <label for="confirmPass" class="form-label">Xác nhận mật khẩu</label>
                             <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass"
-                                name="confirmPass" placeholder="Confirm New Password" required>
-                            <span class="badge bg-danger fst-italic" ng-hide="changePassForm.confirmPass.$valid">
-                                Vui lòng nhập vào trường này
-                            </span>
+                                name="confirmPass" placeholder="Confirm New Password" compare-to="newPass" required>
+                            <div ng-show="changePassForm.$submitted || changePassForm.confirmPass.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="changePassForm.confirmPass.$error.compareTo">
+                                    Xác thực mật khẩu không đúng!
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -87,20 +110,45 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <form id="edit-profile-form" class="p-3">
+                <form id="edit-profile-form" name="editProfileForm" class="p-3" novalidate>
                     <div class="row mb-3">
                         <div class="form-group col-6">
                             <label for="fullnameInfo" class="form-label">Họ và tên</label>
-                            <input type="email" class="form-control" id="fullnameInfo" placeholder="Fullname" required>
+                            <input type="email" class="form-control" id="fullnameInfo" name="fullnameInfo"
+                                ng-model="fullnameInfo" placeholder="Fullname" required>
+                            <div ng-show="editProfileForm.$submitted || editProfileForm.fullnameInfo.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="editProfileForm.fullnameInfo.$error.required">
+                                    Vui lòng nhập họ tên!
+                                </span>
+                            </div>
                         </div>
                         <div class="form-group col-6">
                             <label for="birthdayInfo" class="form-label">Ngày sinh</label>
-                            <input type="date" class="form-control" id="birthdayInfo" required>
+                            <input type="text" datetime="dd/MM/yyyy" class="form-control" id="birthdayInfo" name="birthdayInfo"
+                            ng-model="birthdayInfo" required>
+                            <div ng-show="editProfileForm.$submitted || editProfileForm.birthdayInfo.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="editProfileForm.birthdayInfo.$error.required">
+                                    Vui lòng nhập họ tên!
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group mb-3">
                         <label for="emailInfo" class="form-label">Địa chỉ Email</label>
-                        <input type="email" class="form-control" id="emailInfo" placeholder="Email" required>
+                        <input type="email" class="form-control" id="emailInfo" name="emailInfo"
+                            ng-model="emailInfo" placeholder="Email" required>
+                        <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.emailInfo.$error.email">
+                                Địa chỉ email không hợp lệ!
+                            </span>
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.emailInfo.$error.required">
+                                Vui lòng nhập địa chỉ email!
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label me-3">Giới tính</label>

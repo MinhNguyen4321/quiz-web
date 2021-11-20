@@ -60,10 +60,10 @@
                             ng-model="emailSignUp" required="">
                         <div ng-show="signUpForm.$submitted || signUpForm.emailSignUp.$touched">
                             <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.email">
-                                Vui lòng nhập địa chỉ email!
+                                Địa chỉ email không hợp lệ!
                             </span>
                             <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.required">
-                                Địa chỉ email không hợp lệ!
+                                Vui lòng nhập địa chỉ email!
                             </span>
                         </div>
                     </div>

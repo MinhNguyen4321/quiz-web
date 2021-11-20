@@ -153,3 +153,25 @@ app.controller('signUpCtrl', function ($scope) {
         alert("Đăng ký thành công!");
     }
 });
+
+app.directive("compareTo", function ()  
+{  
+    return {  
+        require: "ngModel",  
+        scope:  
+        {  
+            confirmPassword: "=compareTo"  
+        },  
+        link: function (scope, element, attributes, modelVal)  
+        {  
+            modelVal.$validators.compareTo = function (val)  
+            {  
+                return val == scope.confirmPassword;  
+            };  
+            scope.$watch("confirmPassword", function ()  
+            {  
+                modelVal.$validate();  
+            });  
+        }  
+    };  
+});  
