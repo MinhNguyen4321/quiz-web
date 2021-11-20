@@ -5,16 +5,46 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #c2c2ce;
+}
+
 pre {
     white-space: pre-wrap;
     margin: 0;
 }
 
+.badge.bg-danger {
+    display: none;
+}
+
+.btn-grad {background-image: linear-gradient(to right, #485563 0%, #29323c  51%, #485563  100%)}
+.btn-grad {
+   text-align: center;
+   text-transform: uppercase;
+   transition: 0.5s;
+   background-size: 200% auto;
+   color: white;            
+   box-shadow: 0 0 20px #eee;
+   border-radius: 10px;
+   display: block;
+ }
+
+ .btn-grad:hover {
+   background-position: right center; /* change the direction of the change here */
+   color: #fff;
+   text-decoration: none;
+ }
+
 .dropdown-menu-macos {
     gap: 0.25rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background-color: rgba(255,255,255, 0.93);
+    background-color: rgba(255,255,255, 0.9);
 }
 
 .dropdown-menu-macos .dropdown-item {
@@ -38,7 +68,17 @@ pre {
 .img {
     position: relative;
     height: 100%;
+    width: 100%;
     opacity: 0.85;
+}
+
+.link {
+    font-weight: 500;
+    color: rgb(29, 29, 29);
+}
+
+.link:hover {
+    opacity: 0.5;
 }
 
 .social-icon {
@@ -62,12 +102,12 @@ pre {
     /* border-bottom: 1px solid #ccc; */
 }
 
-html,
-body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: #c2c2ce;
+.modal-content {
+    background-color: rgba(255,255,255, 0.9);
+}
+
+.modal-footer {
+    background-color: rgba(255,255,255, 0.1);
 }
 
 /* NAVBAR */

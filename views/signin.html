@@ -1,62 +1,55 @@
     <div class="container p-3 d-flex h-100 justify-content-center align-items-center">
-        <div class="card bg-light bg-opacity-75" style="width: 1000px;">
-            <div class="row g-0">
-                <div class="col-md-6 bg-black">
-                    <img src="asset/img/signin.jpg" class="img img-fluid rounded-start">
-                </div>
-                <div class="col-md-6 p-0 p-md-5">
-                    <div class="card-body">
-                        <form id="login-form" name="loginForm">
-                            <div class="d-flex">
-                                <div class="w-100">
-                                    <h3 class="mb-3 border-bottom pb-2">Đăng nhập</h3>
-                                </div>
-                                <div>
-                                    <p class="social-media d-flex justify-content-end">
-                                        <a href="#"
-                                            class="social-icon d-flex align-items-center justify-content-center text-decoration-none link-danger">
-                                            <i class="fa-brands fa-google"></i>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="label" for="userLogin">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="userLogin" name="userLogin"
-                                    ng-model="userLogin" placeholder="Username" required>
-                                <span class="badge bg-danger fst-italic" ng-hide="loginForm.userLogin.$valid">
-                                    Vui lòng nhập tên người dùng
-                                </span>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="label" for="passLogin">Mật khẩu</label>
-                                <input type="password" id="passLogin" class="form-control" name="passLogin"
-                                    ng-model="passLogin" placeholder="Password" required>
-                                <span class="badge bg-danger fst-italic" ng-hide="loginForm.passLogin.$valid">
-                                    Vui lòng nhập mật khẩu
-                                </span>
-                            </div>
-                            <div class="form-group d-md-flex mb-3">
-                                <div class="w-50 text-start">
-                                    <input class="form-check-input" type="checkbox" value="" id="remember">
-                                    <label class="form-check-label" for="remember">
-                                        Nhớ tài khoản
-                                    </label>
-                                </div>
-                                <div class="w-50 text-md-end">
-                                    <a href="#" class="text-decoration-none link-warning">Quên mật khẩu</a>
-                                </div>
-                            </div>
-                            <div class="form-group mb-3">
-                                <button type="submit" class="form-control btn btn-warning rounded submit px-3">
-                                    Đăng nhập
-                                </button>
-                            </div>
-                            <p class="text-center m-0">Chưa có tài khoản? <a class="text-decoration-none link-warning"
-                                    href="#!signup">Đăng ký</a></p>
-                        </form>
+        <div class="card bg-light bg-opacity-50" style="width: 400px;">
+            <div class="card-body">
+                <form id="login-form" name="loginForm">
+                    <div class="d-flex">
+                        <div class="w-100">
+                            <h3 class="mb-3 border-bottom pb-2">Đăng nhập</h3>
+                        </div>
+                        <div>
+                            <p class="social-media d-flex justify-content-end">
+                                <a href="#"
+                                    class="social-icon d-flex align-items-center justify-content-center text-decoration-none link-danger">
+                                    <i class="fa-brands fa-google"></i>
+                                </a>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group mb-3">
+                        <label class="label" for="userLogin">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="userLogin" name="userLogin" ng-model="userLogin"
+                            placeholder="Username" required>
+                        <span class="badge bg-danger fst-italic" ng-hide="loginForm.userLogin.$valid">
+                            Vui lòng nhập tên người dùng
+                        </span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="label" for="passLogin">Mật khẩu</label>
+                        <input type="password" id="passLogin" class="form-control" name="passLogin" ng-model="passLogin"
+                            placeholder="Password" required>
+                        <span class="badge bg-danger fst-italic" ng-hide="loginForm.passLogin.$valid">
+                            Vui lòng nhập mật khẩu
+                        </span>
+                    </div>
+                    <div class="form-group d-md-flex mb-3">
+                        <div class="w-50 text-start">
+                            <input class="form-check-input" type="checkbox" value="" id="remember">
+                            <label class="form-check-label" for="remember">
+                                Nhớ tài khoản
+                            </label>
+                        </div>
+                        <div class="w-50 text-md-end">
+                            <a href="#" class="text-decoration-none link">Quên mật khẩu</a>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <button type="submit" class="form-control btn btn-grad rounded submit px-3">
+                            Đăng nhập
+                        </button>
+                    </div>
+                    <p class="text-center m-0">Chưa có tài khoản? <a class="text-decoration-none link"
+                            href="#!signup">Đăng ký</a></p>
+                </form>
             </div>
         </div>
     </div>
