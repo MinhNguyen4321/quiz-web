@@ -1,17 +1,18 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyCZTTvhq4WWrfNiWGuE8nRiXBr47j5Dsz4",
-    authDomain: "online-training-project.firebaseapp.com",
-    databaseURL: "https://online-training-project-default-rtdb.firebaseio.com",
-    projectId: "online-training-project",
-    storageBucket: "online-training-project.appspot.com",
-    messagingSenderId: "1077943488669",
-    appId: "1:1077943488669:web:d9e6b3beaa56e5567e4474"
+    apiKey: "AIzaSyB6aRk400JzDbyczsve4V9rF0-yAE4nxdc",
+    authDomain: "online-training-fpoly.firebaseapp.com",
+    databaseURL: "https://online-training-fpoly-default-rtdb.firebaseio.com",
+    projectId: "online-training-fpoly",
+    storageBucket: "online-training-fpoly.appspot.com",
+    messagingSenderId: "597324730786",
+    appId: "1:597324730786:web:1493eeef2a86450139e2fb",
+    measurementId: "G-Q3B5YZZCY6"
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var app = angular.module('myApp', ['ngRoute', 'ngCookies', 'datetime', 'firebase']);
+var app = angular.module('myApp', ['ngRoute', 'datetime', 'firebase']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -57,7 +58,13 @@ app.config(function ($routeProvider) {
             redirectTo: '/'
         });
 });
+app.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    return $firebaseAuth();
+  }
+]);
 app.controller('homeCtrl', function ($scope, $http, $location, $window) {
+    $scope.user = [];
     $scope.subjects = [];
     $scope.pageSize = 6;
     $scope.start = 0;
@@ -158,41 +165,67 @@ app.controller('signUpCtrl', function ($scope) {
     }
 });
 
-app.controller('signInCtrl', ["$scope", "$firebaseArray",
-    function ($scope, $firebaseArray) {
-        var ref = firebase.database().ref("students");
-        $scope.students = $firebaseArray(ref);
-        $scope.signIn = function () {
-            $scope.students.$loaded().then(function () {
-                var isUser = false;
-                var isPass = false;
-                var currentUser;
-                for (var i = 0; i < $scope.students.length; i++) {
-                    if ($scope.students[i].username == $scope.userLogin || $scope.students[i].email == $scope.userLogin) {
-                        isUser = true;
-                        if ($scope.students[i].password == $scope.passLogin) {
-                            isPass = true;
-                            currentUser = $scope.students[i];
-                            break;
-                        }
-                    }
-                }
-                if (!isUser) {
-                    toastr.warning("Tài khoản không tồn tại!");
-                    //showAlert('Tài khoản không tồn tại', 'danger');
-                } else if (!isPass) {
-                    toastr.warning('Mật khẩu không đúng!');
-                    //showAlert('Mật khẩu không đúng', 'danger');
-                } else {
-                    toastr.success('Đăng nhập thành công!');
-                    //showAlert('Đăng nhập thành công', 'success');
-                    localStorage.setItem("user", JSON.stringify(currentUser));
-                    setTimeout(function () {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                }
-            });
+app.controller('signInCtrl', ["$scope", "Auth",
+    function ($scope, Auth) {
+        $scope.loginWithGoogle = function () {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth()
+                .signInWithPopup(provider)
+                .then((result) => {
+                    /** @type {firebase.auth.OAuthCredential} */
+                    var credential = result.credential;
+                    var token = credential.accessToken;
+                    var user = result.user;
+                    $scope.userLogin = user.displayName;
+                    $scope.passLogin = user.email;
+                    $scope.rememberLogin = true;
+                }).catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    var email = error.email;
+                    var credential = error.credential;
+                    console.error(errorCode);
+                    console.error(errorMessage);
+                    console.error(email);
+                    console.error(credential);
+                });
+
         }
+
+        $scope.loginWithFacebook = function () {
+            var provider = new firebase.auth.FacebookAuthProvider();
+            Auth.$signInWithPopup(provider)
+                .then((result) => {
+                    /** @type {firebase.auth.OAuthCredential} */
+                    var credential = result.credential;
+                    var token = credential.accessToken;
+                    var user = result.user;
+                    $scope.userLogin = user.displayName;
+                    $scope.passLogin = user.email;
+                    $scope.rememberLogin = true;
+                }).catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    var email = error.email;
+                    var credential = error.credential;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                    console.log(email);
+                    console.log(credential);
+                });
+        }
+
+        $scope.login = function () {
+            $scope.firebaseUser = null;
+            $scope.error = null;
+            Auth.$signInWithEmailAndPassword($scope.userLogin, $scope.passLogin)
+                .then((firebaseUser) => {
+                    alert("Đăng nhập thành công!");
+                }).catch((error) => {
+                    alert(error);
+                });
+        }
+
     }
 ]);
 
