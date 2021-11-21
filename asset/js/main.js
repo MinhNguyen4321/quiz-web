@@ -1,3 +1,4 @@
+// Toastr custom
 toastr.options.showMethod = 'slideDown';
 
 // Show alert Bootstrap 5
@@ -10,3 +11,4 @@ function showAlert(message, type) {
         $('.alert').hide();
     }, 5000);
 }
+
