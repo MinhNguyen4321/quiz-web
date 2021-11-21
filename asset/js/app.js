@@ -1,3 +1,16 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyCZTTvhq4WWrfNiWGuE8nRiXBr47j5Dsz4",
+    authDomain: "online-training-project.firebaseapp.com",
+    databaseURL: "https://online-training-project-default-rtdb.firebaseio.com",
+    projectId: "online-training-project",
+    storageBucket: "online-training-project.appspot.com",
+    messagingSenderId: "1077943488669",
+    appId: "1:1077943488669:web:d9e6b3beaa56e5567e4474"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 var app = angular.module('myApp', ['ngRoute', 'datetime', 'firebase']);
 app.config(function ($routeProvider) {
     $routeProvider
@@ -22,6 +35,7 @@ app.config(function ($routeProvider) {
         })
         .when('/signin', {
             templateUrl: 'views/signin.html',
+            controller: 'signInCtrl'
         })
         .when('/signout', {
             templateUrl: 'views/signout.html',
@@ -65,7 +79,7 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
             alert("Error: " + error.statusText);
         }
     );
-    
+
     $scope.showSearch = function (path) {
         return $location.path().includes(path);
     };
@@ -154,24 +168,31 @@ app.controller('signUpCtrl', function ($scope) {
     }
 });
 
-app.directive("compareTo", function ()  
-{  
-    return {  
-        require: "ngModel",  
-        scope:  
-        {  
-            confirmPassword: "=compareTo"  
-        },  
-        link: function (scope, element, attributes, modelVal)  
-        {  
-            modelVal.$validators.compareTo = function (val)  
-            {  
-                return val == scope.confirmPassword;  
-            };  
-            scope.$watch("confirmPassword", function ()  
-            {  
-                modelVal.$validate();  
-            });  
-        }  
-    };  
-});  
+app.controller('signInCtrl', ["$scope", "$firebaseArray",
+    function ($scope, $firebaseArray) {
+        var ref = firebase.database().ref("students");
+        $scope.students = $firebaseArray(ref);
+        $scope.signIn = function () {
+            var email = $scope.userLogin;
+            var password = $scope.passLogin;
+            console.log($scope.students);
+        }
+    }
+]);
+
+app.directive("compareTo", function () {
+    return {
+        require: "ngModel",
+        scope: {
+            confirmPassword: "=compareTo"
+        },
+        link: function (scope, element, attributes, modelVal) {
+            modelVal.$validators.compareTo = function (val) {
+                return val == scope.confirmPassword;
+            };
+            scope.$watch("confirmPassword", function () {
+                modelVal.$validate();
+            });
+        }
+    };
+});
