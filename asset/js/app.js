@@ -11,7 +11,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var app = angular.module('myApp', ['ngRoute', 'datetime', 'firebase']);
+var app = angular.module('myApp', ['ngRoute', 'ngCookies', 'datetime', 'firebase']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -59,7 +59,6 @@ app.config(function ($routeProvider) {
 });
 app.controller('homeCtrl', function ($scope, $http, $location, $window) {
     $scope.subjects = [];
-    $scope.students = [];
     $scope.pageSize = 6;
     $scope.start = 0;
 
@@ -71,15 +70,6 @@ app.controller('homeCtrl', function ($scope, $http, $location, $window) {
             alert("Error: " + error.statusText);
         }
     );
-    $http.get("asset/js/db/Students.js").then(
-        function (response) {
-            $scope.students = response.data;
-        },
-        function (error) {
-            alert("Error: " + error.statusText);
-        }
-    );
-
     $scope.showSearch = function (path) {
         return $location.path().includes(path);
     };
@@ -173,9 +163,35 @@ app.controller('signInCtrl', ["$scope", "$firebaseArray",
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         $scope.signIn = function () {
-            var email = $scope.userLogin;
-            var password = $scope.passLogin;
-            console.log($scope.students);
+            $scope.students.$loaded().then(function () {
+                var isUser = false;
+                var isPass = false;
+                var currentUser;
+                for (var i = 0; i < $scope.students.length; i++) {
+                    if ($scope.students[i].username == $scope.userLogin || $scope.students[i].email == $scope.userLogin) {
+                        isUser = true;
+                        if ($scope.students[i].password == $scope.passLogin) {
+                            isPass = true;
+                            currentUser = $scope.students[i];
+                            break;
+                        }
+                    }
+                }
+                if (!isUser) {
+                    toastr.warning("Tài khoản không tồn tại!");
+                    //showAlert('Tài khoản không tồn tại', 'danger');
+                } else if (!isPass) {
+                    toastr.warning('Mật khẩu không đúng!');
+                    //showAlert('Mật khẩu không đúng', 'danger');
+                } else {
+                    toastr.success('Đăng nhập thành công!');
+                    //showAlert('Đăng nhập thành công', 'success');
+                    localStorage.setItem("user", JSON.stringify(currentUser));
+                    setTimeout(function () {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                }
+            });
         }
     }
 ]);
