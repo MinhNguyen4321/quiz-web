@@ -62,9 +62,19 @@ app.factory("Auth", ["$firebaseAuth",
         return $firebaseAuth();
     }
 ]);
+
 app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
     function ($scope, $http, $location, $window) {
+        // Current User
         $scope.isLoginWithGoogle = false;
+        $scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        $scope.logout = function () {
+            $scope.currentUser = null;
+            localStorage.removeItem("currentUser");
+
+            $location.path("/");
+            toastr.success("Đăng xuất thành công!");
+        }
         $scope.subjects = [];
         $scope.pageSize = 6;
         $scope.start = 0;
@@ -77,24 +87,28 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
             }
         );
         $scope.showSearch = function (path) {
-            return $location.path().includes(path);
+            return $location.path() == path;
         };
         $scope.openQuiz = function (idSubject, nameSubject) {
-            Swal.fire({
-                title: 'Bạn đã sẵn sàng?',
-                text: "Thời gian làm bài: 15 phút",
-                icon: 'warning',
-                heightAuto: false,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Có! Bắt đầu thi',
-                cancelButtonText: 'Huỷ bỏ',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
-                }
-            })
+            if ($scope.currentUser == null) {
+                toastr.error("Bạn cần đăng nhập để thực hiện chức năng này!");
+            } else {
+                Swal.fire({
+                    title: 'Bạn đã sẵn sàng?',
+                    text: "Thời gian làm bài: 15 phút",
+                    icon: 'warning',
+                    heightAuto: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có! Bắt đầu thi',
+                    cancelButtonText: 'Huỷ bỏ',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
+                    }
+                })
+            }
         };
         $scope.firstSubject = function () {
             console.log($scope.keyword);
@@ -115,7 +129,6 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
             }
         }
     }
-
 ]);
 app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     $scope.idSubject = $routeParams.id;
@@ -179,29 +192,35 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
         $scope.loginWithGoogle = function () {
             Auth.$signInWithPopup("google")
                 .then((result) => {
-                    var username = result.user.email.substring(0, result.user.email.indexOf('@'));
-                    var email = result.user.email;
-                    var displayName = result.user.displayName;
+                    var user = result.user;
+                    var fullname = user.displayName;
+                    var email = user.email;
+                    var username = user.email.substring(0, result.user.email.indexOf('@'));
 
-                    console.log(username);
-                    console.log(email);
-                    console.log(displayName);
-
-                    if ($scope.students.filter(student => student.email == email).length == 0) {
+                    $scope.currentUser = {
+                        fullname: fullname,
+                        email: email,
+                        username: username
+                    };
+                    
+                    if ($scope.students.filter(student => student.email == $scope.currentUser.email).length == 0) {
                         $scope.students.$add({
+                            fullname: fullname,
                             email: email,
-                            fullname: displayName,
-                            username: username,
+                            username: username
                         });
                     }
 
-                    Cookies.set('username', email, { expires: 30 });
-                    Cookies.remove('password');
-                    Cookies.remove('remember');
+                    localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
+                    removeCookies('username', 'password', 'remember');
+                    toastr.success('Đăng nhập thành công!');
 
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
 
                 }).catch((error) => {
-                    console.error(errorMessage);
+                    console.error(error.message);
                 });
         }
 
@@ -225,10 +244,14 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
                 } else if (!isPass) {
                     toastr.warning('Mật khẩu không đúng!');
                 } else {
-                    Cookies.set('username', $scope.userLogin, { expires: 30 });
-                    Cookies.set('password', $scope.passLogin, { expires: 30 });
-                    Cookies.set('remember', $scope.rememberLogin, { expires: 30 });
-
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    if($scope.rememberLogin){
+                        Cookies.set('username', $scope.userLogin, { expires: 7 });
+                        Cookies.set('password', $scope.passLogin, { expires: 7 });
+                        Cookies.set('remember', $scope.rememberLogin, { expires: 7 });
+                    } else {
+                        removeCookies('username', 'password', 'remember');
+                    }
                     toastr.success('Đăng nhập thành công!');
                     $scope.isLoginWithGoogle = false;
                     setTimeout(function () {
