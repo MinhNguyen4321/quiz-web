@@ -69,7 +69,6 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         // Current User
-        $scope.isLoginWithGoogle = false;
         $scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
         $scope.logout = function () {
             $scope.currentUser = null;
@@ -265,6 +264,14 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                             email: email,
                             username: username
                         });
+
+                        Email.send({
+                            SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                            To : receiver,
+                            From : "onlinetrainingfpoly@fpt.edu.vn",
+                            Subject : "Welcome to Online Training",
+                            Body : "Chào mừng bạn đến với Online Training!"
+                        })
                     }
 
                     localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));

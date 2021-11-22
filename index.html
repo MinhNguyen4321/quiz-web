@@ -20,7 +20,7 @@
     <!-- <header>
         <div class="container-fluid background"></div>
     </header> -->
-    <nav class="navbar navbar-expand-lg navbar-light py-2" ng-hide="showWithPath('/resetpass')">
+    <nav class="navbar navbar-expand-lg navbar-light py-2">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="#!" ng-click="firstSubject()">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -70,7 +70,7 @@
                                 <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">
                                     Đăng xuất
                                 </a></li>
-                                <li ng-show="isLoginWithGoogle"><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                                         data-bs-target="#changePassModal">
                                     Đổi mật khẩu
                                 </a></li>
@@ -87,13 +87,13 @@
     <main>
         <div class="view h-100" ng-view></div>
     </main>
-    <footer class="container-fluid" ng-hide="showWithPath('/resetpass')">
-        <div class="d-flex flex-wrap justify-content-between align-items-center my-3 position-relative">
-            <div class="col-md-4 d-flex align-items-center">
+    <footer>
+        <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center my-3 position-relative">
+            <div class=d-flex align-items-center">
                 <span class="content">&copy; 2021 FPT Polytechnic</span>
             </div>
 
-            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <ul class="nav justify-content-end list-unstyled d-flex">
                 <li class="ms-3"><a class="icon link-dark" target="_blank" href="https://www.facebook.com/fpt.poly">
                         <i class="fa-brands fa-facebook-square"></i>
                     </a></li>

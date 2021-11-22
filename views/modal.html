@@ -44,19 +44,7 @@
             </div>
             <div class="modal-body p-0">
                 <form id="change-pass-form" name="changePassForm" class="p-3" novalidate>
-                    <div class="row mb-3">
-                        <div class="form-group col-6">
-                            <label for="user-change-pass" class="form-label">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="user-change-pass" ng-model="userChangePass"
-                                name="userChangePass" placeholder="Username" required>
-                            <div ng-show="changePassForm.$submitted || changePassForm.userChangePass.$touched">
-                                <span class="badge bg-danger fst-italic"
-                                    ng-show="changePassForm.userChangePass.$error.required">
-                                    Vui lòng nhập tên người dùng!
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group col-6">
+                        <div class="form-group mb-3" ng-show="currentUser.password">
                             <label for="currentPass" class="form-label">Mật khẩu hiện tại</label>
                             <input type="password" class="form-control" id="currentPass" ng-model="currentPass"
                                 name="currentPass" placeholder="Current Password" required>
@@ -67,9 +55,7 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-6">
+                        <div class="form-group mb-3">
                             <label for="newPass" class="form-label">Mật khẩu mới</label>
                             <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass"
                                 placeholder="New Password" required>
@@ -80,18 +66,17 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="confirmPass" class="form-label">Xác nhận mật khẩu</label>
+                        <div class="form-group">
+                            <label for="confirmPass" class="form-label">Xác nhận mật khẩu mới</label>
                             <input type="password" class="form-control" id="confirmPass" ng-model="confirmPass"
                                 name="confirmPass" placeholder="Confirm New Password" compare-to="newPass" required>
                             <div ng-show="changePassForm.$submitted || changePassForm.confirmPass.$touched">
                                 <span class="badge bg-danger fst-italic"
                                     ng-show="changePassForm.confirmPass.$error.compareTo">
-                                    Xác thực mật khẩu không đúng!
+                                    Mật khẩu xác thực không đúng!
                                 </span>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -111,6 +96,34 @@
             </div>
             <div class="modal-body p-0">
                 <form id="edit-profile-form" name="editProfileForm" class="p-3" novalidate>
+                    <div class="row mb-3">
+                        <div class="form-group col">
+                            <label class="label" for="userInfo">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="userInfo" name="userInfo" ng-model="userInfo"
+                                placeholder="Username" required>
+                            <div ng-show="editProfileForm.$submitted || editProfileForm.userInfo.$touched">
+                                <span class="badge bg-danger fst-italic" ng-show="editProfileForm.userInfo.$error.required">
+                                    Vui lòng nhập tên người dùng!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label for="emailInfo" class="form-label">Địa chỉ Email</label>
+                            <input type="email" class="form-control" id="emailInfo" name="emailInfo"
+                                ng-model="emailInfo" placeholder="Email" required>
+                            <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="editProfileForm.emailInfo.$error.email">
+                                    Địa chỉ email không hợp lệ!
+                                </span>
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="editProfileForm.emailInfo.$error.required">
+                                    Vui lòng nhập địa chỉ email!
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </div>
                     <div class="row mb-3">
                         <div class="form-group col-6">
                             <label for="fullnameInfo" class="form-label">Họ và tên</label>
@@ -133,21 +146,6 @@
                                     Vui lòng nhập họ tên!
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="emailInfo" class="form-label">Địa chỉ Email</label>
-                        <input type="email" class="form-control" id="emailInfo" name="emailInfo"
-                            ng-model="emailInfo" placeholder="Email" required>
-                        <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
-                            <span class="badge bg-danger fst-italic"
-                                ng-show="editProfileForm.emailInfo.$error.email">
-                                Địa chỉ email không hợp lệ!
-                            </span>
-                            <span class="badge bg-danger fst-italic"
-                                ng-show="editProfileForm.emailInfo.$error.required">
-                                Vui lòng nhập địa chỉ email!
-                            </span>
                         </div>
                     </div>
                     <div class="form-group">
