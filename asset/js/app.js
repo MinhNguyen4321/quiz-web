@@ -171,12 +171,37 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     }
 });
 
-app.controller('signUpCtrl', function ($scope) {
-    $scope.genderSignUp = 0;
-    $scope.signUp = function () {
-        alert("Đăng ký thành công!");
+app.controller('signUpCtrl', ["$scope", "$firebaseArray",
+    function ($scope, $firebaseArray) {
+        var ref = firebase.database().ref("students");
+        $scope.students = $firebaseArray(ref);
+        
+        $scope.genderSignUp = 0;
+        $scope.signUp = function () {
+            if ($scope.students.filter(st => st.email == $scope.emailSignUp).length > 0) {
+                toastr.error("Email đã tồn tại!");
+            } else if ($scope.students.filter(st => st.username == $scope.userSignUp).length > 0) {
+                toastr.error("Tên đăng nhập đã tồn tại!");
+            } else {
+                $scope.students.$add({
+                    username: $scope.userSignUp,
+                    fullname: $scope.fullnameSignUp,
+                    email: $scope.emailSignUp,
+                    password: $scope.passSignUp,
+                    birthday: $scope.birthdaySignUp,
+                    gender: $scope.genderSignUp == 1,
+                    marks: 0
+                }).then(function (ref) {
+                    var id = ref.key;
+                    toastr.success("Đăng ký thành công!");
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                });
+            }
+        }
     }
-});
+]);
 
 app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
     function ($scope, Auth, $firebaseArray) {
@@ -202,7 +227,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
                         email: email,
                         username: username
                     };
-                    
+
                     if ($scope.students.filter(student => student.email == $scope.currentUser.email).length == 0) {
                         $scope.students.$add({
                             fullname: fullname,
@@ -245,7 +270,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
                     toastr.warning('Mật khẩu không đúng!');
                 } else {
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    if($scope.rememberLogin){
+                    if ($scope.rememberLogin) {
                         Cookies.set('username', $scope.userLogin, { expires: 7 });
                         Cookies.set('password', $scope.passLogin, { expires: 7 });
                         Cookies.set('remember', $scope.rememberLogin, { expires: 7 });

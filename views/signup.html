@@ -20,12 +20,38 @@
                             </div>
                         </div>
                         <div class="form-group col">
+                            <label class="label " for="emailSignUp">Địa chỉ email</label>
+                            <input type="email" id="emailSignUp" class="form-control" placeholder="Email" name="emailSignUp"
+                                ng-model="emailSignUp" required="">
+                            <div ng-show="signUpForm.$submitted || signUpForm.emailSignUp.$touched">
+                                <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.email">
+                                    Địa chỉ email không hợp lệ!
+                                </span>
+                                <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.required">
+                                    Vui lòng nhập địa chỉ email!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="form-group col">
                             <label class="label " for="passSignUp">Mật khẩu</label>
                             <input type="password" id="passSignUp" class="form-control" placeholder="Password"
                                 name="passSignUp" ng-model="passSignUp" required>
                             <div ng-show="signUpForm.$submitted || signUpForm.passSignUp.$touched">
                                 <span class="badge bg-danger fst-italic" ng-show="signUpForm.passSignUp.$error.required">
                                     Vui lòng nhập mật khẩu!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="label " for="confirmPassSignUp">Xác nhận mật khẩu</label>
+                            <input type="password" id="confirmPassSignUp" class="form-control" placeholder="Password"
+                                name="confirmPassSignUp" ng-model="confirmPassSignUp" compare-to="passSignUp" required>
+                            <div ng-show="signUpForm.$submitted || signUpForm.confirmPassSignUp.$touched">
+                                <span class="badge bg-danger fst-italic"
+                                    ng-show="signUpForm.confirmPassSignUp.$error.compareTo">
+                                    Mật khẩu xác nhận không đúng!
                                 </span>
                             </div>
                         </div>
@@ -52,19 +78,6 @@
                                     Vui lòng nhập ngày sinh!
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="label " for="emailSignUp">Địa chỉ email</label>
-                        <input type="email" id="emailSignUp" class="form-control" placeholder="Email" name="emailSignUp"
-                            ng-model="emailSignUp" required="">
-                        <div ng-show="signUpForm.$submitted || signUpForm.emailSignUp.$touched">
-                            <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.email">
-                                Địa chỉ email không hợp lệ!
-                            </span>
-                            <span class="badge bg-danger fst-italic" ng-show="signUpForm.emailSignUp.$error.required">
-                                Vui lòng nhập địa chỉ email!
-                            </span>
                         </div>
                     </div>
                     <div class="form-group mb-3">
