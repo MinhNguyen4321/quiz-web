@@ -64,14 +64,21 @@
                             <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#forgotPassModal" >Quên mật khẩu</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">Đăng xuất</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#changePassModal" ng-show="isLoginWithGoogle">Đổi mật khẩu</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#editProfileModal">Cập nhật tài khoản</a></li>
+                            <div ng-hide="currentUser == null">
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">
+                                    Đăng xuất
+                                </a></li>
+                                <li ng-show="isLoginWithGoogle"><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#changePassModal">
+                                    Đổi mật khẩu
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#editProfileModal">Cập nhật tài khoản
+                                </a></li>
+                            </div>
                         </ul>
                     </li>
                 </ul>
@@ -110,6 +117,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- jQuery Easing Plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <!-- SMTP JS -->
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <!-- Sweet Alert 2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JS Cookies -->

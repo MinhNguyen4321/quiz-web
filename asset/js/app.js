@@ -75,6 +75,19 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
             $location.path("/");
             toastr.success("Đăng xuất thành công!");
         }
+
+        $scope.forgotPassword = function (emailFrom) {
+            Email.send({
+                SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                To : 'hoaiminh4321@gmail.com',
+                From : emailFrom,
+                Subject : "Xin chào",
+                Body : "And this is the body"
+            }).then(
+                message => alert(message)
+            );
+        }
+
         $scope.subjects = [];
         $scope.pageSize = 6;
         $scope.start = 0;
@@ -176,7 +189,8 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray",
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         
-        $scope.genderSignUp = 0;
+        $scope.genderSignUp = 1;
+
         $scope.signUp = function () {
             if ($scope.students.filter(st => st.email == $scope.emailSignUp).length > 0) {
                 toastr.error("Email đã tồn tại!");
@@ -203,8 +217,8 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray",
     }
 ]);
 
-app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
-    function ($scope, Auth, $firebaseArray) {
+app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
+    function ($scope, Auth, $firebaseArray, $location) {
         if (Cookies.get('remember') == 'true') {
             $scope.userLogin = Cookies.get('username');
             $scope.passLogin = Cookies.get('password');
@@ -238,11 +252,9 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
 
                     localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
                     removeCookies('username', 'password', 'remember');
-                    toastr.success('Đăng nhập thành công!');
 
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
+                    $location.path('index.html');
+                    toastr.success('Đăng nhập thành công!');
 
                 }).catch((error) => {
                     console.error(error.message);
@@ -277,11 +289,10 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray",
                     } else {
                         removeCookies('username', 'password', 'remember');
                     }
-                    toastr.success('Đăng nhập thành công!');
+                    
                     $scope.isLoginWithGoogle = false;
-                    setTimeout(function () {
-                        window.location.href = 'index.html';
-                    }, 1000);
+                    $location.path('index.html');
+                    toastr.success('Đăng nhập thành công!');
                 }
             });
         }

@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <form id="forgot-pass-form" name="forgotPassForm" class="p-3" novalidate>
+                <form id="forgot-pass-form" name="forgotPassForm" class="p-3" ng-submit="forgotPassForm.$valid && forgotPassword(emailResetPass)"  novalidate>
                     <div class="row">
                         <label for="emailResetPass" class="col-sm-3 col-form-label">Địa chỉ Email</label>
                         <div class="col-sm-9">
@@ -29,7 +29,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                <button type="submit" form="forgot-pass-form" class="btn btn-primary">Đặt lại mật khẩu</button>
+                <button type="submit" form="forgot-pass-form" class="btn btn-primary">Gửi</button>
             </div>
         </div>
     </div>
