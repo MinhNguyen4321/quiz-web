@@ -20,7 +20,7 @@
     <!-- <header>
         <div class="container-fluid background"></div>
     </header> -->
-    <nav class="navbar navbar-expand-lg navbar-light py-2">
+    <nav class="navbar navbar-expand-lg navbar-light py-2" ng-hide="showWithPath('/resetpass')">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="#!" ng-click="firstSubject()">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -48,7 +48,7 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" ng-show="showSearch('/')" ng-change="firstSubject()"
+                    <input class="form-control me-2" ng-show="showWithPath('/')" ng-change="firstSubject()"
                         onclick="this.select()" ng-model="keyword" type="search" placeholder="Tìm kiếm môn học"
                         aria-label="Search">
                 </form>
@@ -60,14 +60,13 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-macos"
                             aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!signup">Đăng ký</a></li>
-                            <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#forgotPassModal" >Quên mật khẩu</a></li>
+                            <div ng-show="currentUser == null">
+                                <li><a class="dropdown-item" href="#!signup">Đăng ký</a></li>
+                                <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#forgotPassModal" >Quên mật khẩu</a></li>
+                            </div>
                             <div ng-hide="currentUser == null">
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
                                 <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">
                                     Đăng xuất
                                 </a></li>
@@ -88,7 +87,7 @@
     <main>
         <div class="view h-100" ng-view></div>
     </main>
-    <footer class="container-fluid">
+    <footer class="container-fluid" ng-hide="showWithPath('/resetpass')">
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3 position-relative">
             <div class="col-md-4 d-flex align-items-center">
                 <span class="content">&copy; 2021 FPT Polytechnic</span>

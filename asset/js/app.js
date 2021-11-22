@@ -78,22 +78,33 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             $location.path("/");
             toastr.success("Đăng xuất thành công!");
         }
-        $scope.forgotPassword = function (emailFrom) {
-            if ($scope.students.filter(st => st.email == emailFrom).length == 0) {
+
+        /* Reset password */
+        $scope.forgotPassword = function (receiver) {
+            var student = $scope.students.filter(st => st.email == receiver)[0]; 
+            var password = generatePassword(8);
+
+            if (!student) {
                 toastr.error("Email không tồn tại!");
                 return;
             }
-            // Email.send({
-            //     SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-            //     To : emailFrom,
-            //     From : "hoaiminh4321@gmail.com",
-            //     Subject : "Xin chào",
-            //     Body : "And this is the body"
-            // }).then(
-            //     message => alert(message)
-            // );
+
+            Email.send({
+                SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                To : receiver,
+                From : "onlinetrainingfpoly@fpt.edu.vn",
+                Subject : "Đặt lại mật khẩu từ Online Training",
+                Body : "Xin chào, mật khẩu mới của bạn là: <b>" + password + "</b>"
+            }).then(
+                ref.child(student.$id).update({
+                    password: password
+                }),
+                toastr.success("Gửi email thành công!")
+            );
+
         }
 
+        /* Subjects */
         $scope.subjects = [];
         $scope.pageSize = 6;
         $scope.start = 0;
@@ -105,7 +116,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
                 alert("Error: " + error.statusText);
             }
         );
-        $scope.showSearch = function (path) {
+        $scope.showWithPath = function (path) {
             return $location.path() == path;
         };
         $scope.openQuiz = function (idSubject, nameSubject) {
@@ -259,9 +270,11 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                     localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
                     removeCookies('username', 'password', 'remember');
 
-                    $location.path('index.html');
                     toastr.success('Đăng nhập thành công!');
-
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 }).catch((error) => {
                     console.error(error.message);
                 });
@@ -295,10 +308,12 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                     } else {
                         removeCookies('username', 'password', 'remember');
                     }
-                    
                     $scope.isLoginWithGoogle = false;
-                    $location.path('index.html');
                     toastr.success('Đăng nhập thành công!');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 }
             });
         }
