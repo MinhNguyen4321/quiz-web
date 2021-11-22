@@ -46,8 +46,8 @@ app.config(function ($routeProvider) {
         .when('/forgotpass', {
             templateUrl: 'views/forgotpass.html',
         })
-        .when('/editprofile', {
-            templateUrl: 'views/editprofile.html',
+        .when('/userinfo', {
+            templateUrl: 'views/userinfo.html',
         })
         .when('/quiz', {
             templateUrl: 'views/quiz.html',

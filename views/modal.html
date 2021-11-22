@@ -95,12 +95,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <form id="edit-profile-form" name="editProfileForm" class="p-3" novalidate>
+                <form id="edit-profile-form" name="editProfileForm" ng-click="editProfileForm.$valid && editProfile()" class="p-3" novalidate>
                     <div class="row mb-3">
                         <div class="form-group col">
                             <label class="label" for="userInfo">Tên đăng nhập</label>
                             <input type="text" class="form-control" id="userInfo" name="userInfo" ng-model="userInfo"
-                                placeholder="Username" required>
+                                placeholder="Username" ng-value="currentUser.username" disabled required>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.userInfo.$touched">
                                 <span class="badge bg-danger fst-italic" ng-show="editProfileForm.userInfo.$error.required">
                                     Vui lòng nhập tên người dùng!
@@ -110,7 +110,7 @@
                         <div class="form-group col">
                             <label for="emailInfo" class="form-label">Địa chỉ Email</label>
                             <input type="email" class="form-control" id="emailInfo" name="emailInfo"
-                                ng-model="emailInfo" placeholder="Email" required>
+                                ng-model="emailInfo" placeholder="Email" ng-value="currentUser.email" required>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
                                 <span class="badge bg-danger fst-italic"
                                     ng-show="editProfileForm.emailInfo.$error.email">
@@ -128,7 +128,7 @@
                         <div class="form-group col-6">
                             <label for="fullnameInfo" class="form-label">Họ và tên</label>
                             <input type="email" class="form-control" id="fullnameInfo" name="fullnameInfo"
-                                ng-model="fullnameInfo" placeholder="Fullname" required>
+                                ng-model="fullnameInfo" placeholder="Fullname" ng-value="currentUser.fullname" required>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.fullnameInfo.$touched">
                                 <span class="badge bg-danger fst-italic"
                                     ng-show="editProfileForm.fullnameInfo.$error.required">
@@ -139,7 +139,7 @@
                         <div class="form-group col-6">
                             <label for="birthdayInfo" class="form-label">Ngày sinh</label>
                             <input type="text" datetime="dd/MM/yyyy" class="form-control" id="birthdayInfo" name="birthdayInfo"
-                            ng-model="birthdayInfo" required>
+                            ng-model="birthdayInfo" ng-value="currentUser.birthday" required>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.birthdayInfo.$touched">
                                 <span class="badge bg-danger fst-italic"
                                     ng-show="editProfileForm.birthdayInfo.$error.required">
@@ -151,11 +151,11 @@
                     <div class="form-group">
                         <label class="form-label me-3">Giới tính</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="male" value="1">
+                            <input class="form-check-input" ng-checked="currentUser.gender" type="radio" name="gender" id="male" value="1">
                             <label class="form-check-label" for="male">Nam</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" id="female" value="0">
+                            <input class="form-check-input" ng-checked="!currentUser.gender" type="radio" name="gender" id="female" value="0">
                             <label class="form-check-label" for="female">Nữ</label>
                         </div>
                     </div>
