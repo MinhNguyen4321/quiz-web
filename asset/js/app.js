@@ -109,6 +109,8 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
 
             if (student.password != oldPass) {
                 toastr.error("Mật khẩu hiện tại không đúng!");
+            } else if (oldPass == newPass) {
+                toastr.error("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
             } else {
                 ref.child(student.$id).update({
                     password: newPass
@@ -120,8 +122,10 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             $('#changePassModal').modal('hide');
         }
 
+        $scope.profile = angular.copy($scope.currentUser);
         $scope.editProfile = function () {
-            console.log(editProfile);
+            
+            console.log("editProfile");
             // var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
             // console.log(student);
             // ref.child(student.$id).update({
