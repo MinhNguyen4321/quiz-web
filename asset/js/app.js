@@ -63,8 +63,11 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
-    function ($scope, $http, $location, $window) {
+app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray",
+    function ($scope, $http, $location, $window, $firebaseArray) {
+        // Students in DB
+        var ref = firebase.database().ref("students");
+        $scope.students = $firebaseArray(ref);
         // Current User
         $scope.isLoginWithGoogle = false;
         $scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -75,17 +78,20 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window",
             $location.path("/");
             toastr.success("Đăng xuất thành công!");
         }
-
         $scope.forgotPassword = function (emailFrom) {
-            Email.send({
-                SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-                To : 'hoaiminh4321@gmail.com',
-                From : emailFrom,
-                Subject : "Xin chào",
-                Body : "And this is the body"
-            }).then(
-                message => alert(message)
-            );
+            if ($scope.students.filter(st => st.email == emailFrom).length == 0) {
+                toastr.error("Email không tồn tại!");
+                return;
+            }
+            // Email.send({
+            //     SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+            //     To : emailFrom,
+            //     From : "hoaiminh4321@gmail.com",
+            //     Subject : "Xin chào",
+            //     Body : "And this is the body"
+            // }).then(
+            //     message => alert(message)
+            // );
         }
 
         $scope.subjects = [];
