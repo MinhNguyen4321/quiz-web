@@ -32,12 +32,12 @@
               <i class="fa-solid fa-envelope"></i>Email:&nbsp;<span class="">{{currentUser.email}}</span>
             </div>
           </div>
-          <div class="col">
+          <div class="col" ng-show="currentUser.birthday">
             <div class="p-3 h-100 p-3 d-flex align-items-center">
               <i class="fa-solid fa-cake-candles"></i></i>Ngày sinh:&nbsp;<span class="">{{currentUser.birthday}}</span>
             </div>
           </div>
-          <div class="col">
+          <div class="col" ng-show="currentUser.gender">
             <div class="p-3 h-100 p-3 d-flex align-items-center">
               <i class="fa-solid fa-venus-mars"></i>Giới tính:&nbsp;<span class="">{{currentUser.gender ? 'Nam' : 'Nữ'}}</span>
             </div>

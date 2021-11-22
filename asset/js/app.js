@@ -65,7 +65,6 @@ app.factory("Auth", ["$firebaseAuth",
 
 app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray",
     function ($scope, $http, $location, $window, $firebaseArray) {
-        // Students in DB
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         // Current User
@@ -80,7 +79,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
 
         /* Reset password */
         $scope.forgotPassword = function (receiver) {
-            var student = $scope.students.filter(st => st.email == receiver)[0]; 
+            var student = $scope.students.filter(st => st.email == receiver)[0];
             var password = generatePassword(8);
 
             if (!student) {
@@ -89,18 +88,52 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             }
 
             Email.send({
-                SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-                To : receiver,
-                From : "onlinetrainingfpoly@fpt.edu.vn",
-                Subject : "Đặt lại mật khẩu từ Online Training",
-                Body : "Xin chào, mật khẩu mới của bạn là: <b>" + password + "</b>"
+                SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                To: receiver,
+                From: "onlinetrainingfpoly@fpt.edu.vn",
+                Subject: "Đặt lại mật khẩu từ Online Training",
+                Body: "Xin chào, mật khẩu mới của bạn là: <b>" + password + "</b>"
             }).then(
                 ref.child(student.$id).update({
                     password: password
                 }),
-                toastr.success("Gửi email thành công!")
+                toastr.success("Gửi email thành công!"),
+                $("#forgot-pass-form").trigger("reset"),
+                $('#forgotPassModal').modal('hide')
             );
 
+        }
+
+        $scope.changePassword = function (oldPass, newPass) {
+            var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
+
+            if (student.password != oldPass) {
+                toastr.error("Mật khẩu hiện tại không đúng!");
+            } else {
+                ref.child(student.$id).update({
+                    password: newPass
+                });
+                toastr.success("Đổi mật khẩu thành công!");
+            }
+
+            $("#change-pass-form").trigger("reset");
+            $('#changePassModal').modal('hide');
+        }
+
+        $scope.editProfile = function () {
+            console.log(editProfile);
+            // var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
+            // console.log(student);
+            // ref.child(student.$id).update({
+            //     fullname: $scope.currentUser.fullname,
+            //     phone: $scope.currentUser.phone,
+            //     address: $scope.currentUser.address,
+            //     email: $scope.currentUser.email
+            // }).then(
+            //     toastr.success("Cập nhật thông tin thành công!"),
+            //     $("#user-info-form").trigger("reset"),
+            //     $('#userInfoModal').modal('hide')
+            // );
         }
 
         /* Subjects */
@@ -204,8 +237,8 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray",
     function ($scope, $firebaseArray) {
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
-        
-        $scope.genderSignUp = 1;
+
+        $scope.genderSignUp = "true";
 
         $scope.signUp = function () {
             if ($scope.students.filter(st => st.email == $scope.emailSignUp).length > 0) {
@@ -219,7 +252,7 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray",
                     email: $scope.emailSignUp,
                     password: $scope.passSignUp,
                     birthday: $scope.birthdaySignUp,
-                    gender: $scope.genderSignUp == 1,
+                    gender: $scope.genderSignUp,
                     marks: 0
                 }).then(function (ref) {
                     var id = ref.key;
@@ -266,11 +299,11 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                         });
 
                         Email.send({
-                            SecureToken : "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-                            To : receiver,
-                            From : "onlinetrainingfpoly@fpt.edu.vn",
-                            Subject : "Welcome to Online Training",
-                            Body : "Chào mừng bạn đến với Online Training!"
+                            SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                            To: email,
+                            From: "onlinetrainingfpoly@fpt.edu.vn",
+                            Subject: "Welcome to Online Training",
+                            Body: "Chào mừng bạn đến với Online Training!"
                         })
                     }
 
@@ -278,7 +311,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                     removeCookies('username', 'password', 'remember');
 
                     toastr.success('Đăng nhập thành công!');
-                    
+
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
@@ -317,7 +350,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                     }
                     $scope.isLoginWithGoogle = false;
                     toastr.success('Đăng nhập thành công!');
-                    
+
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
