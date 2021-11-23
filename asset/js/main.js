@@ -1,5 +1,5 @@
 // Wrapper
-$(window).on("load", function() {
+$(window).on("load", function () {
     $('body').addClass('loaded');
 });
 
@@ -46,6 +46,28 @@ function generatePassword(length) {
     var result = '';
     for (var i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+// Fisher-Yates algorith to shuffle an array
+const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+        // [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Get number items in random array
+const getRandomArray = (array, number) => {
+    let result = [];
+    let temp = array;
+    shuffleArray(temp);
+    for (let i = 0; i < number; i++) {
+        result.push(temp[i]);
     }
     return result;
 }
