@@ -280,8 +280,14 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
         }
 
         $scope.loginWithGoogle = function () {
-            Auth.$signInWithPopup("google")
+            var provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('https://www.googleapis.com/auth/userinfo.email')
+            provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
+            provider.addScope('https://www.googleapis.com/auth/user.birthday.read')
+            provider.addScope('https://www.googleapis.com/auth/user.gender.read')
+            Auth.$signInWithPopup(provider)
                 .then((result) => {
+                    console.log(result.user);
                     var fullname = result.user.displayName;
                     var email = result.user.email;
                     var username = result.user.email.substring(0, result.user.email.indexOf('@'));
