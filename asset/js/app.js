@@ -67,6 +67,8 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
     function ($scope, $http, $location, $window, $firebaseArray, datetime) {
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
+        $scope.currentUser = localStorage.getItem("currentUser");
+
         // Current User
         $scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
         $scope.logout = function () {
@@ -241,9 +243,6 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime",
     function ($scope, $firebaseArray, datetime) {
         var parser = datetime("dd/MM/yyyy");
 
-        var ref = firebase.database().ref("students");
-        $scope.students = $firebaseArray(ref);
-
         $scope.genderSignUp = "true";
 
         $scope.signUp = function () {
@@ -280,24 +279,14 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
             $scope.rememberLogin = Boolean(Cookies.get('remember'));
         }
 
-        var ref = firebase.database().ref("students");
-        $scope.students = $firebaseArray(ref);
-
         $scope.loginWithGoogle = function () {
             Auth.$signInWithPopup("google")
                 .then((result) => {
-                    var user = result.user;
-                    var fullname = user.displayName;
-                    var email = user.email;
-                    var username = user.email.substring(0, result.user.email.indexOf('@'));
+                    var fullname = result.user.displayName;
+                    var email = result.user.email;
+                    var username = result.user.email.substring(0, result.user.email.indexOf('@'));
 
-                    $scope.currentUser = {
-                        fullname: fullname,
-                        email: email,
-                        username: username
-                    };
-
-                    if ($scope.students.filter(student => student.email == $scope.currentUser.email).length == 0) {
+                    if ($scope.students.filter(student => student.email == email).length == 0) {
                         $scope.students.$add({
                             fullname: fullname,
                             email: email,
@@ -311,9 +300,12 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                             Subject: "Welcome to Online Training",
                             Body: "Chào mừng bạn đến với Online Training!"
                         })
+;
                     }
 
-                    localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
+                    var student = $scope.students.filter(st => st.email == email)[0];
+
+                    localStorage.setItem('currentUser', JSON.stringify(student));
                     removeCookies('username', 'password', 'remember');
 
                     toastr.success('Đăng nhập thành công!');

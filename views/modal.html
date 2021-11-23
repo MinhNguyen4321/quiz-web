@@ -154,12 +154,12 @@
                     <div class="form-group">
                         <label class="form-label me-3">Giới tính</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender"
+                            <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == true"
                                 type="radio" name="genderInfo" id="maleInfo" value="true">
                             <label class="form-check-label" for="maleInfo">Nam</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" ng-model="profile.gender" ng-checked="!profile.gender"
+                            <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == false"
                                 type="radio" name="genderInfo" id="femaleInfo" value="false">
                             <label class="form-check-label" for="femaleInfo">Nữ</label>
                         </div>
