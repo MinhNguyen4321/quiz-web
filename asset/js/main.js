@@ -1,3 +1,8 @@
+// Wrapper
+$(window).on("load", function() {
+    $('body').addClass('loaded');
+});
+
 // Toastr custom
 toastr.options.showMethod = 'slideDown';
 
