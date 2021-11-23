@@ -220,12 +220,17 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
 
     $http.get("asset/js/db/quizs/" + $scope.idSubject + ".js").then(
         function (response) {
-            $scope.questions = response.data;
+            var listquestion = response.data;
+            $scope.questions = getRandomArray(listquestion, 10);
+            console.log($scope.questions);
+            
         },
         function (error) {
             alert("Error: " + error.statusText);
         }
     );
+
+    
 
     $scope.firstQuiz = function () {
         $scope.start = 0;

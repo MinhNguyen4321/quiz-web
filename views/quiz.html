@@ -3,16 +3,15 @@
         <div class="col-lg-9">
             <div class="d-flex flex-column justify-content-between rounded bg-light bg-opacity-50 p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center border-bottom">
-                    <span class="h5 fw-bolder mb-3">
+                    <span class="h5 m-0 fw-bolder">
                         <i class="fa-solid fa-book-open me-2"></i>{{nameSubject|uppercase}}
                     </span>
-                    <span class="h5 fw-bolder mb-3">15:00</span>
+                    <span class="fs-5 badge bg-danger">15:00</span>
                 </div>
                 <div class="list-question" ng-repeat="q in questions|limitTo:pageSize:start">
                     <div class="card bg-light bg-opacity-50 mb-3">
                         <div class="card-header fw-bold d-flex justify-content-between align-items-center">
                             <span>{{stt}}. {{q.Text}}</span>
-                            <span class="badge bg-info rounded-pill">10/{{questions.length}}</span>
                         </div>
                         <div class="card-body">
                             <p class="card-text" ng-repeat="a in q.Answers">
@@ -25,8 +24,8 @@
                         </div>
                         <div class="card-footer py-2">
                             <div class="d-flex justify-content-between align-items-center">
-                                <button class="btn btn-success py-1" type="button">Xác nhận</button>
-                                <span class="text-muted fw-bold">Điểm: 0/{{questions.length}}</span>
+                                <button class="fs-6 btn btn-success py-1" type="button">Xác nhận</button>
+                                <span class="text-muted fw-bold">Điểm: <span class="fs-6 badge bg-info">0/{{questions.length}}</span></span>
                             </div>
                         </div>
                     </div>
