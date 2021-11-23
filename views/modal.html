@@ -155,13 +155,19 @@
                         <label class="form-label me-3">Giới tính</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == 'true'"
-                                type="radio" name="genderInfo" id="maleInfo" value="true">
+                                type="radio" name="genderInfo" id="maleInfo" value="true" required>
                             <label class="form-check-label" for="maleInfo">Nam</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == 'false'"
-                                type="radio" name="genderInfo" id="femaleInfo" value="false">
+                                type="radio" name="genderInfo" id="femaleInfo" value="false" required>
                             <label class="form-check-label" for="femaleInfo">Nữ</label>
+                        </div>
+                        <div class="form-check-inline" ng-show="editProfileForm.$submitted || editProfileForm.genderInfo.$touched">
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.genderInfo.$error.required">
+                                Vui lòng chọn giới tính!
+                            </span>
                         </div>
                     </div>
                 </form>

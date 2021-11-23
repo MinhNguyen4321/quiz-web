@@ -65,6 +65,8 @@ app.factory("Auth", ["$firebaseAuth",
 
 app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray", "datetime",
     function ($scope, $http, $location, $window, $firebaseArray, datetime) {
+        var parser = datetime("dd/MM/yyyy");
+
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         $scope.currentUser = localStorage.getItem("currentUser");
@@ -125,11 +127,11 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
 
         $scope.profile = angular.copy($scope.currentUser);
-        var parser = datetime("dd/MM/yyyy");
         $scope.editProfile = function () {
+            console.log($scope.profile.birthday);
             ref.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
-                birthday: parser.parse($scope.profile.birthday).getText(),
+                birthday: parser.setDate($scope.profile.birthday).getText(),
                 email: $scope.profile.email,
                 gender: $scope.profile.gender
             }).then(
@@ -239,8 +241,8 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     }
 });
 
-app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime",
-    function ($scope, $firebaseArray, datetime) {
+app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime", "$location",
+    function ($scope, $firebaseArray, datetime, $location) {
         var parser = datetime("dd/MM/yyyy");
 
         $scope.genderSignUp = "true";
@@ -259,12 +261,9 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime",
                     birthday: parser.setDate($scope.birthdaySignUp).getText(),
                     gender: $scope.genderSignUp,
                     marks: 0
-                }).then(function (ref) {
-                    var id = ref.key;
+                }).then(function () {
+                    window.location.href = "index.html";
                     toastr.success("Đăng ký thành công!");
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
                 });
             }
         }
@@ -281,10 +280,6 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
 
         $scope.loginWithGoogle = function () {
             var provider = new firebase.auth.GoogleAuthProvider();
-            // provider.addScope('https://www.googleapis.com/auth/userinfo.email')
-            // provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
-            // provider.addScope('https://www.googleapis.com/auth/user.birthday.read')
-            // provider.addScope('https://www.googleapis.com/auth/user.gender.read')
             Auth.$signInWithPopup(provider)
                 .then((result) => {
                     var fullname = result.user.displayName;
@@ -295,29 +290,25 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                         $scope.students.$add({
                             fullname: fullname,
                             email: email,
-                            username: username
-                        });
-
-                        Email.send({
-                            SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-                            To: email,
-                            From: "onlinetrainingfpoly@fpt.edu.vn",
-                            Subject: "Welcome to Online Training",
-                            Body: "Chào mừng bạn đến với Online Training!"
-                        })
-;
+                            username: username,
+                        }).then(function () {
+                            $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
+                            localStorage.setItem('currentUser', JSON.stringify(student));
+                            Email.send({
+                                SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                                To: email,
+                                From: "onlinetrainingfpoly@fpt.edu.vn",
+                                Subject: "Welcome to Online Training",
+                                Body: "Chào mừng bạn đến với Online Training!"
+                            })
+                        }); 
+                    } else {
+                        $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
+                        localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
                     }
-
-                    var student = $scope.students.filter(st => st.email == email)[0];
-
-                    localStorage.setItem('currentUser', JSON.stringify(student));
                     removeCookies('username', 'password', 'remember');
-
+                    window.location.href = "index.html";
                     toastr.success('Đăng nhập thành công!');
-
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
                 }).catch((error) => {
                     console.error(error.message);
                 });
@@ -327,13 +318,13 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
             $scope.students.$loaded().then(function () {
                 var isUser = false;
                 var isPass = false;
-                var currentUser;
                 for (var i = 0; i < $scope.students.length; i++) {
                     if ($scope.students[i].username == $scope.userLogin || $scope.students[i].email == $scope.userLogin) {
                         isUser = true;
                         if ($scope.students[i].password == $scope.passLogin) {
                             isPass = true;
-                            currentUser = $scope.students[i];
+                            $scope.currentUser = angular.copy($scope.students[i]);
+                            console.log($scope.currentUser);
                             break;
                         }
                     }
@@ -343,7 +334,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                 } else if (!isPass) {
                     toastr.warning('Mật khẩu không đúng!');
                 } else {
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    localStorage.setItem('currentUser', JSON.stringify($scope.currentUser));
                     if ($scope.rememberLogin) {
                         Cookies.set('username', $scope.userLogin, { expires: 7 });
                         Cookies.set('password', $scope.passLogin, { expires: 7 });
@@ -351,12 +342,8 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                     } else {
                         removeCookies('username', 'password', 'remember');
                     }
-                    $scope.isLoginWithGoogle = false;
+                    $location.path("/");
                     toastr.success('Đăng nhập thành công!');
-
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
                 }
             });
         }
