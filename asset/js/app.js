@@ -63,26 +63,18 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$window", "$firebaseArray", "datetime", "Auth",
-    function ($scope, $rootScope, $http, $location, $window, $firebaseArray, datetime, Auth) {
+app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray", "datetime",
+    function ($scope, $http, $location, $window, $firebaseArray, datetime) {
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
 
         var studentRef = ref.child("students");
         $scope.students = $firebaseArray(studentRef);
 
-        $scope.currentUser = {};
-
         // Current User
         $scope.students.$loaded().then(function () {
             if (Cookies.get('email')) {
                 $scope.currentUser = angular.copy($scope.students.find(st => st.email === Cookies.get('email')));
-                $scope.profile = angular.copy($scope.currentUser);
-                if($scope.profile){
-                    if($scope.profile.birthday) {
-                        $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
-                    }
-                }
             }
         });
 
@@ -94,13 +86,13 @@ app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$wind
             toastr.success("Đăng xuất thành công!");
         }
 
-        /* Reset password */
+        /* Modal */
         $scope.forgotPassword = function (receiver) {
             var student = $scope.students.filter(st => st.email == receiver)[0];
             var password = generatePassword(8);
 
             if (!student) {
-                toastr.error("Email không tồn tại!");
+                toastr.error("Email chưa đăng ký!");
                 return;
             }
 
@@ -111,7 +103,7 @@ app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$wind
                 Subject: "Đặt lại mật khẩu từ Online Training",
                 Body: "Xin chào, mật khẩu mới của bạn là: <b>" + password + "</b>"
             }).then(
-                ref.child(student.$id).update({
+                studentRef.child(student.$id).update({
                     password: password
                 }),
                 toastr.success("Gửi email thành công!"),
@@ -123,24 +115,29 @@ app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$wind
 
         $scope.changePassword = function (oldPass, newPass) {
             var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
-
             if (student.password != oldPass) {
                 toastr.error("Mật khẩu hiện tại không đúng!");
             } else if (oldPass == newPass) {
                 toastr.error("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
             } else {
-                ref.child(student.$id).update({
+                studentRef.child(student.$id).update({
                     password: newPass
                 });
                 toastr.success("Đổi mật khẩu thành công!");
+                $("#change-pass-form").trigger("reset");
+                $('#changePassModal').modal('hide');
             }
+        }
 
-            $("#change-pass-form").trigger("reset");
-            $('#changePassModal').modal('hide');
+        $scope.openEditProfileModal = function () {
+            $scope.profile = angular.copy($scope.currentUser);
+            if($scope.profile.birthday) {
+                $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
+            }
+            $('#editProfileModal').modal('show');
         }
 
         $scope.editProfile = function () {
-            console.log($scope.profile.birthday);
             $scope.profile.birthday = parser.setDate($scope.profile.birthday).getText();
             studentRef.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
@@ -150,7 +147,7 @@ app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$wind
             }).then(
                 $scope.currentUser = angular.copy($scope.profile),
                 toastr.success("Cập nhật thông tin thành công!"),
-                $('#editProfileForm').modal('hide')
+                $('#editProfileModal').modal('hide')
             ).catch(function (error) {
                 toastr.error("Cập nhật thông tin thất bại!");
             });
