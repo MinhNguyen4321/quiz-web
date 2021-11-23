@@ -63,8 +63,8 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray",
-    function ($scope, $http, $location, $window, $firebaseArray) {
+app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray", "datetime",
+    function ($scope, $http, $location, $window, $firebaseArray, datetime) {
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
         // Current User
@@ -123,21 +123,21 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
 
         $scope.profile = angular.copy($scope.currentUser);
+        var parser = datetime("dd/MM/yyyy");
         $scope.editProfile = function () {
-            
-            console.log("editProfile");
-            // var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
-            // console.log(student);
-            // ref.child(student.$id).update({
-            //     fullname: $scope.currentUser.fullname,
-            //     phone: $scope.currentUser.phone,
-            //     address: $scope.currentUser.address,
-            //     email: $scope.currentUser.email
-            // }).then(
-            //     toastr.success("Cập nhật thông tin thành công!"),
-            //     $("#user-info-form").trigger("reset"),
-            //     $('#userInfoModal').modal('hide')
-            // );
+            ref.child($scope.currentUser.$id).update({
+                fullname: $scope.profile.fullname,
+                birthday: parser.parse($scope.profile.birthday).getText(),
+                email: $scope.profile.email,
+                gender: $scope.profile.gender
+            }).then(
+                $scope.currentUser = angular.copy($scope.profile),
+                toastr.success("Cập nhật thông tin thành công!"),
+                $("#user-info-form").trigger("reset"),
+                $('#userInfoModal').modal('hide')
+            ).catch(function (error) { 
+                toastr.error("Cập nhật thông tin thất bại!");
+            });
         }
 
         /* Subjects */
@@ -237,8 +237,10 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
     }
 });
 
-app.controller('signUpCtrl', ["$scope", "$firebaseArray",
-    function ($scope, $firebaseArray) {
+app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime",
+    function ($scope, $firebaseArray, datetime) {
+        var parser = datetime("dd/MM/yyyy");
+
         var ref = firebase.database().ref("students");
         $scope.students = $firebaseArray(ref);
 
@@ -255,7 +257,7 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray",
                     fullname: $scope.fullnameSignUp,
                     email: $scope.emailSignUp,
                     password: $scope.passSignUp,
-                    birthday: $scope.birthdaySignUp,
+                    birthday: parser.setDate($scope.birthdaySignUp).getText(),
                     gender: $scope.genderSignUp,
                     marks: 0
                 }).then(function (ref) {
