@@ -292,7 +292,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                             email: email,
                             username: username,
                         }).then(function () {
-                            $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
+                            $scope.currentUser = angular.copy($scope.students.filter(student => student.email == email)[0]);
                             localStorage.setItem('currentUser', JSON.stringify(student));
                             Email.send({
                                 SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
