@@ -269,7 +269,7 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime", "$location
                     gender: $scope.genderSignUp,
                     marks: 0
                 }).then(function () {
-                    window.location.href = "index.html";
+                    $location.path("/");
                     toastr.success("Đăng ký thành công!");
                 });
             }
