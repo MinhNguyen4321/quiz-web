@@ -124,7 +124,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
 
         $scope.profile = angular.copy($scope.currentUser);
         var parser = datetime("dd/MM/yyyy");
-        $scope.editProfile = function () {
+        $scope.editProfile = function (gender) {
             ref.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
                 birthday: parser.parse($scope.profile.birthday).getText(),
