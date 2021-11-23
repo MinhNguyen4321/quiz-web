@@ -141,7 +141,7 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="birthdayInfo" class="form-label">Ngày sinh</label>
-                            <input type="text" class="form-control" id="birthdayInfo"
+                            <input type="text" datetime="dd-MM-yyyy" class="form-control" id="birthdayInfo"
                                 name="birthdayInfo" ng-model="profile.birthday" required>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.birthdayInfo.$touched">
                                 <span class="badge bg-danger fst-italic"

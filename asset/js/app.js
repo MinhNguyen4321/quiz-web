@@ -63,19 +63,26 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray", "datetime",
-    function ($scope, $http, $location, $window, $firebaseArray, datetime) {
+app.controller("homeCtrl", ["$scope", "$rootScope", "$http", "$location", "$window", "$firebaseArray", "datetime", "Auth",
+    function ($scope, $rootScope, $http, $location, $window, $firebaseArray, datetime, Auth) {
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
 
         var studentRef = ref.child("students");
         $scope.students = $firebaseArray(studentRef);
 
+        $scope.currentUser = {};
+
         // Current User
         $scope.students.$loaded().then(function () {
             if (Cookies.get('email')) {
                 $scope.currentUser = angular.copy($scope.students.find(st => st.email === Cookies.get('email')));
                 $scope.profile = angular.copy($scope.currentUser);
+                if($scope.profile){
+                    if($scope.profile.birthday) {
+                        $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
+                    }
+                }
             }
         });
 
@@ -133,6 +140,8 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
 
         $scope.editProfile = function () {
+            console.log($scope.profile.birthday);
+            $scope.profile.birthday = parser.setDate($scope.profile.birthday).getText();
             studentRef.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
                 birthday: $scope.profile.birthday,
@@ -271,8 +280,8 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime", "$location
     }
 ]);
 
-app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
-    function ($scope, Auth, $firebaseArray, $location) {
+app.controller('signInCtrl', ["$scope", "Auth", "$location",
+    function ($scope, Auth, $location) {
         if (Cookies.get('remember') == 'true') {
             $scope.userLogin = Cookies.get('username');
             $scope.passLogin = Cookies.get('password');
@@ -303,13 +312,15 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                                 Body: "Chào mừng bạn đến với Online Training!"
                             })
                         });
-                    } else {
+                    } 
+
+                    $scope.students.$loaded().then(function () {
                         $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
-                        Cookies.set('email', email, { expires: 7 });
-                    }
+                    });
+
+                    Cookies.set('email', email, { expires: 7 });
                     removeCookies('username', 'password', 'remember');
                     window.location.href = "index.html";
-                    toastr.success('Đăng nhập thành công!');
                 }).catch((error) => {
                     console.error(error.message);
                 });
@@ -318,12 +329,13 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
         $scope.login = function () {
             var isUser = false;
             var isPass = false;
+            var currentUser;
             for (var i = 0; i < $scope.students.length; i++) {
                 if ($scope.students[i].username == $scope.userLogin || $scope.students[i].email == $scope.userLogin) {
                     isUser = true;
                     if ($scope.students[i].password == $scope.passLogin) {
                         isPass = true;
-                        $scope.currentUser = $scope.students[i];
+                        currentUser = $scope.students[i];
                         break;
                     }
                 }
@@ -333,7 +345,8 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
             } else if (!isPass) {
                 toastr.warning('Mật khẩu không đúng!');
             } else {
-                Cookies.set('email', $scope.currentUser.email, { expires: 7 });
+
+                Cookies.set('email', currentUser.email, { expires: 7 });
                 if ($scope.rememberLogin) {
                     Cookies.set('username', $scope.userLogin, { expires: 7 });
                     Cookies.set('password', $scope.passLogin, { expires: 7 });
@@ -341,8 +354,9 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
                 } else {
                     removeCookies('username', 'password', 'remember');
                 }
-                $location.path("/");
-                toastr.success('Đăng nhập thành công!');
+
+                $scope.currentUser = currentUser;
+                window.location.href = "index.html";
             }
         }
 
