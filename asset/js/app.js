@@ -76,7 +76,6 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             if (Cookies.get('email')) {
                 $scope.currentUser = angular.copy($scope.students.find(st => st.email === Cookies.get('email')));
                 $scope.profile = angular.copy($scope.currentUser);
-                $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
             }
         });
 
@@ -134,9 +133,9 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
 
         $scope.editProfile = function () {
-            ref.child($scope.currentUser.$id).update({
+            studentRef.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
-                birthday: parser.setDate($scope.profile.birthday).getText(),
+                birthday: $scope.profile.birthday,
                 email: $scope.profile.email,
                 gender: $scope.profile.gender
             }).then(
