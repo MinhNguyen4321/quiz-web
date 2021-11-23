@@ -72,11 +72,13 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         $scope.students = $firebaseArray(studentRef);
 
         // Current User
-        $scope.students.$loaded().then(function () {
-            if (Cookies.get('email')) {
-                $scope.currentUser = angular.copy($scope.students.find(st => st.email === Cookies.get('email')));
-            }
-        });
+        setInterval(() => {
+            $scope.students.$loaded().then(function () {
+                if (Cookies.get('email')) {
+                    $scope.currentUser = angular.copy($scope.students.find(st => st.email === Cookies.get('email')));
+                }
+            });
+        }, 1000);
 
         $scope.logout = function () {
             $scope.currentUser = null;
@@ -131,7 +133,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
 
         $scope.openEditProfileModal = function () {
             $scope.profile = angular.copy($scope.currentUser);
-            if($scope.profile.birthday) {
+            if ($scope.profile.birthday) {
                 $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
             }
             $('#editProfileModal').modal('show');
@@ -266,8 +268,7 @@ app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime", "$location
                     email: $scope.emailSignUp,
                     password: $scope.passSignUp,
                     birthday: parser.setDate($scope.birthdaySignUp).getText(),
-                    gender: $scope.genderSignUp,
-                    marks: 0
+                    gender: $scope.genderSignUp
                 }).then(function () {
                     $location.path("/");
                     toastr.success("Đăng ký thành công!");
@@ -309,7 +310,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$location",
                                 Body: "Chào mừng bạn đến với Online Training!"
                             })
                         });
-                    } 
+                    }
 
                     $scope.students.$loaded().then(function () {
                         $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
