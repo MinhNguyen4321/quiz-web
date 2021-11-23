@@ -279,7 +279,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
         }
 
         $scope.loginWithGoogle = function () {
-            var provider = new firebase.auth.GoogleAuthProvider();
+            let provider = new firebase.auth.GoogleAuthProvider()
             Auth.$signInWithPopup(provider)
                 .then((result) => {
                     var fullname = result.user.displayName;
