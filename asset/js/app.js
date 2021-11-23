@@ -142,8 +142,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             }).then(
                 $scope.currentUser = angular.copy($scope.profile),
                 toastr.success("Cập nhật thông tin thành công!"),
-                $("#user-info-form").trigger("reset"),
-                $('#userInfoModal').modal('hide')
+                $('#editProfileForm').modal('hide')
             ).catch(function (error) {
                 toastr.error("Cập nhật thông tin thất bại!");
             });
