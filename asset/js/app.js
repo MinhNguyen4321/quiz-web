@@ -126,7 +126,7 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
 
         $scope.profile = angular.copy($scope.currentUser);
         var parser = datetime("dd/MM/yyyy");
-        $scope.editProfile = function (gender) {
+        $scope.editProfile = function () {
             ref.child($scope.currentUser.$id).update({
                 fullname: $scope.profile.fullname,
                 birthday: parser.parse($scope.profile.birthday).getText(),
@@ -281,13 +281,12 @@ app.controller('signInCtrl', ["$scope", "Auth", "$firebaseArray", "$location",
 
         $scope.loginWithGoogle = function () {
             var provider = new firebase.auth.GoogleAuthProvider();
-            provider.addScope('https://www.googleapis.com/auth/userinfo.email')
-            provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
-            provider.addScope('https://www.googleapis.com/auth/user.birthday.read')
-            provider.addScope('https://www.googleapis.com/auth/user.gender.read')
+            // provider.addScope('https://www.googleapis.com/auth/userinfo.email')
+            // provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
+            // provider.addScope('https://www.googleapis.com/auth/user.birthday.read')
+            // provider.addScope('https://www.googleapis.com/auth/user.gender.read')
             Auth.$signInWithPopup(provider)
                 .then((result) => {
-                    console.log(result.user);
                     var fullname = result.user.displayName;
                     var email = result.user.email;
                     var username = result.user.email.substring(0, result.user.email.indexOf('@'));
