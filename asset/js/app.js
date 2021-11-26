@@ -203,16 +203,20 @@ app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", 
         }
     }
 ]);
-app.controller('quizCtrl', ["$scope", "$http", "$routeParams", "$firebaseArray",
-    function ($scope, $http, $routeParams, $firebaseArray) {
+app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray",
+    function ($scope, $routeParams, $firebaseArray) {
         $scope.idSubject = $routeParams.id;
         $scope.nameSubject = $routeParams.name;
         $scope.pageSize = 1;
         $scope.start = 0;
         $scope.stt = 1;
 
-        var quizzes = firebase.database().ref("quizzes").child($scope.idSubject);
-        $scope.questions = $firebaseArray(quizzes);
+        var quizzesRef = firebase.database().ref("quizzes").child($scope.idSubject);
+        var quizzes= $firebaseArray(quizzesRef);
+
+        quizzes.$loaded().then(function () {
+            $scope.questions = getRandomArray(quizzes, 10);
+        });
     
         $scope.firstQuiz = function () {
             $scope.start = 0;
