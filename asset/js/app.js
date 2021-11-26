@@ -210,12 +210,14 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray",
         $scope.pageSize = 1;
         $scope.start = 0;
         $scope.stt = 1;
+        $scope.timer = 900;
 
         var quizzesRef = firebase.database().ref("quizzes").child($scope.idSubject);
         var quizzes= $firebaseArray(quizzesRef);
 
         quizzes.$loaded().then(function () {
-            $scope.questions = getRandomArray(quizzes, 10);
+            
+            $scope.quizzes = getRandomArray(quizzes, 10);
         });
     
         $scope.firstQuiz = function () {
@@ -229,15 +231,15 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray",
             }
         }
         $scope.nextQuiz = function () {
-            if ($scope.start < $scope.questions.length - $scope.pageSize) {
+            if ($scope.start < $scope.quizzes.length - $scope.pageSize) {
                 $scope.start += $scope.pageSize;
                 $scope.stt += 1;
             }
         }
         $scope.lastQuiz = function () {
-            var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
+            var soTrang = Math.ceil($scope.quizzes.length / $scope.pageSize);
             $scope.start = (soTrang - 1) * $scope.pageSize;
-            $scope.stt = $scope.questions.length;
+            $scope.stt = $scope.quizzes.length;
         }
     }
 ]);
