@@ -1,36 +1,38 @@
-<div class="container p-3 p-md-5 h-100">
+<div class="container p-3 p-md-4 h-100">
     <div class="d-flex flex-column justify-content-between rounded bg-light bg-opacity-50 p-4 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="h5 m-0 fw-bolder">
                 <i class="fa-solid fa-book-open me-2"></i>{{nameSubject|uppercase}}
             </span>
-            <span class="fs-5 badge bg-danger">
+            <span class="h5 m-0 fw-bolder">
                 {{(timer-timer%60)/60 > 9 ? (timer-timer%60)/60 : '0' + (timer-timer%60)/60}}:{{timer%60 > 9 ? timer%60 : ('0' + timer%60)}}
             </span>
+            
         </div>
-        <div class="list-question" ng-repeat="q in quizzes|limitTo:pageSize:start">
-            <div class="card bg-light bg-opacity-50 mb-3">
+        <div class="list-question mb-4 h-100" ng-repeat="q in quizzes|limitTo:pageSize:start">
+            <div class="card bg-light bg-opacity-50 h-100">
                 <div class="card-header fw-bold d-flex justify-content-between align-items-center">
                     <span>{{stt}}. {{q.Text}}</span>
                 </div>
                 <div class="card-body">
-                    <p class="card-text" ng-repeat="a in q.Answers">
-                        <label class="form-check-label" for="{{a.Id}}">
-                            <input class="form-check-input" type="radio" name="a" value="{{a.Id}}" id="{{a.Id}}">
-                            {{a.Text}}
+                    <p class="card-text" ng-repeat="answer in q.Answers">
+                        <label class="form-check-label" for="{{answer.Id}}">
+                            <input class="form-check-input" type="radio" name="answer" value="{{answer.Id}}" id="{{answer.Id}}">
+                            {{answer.Text}}
                         </label>
                     </p>
                 </div>
-                <div class="card-footer py-2">
+                <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
-                        <button class="fs-6 btn btn-success py-1" type="button">Xác nhận</button>
-                        <span class="text-muted fw-bold">Điểm: <span
-                                class="fs-6 badge bg-info">0/{{quizzes.length}}</span></span>
+                        <button class="fs-6 py-1 btn btn-danger" type="button">Kết thúc bài kiểm tra</button>
+                        <span class="text-muted fw-bold">Điểm: 
+                            <span class="fs-6 badge bg-info rounded-pill">0/{{quizzes.length}}</span>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center position-relative">
             <nav>
                 <ul class="pagination text-center m-0">
                     <li class="page-item" ng-click="firstQuiz()"><a class="page-link" href="javascript:void(0)">

@@ -57,6 +57,7 @@ app.config(function ($routeProvider) {
             redirectTo: '/'
         });
 });
+
 app.factory("Auth", ["$firebaseAuth",
     function ($firebaseAuth) {
         return $firebaseAuth();
@@ -67,7 +68,7 @@ app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", 
     function ($scope, $location, $window, $firebaseArray, datetime) {
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
-
+        
         // Current User
         var studentRef = ref.child("students");
         $scope.students = $firebaseArray(studentRef);
@@ -203,8 +204,8 @@ app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", 
         }
     }
 ]);
-app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray",
-    function ($scope, $routeParams, $firebaseArray) {
+app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interval",
+    function ($scope, $routeParams, $firebaseArray, $interval) {
         $scope.idSubject = $routeParams.id;
         $scope.nameSubject = $routeParams.name;
         $scope.pageSize = 1;
@@ -212,11 +213,17 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray",
         $scope.stt = 1;
         $scope.timer = 900;
 
+        $interval(function () {
+            $scope.timer--;
+            if ($scope.timer == 0) {
+                $scope.stop();
+            }
+        }, 1000);
+
         var quizzesRef = firebase.database().ref("quizzes").child($scope.idSubject);
         var quizzes= $firebaseArray(quizzesRef);
 
         quizzes.$loaded().then(function () {
-            
             $scope.quizzes = getRandomArray(quizzes, 10);
         });
     
