@@ -208,10 +208,18 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interv
     function ($scope, $routeParams, $firebaseArray, $interval) {
         $scope.idSubject = $routeParams.id;
         $scope.nameSubject = $routeParams.name;
+        
         $scope.pageSize = 1;
         $scope.start = 0;
-        $scope.stt = 1;
+
+        $scope.indexQuiz = 1;
         $scope.timer = 900;
+
+        /* Khôi phục kết quả thi nếu có dữ liệu */
+        $scope.results = JSON.parse(localStorage.getItem($scope.idSubject));
+        if ($scope.results == null) {
+            $scope.results = [];
+        }
 
         $interval(function () {
             $scope.timer--;
@@ -226,27 +234,38 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interv
         quizzes.$loaded().then(function () {
             $scope.quizzes = getRandomArray(quizzes, 10);
         });
+        
+        $scope.checkAnswer = function (index, idAnswer) {
+            $scope.results[index - 1] = idAnswer;
+            localStorage.setItem($scope.idSubject, JSON.stringify($scope.results));
+        }
     
         $scope.firstQuiz = function () {
             $scope.start = 0;
-            $scope.stt = 1;
+            $scope.indexQuiz = 1;
         }
         $scope.prevQuiz = function () {
             if ($scope.start > 0) {
                 $scope.start -= $scope.pageSize;
-                $scope.stt -= 1;
+                $scope.indexQuiz -= 1;
+            } else {
+                $scope.start = $scope.quizzes.length - $scope.pageSize;
+                $scope.indexQuiz = $scope.quizzes.length;
             }
         }
         $scope.nextQuiz = function () {
             if ($scope.start < $scope.quizzes.length - $scope.pageSize) {
                 $scope.start += $scope.pageSize;
-                $scope.stt += 1;
+                $scope.indexQuiz += 1;
+            } else {
+                $scope.start = 0;
+                $scope.indexQuiz = 1;
             }
         }
         $scope.lastQuiz = function () {
             var soTrang = Math.ceil($scope.quizzes.length / $scope.pageSize);
             $scope.start = (soTrang - 1) * $scope.pageSize;
-            $scope.stt = $scope.quizzes.length;
+            $scope.indexQuiz = $scope.quizzes.length;
         }
     }
 ]);
