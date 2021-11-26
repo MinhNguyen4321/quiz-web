@@ -63,8 +63,8 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebaseArray", "datetime",
-    function ($scope, $http, $location, $window, $firebaseArray, datetime) {
+app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", "datetime",
+    function ($scope, $location, $window, $firebaseArray, datetime) {
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
 
@@ -203,51 +203,43 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
     }
 ]);
-app.controller('quizCtrl', function ($scope, $http, $routeParams) {
-    $scope.idSubject = $routeParams.id;
-    $scope.nameSubject = $routeParams.name;
-    $scope.questions = [];
-    $scope.pageSize = 1;
-    $scope.start = 0;
-    $scope.stt = 1;
-
-    $http.get("asset/js/db/quizs/" + $scope.idSubject + ".js").then(
-        function (response) {
-            var listquestion = response.data;
-            $scope.questions = getRandomArray(listquestion, 10);
-            console.log($scope.questions);
-            
-        },
-        function (error) {
-            alert("Error: " + error.statusText);
-        }
-    );
-
-    $scope.firstQuiz = function () {
+app.controller('quizCtrl', ["$scope", "$http", "$routeParams", "$firebaseArray",
+    function ($scope, $http, $routeParams, $firebaseArray) {
+        $scope.idSubject = $routeParams.id;
+        $scope.nameSubject = $routeParams.name;
+        $scope.pageSize = 1;
         $scope.start = 0;
         $scope.stt = 1;
-    }
-    $scope.prevQuiz = function () {
-        if ($scope.start > 0) {
-            $scope.start -= $scope.pageSize;
-            $scope.stt -= 1;
-        }
-    }
-    $scope.nextQuiz = function () {
-        if ($scope.start < $scope.questions.length - $scope.pageSize) {
-            $scope.start += $scope.pageSize;
-            $scope.stt += 1;
-        }
-    }
-    $scope.lastQuiz = function () {
-        var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
-        $scope.start = (soTrang - 1) * $scope.pageSize;
-        $scope.stt = $scope.questions.length;
-    }
-});
 
-app.controller('signUpCtrl', ["$scope", "$firebaseArray", "datetime", "$location",
-    function ($scope, $firebaseArray, datetime, $location) {
+        var quizzes = firebase.database().ref("quizzes").child($scope.idSubject);
+        $scope.questions = $firebaseArray(quizzes);
+    
+        $scope.firstQuiz = function () {
+            $scope.start = 0;
+            $scope.stt = 1;
+        }
+        $scope.prevQuiz = function () {
+            if ($scope.start > 0) {
+                $scope.start -= $scope.pageSize;
+                $scope.stt -= 1;
+            }
+        }
+        $scope.nextQuiz = function () {
+            if ($scope.start < $scope.questions.length - $scope.pageSize) {
+                $scope.start += $scope.pageSize;
+                $scope.stt += 1;
+            }
+        }
+        $scope.lastQuiz = function () {
+            var soTrang = Math.ceil($scope.questions.length / $scope.pageSize);
+            $scope.start = (soTrang - 1) * $scope.pageSize;
+            $scope.stt = $scope.questions.length;
+        }
+    }
+]);
+
+app.controller('signUpCtrl', ["$scope", "datetime", "$location",
+    function ($scope, datetime, $location) {
         var parser = datetime("dd/MM/yyyy");
 
         $scope.genderSignUp = "true";
@@ -309,12 +301,13 @@ app.controller('signInCtrl', ["$scope", "Auth", "$location",
                     }
 
                     $scope.students.$loaded().then(function () {
-                        $scope.currentUser = $scope.students.filter(st => st.email == email)[0];
+                        $scope.$parent.currentUser = $scope.students.filter(st => st.email == email)[0];
                     });
 
                     Cookies.set('email', email, { expires: 7 });
                     removeCookies('username', 'password', 'remember');
-                    window.location.href = "index.html";
+                    $location.path("/");
+                    toastr.success("Đăng nhập thành công!");
                 }).catch((error) => {
                     console.error(error.message);
                 });
@@ -349,8 +342,9 @@ app.controller('signInCtrl', ["$scope", "Auth", "$location",
                     removeCookies('username', 'password', 'remember');
                 }
 
-                $scope.currentUser = currentUser;
-                window.location.href = "index.html";
+                $scope.$parent.currentUser = currentUser;
+                $location.path("/");
+                toastr.success("Đăng nhập thành công!");
             }
         }
 
