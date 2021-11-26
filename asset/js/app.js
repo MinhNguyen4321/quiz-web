@@ -68,10 +68,10 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
 
+        // Current User
         var studentRef = ref.child("students");
         $scope.students = $firebaseArray(studentRef);
-
-        // Current User
+        
         setInterval(() => {
             $scope.students.$loaded().then(function () {
                 if (Cookies.get('email')) {
@@ -88,7 +88,6 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
             toastr.success("Đăng xuất thành công!");
         }
 
-        /* Modal */
         $scope.forgotPassword = function (receiver) {
             var student = $scope.students.filter(st => st.email == receiver)[0];
             var password = generatePassword(8);
@@ -156,17 +155,11 @@ app.controller("homeCtrl", ["$scope", "$http", "$location", "$window", "$firebas
         }
 
         /* Subjects */
-        $scope.subjects = [];
+        var subjectRef = ref.child("subjects");
+        $scope.subjects = $firebaseArray(subjectRef);
+
         $scope.pageSize = 6;
         $scope.start = 0;
-        $http.get("asset/js/db/Subjects.js").then(
-            function (response) {
-                $scope.subjects = response.data;
-            },
-            function (error) {
-                alert("Error: " + error.statusText);
-            }
-        );
         $scope.showWithPath = function (path) {
             return $location.path() == path;
         };
@@ -229,8 +222,6 @@ app.controller('quizCtrl', function ($scope, $http, $routeParams) {
             alert("Error: " + error.statusText);
         }
     );
-
-    
 
     $scope.firstQuiz = function () {
         $scope.start = 0;
