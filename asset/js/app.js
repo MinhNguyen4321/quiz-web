@@ -226,7 +226,9 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
         var ref = firebase.database().ref();
         var subjectRef = ref.child("students");
-        var quizzes= $firebaseArray(ref.child("quizzes").child($scope.idSubject));
+        var quizzesRef = ref.child("subjects");
+
+        var quizzes= $firebaseArray(quizzesRef);
         quizzes.$loaded().then(function () {
             // Kiểm tra xem có bài thi nào chưa được làm hay không
 
