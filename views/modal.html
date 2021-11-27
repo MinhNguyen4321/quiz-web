@@ -98,7 +98,7 @@
             <div class="modal-body p-0">
                 <form id="edit-profile-form" name="editProfileForm" ng-submit="editProfileForm.$valid && editProfile()"
                     class="p-3" novalidate>
-                    <div class="row mb-3">
+                    <!-- <div class="row mb-3">
                         <div class="form-group col">
                             <label class="label" for="userInfo">Tên đăng nhập</label>
                             <input type="text" class="form-control" id="userInfo" name="userInfo"
@@ -113,7 +113,7 @@
                         <div class="form-group col">
                             <label for="emailInfo" class="form-label">Địa chỉ Email</label>
                             <input type="email" class="form-control" id="emailInfo" name="emailInfo"
-                                ng-model="profile.email" placeholder="Email" required>
+                                ng-model="profile.email" placeholder="Email" disabled>
                             <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
                                 <span class="badge bg-danger fst-italic"
                                     ng-show="editProfileForm.emailInfo.$error.email">
@@ -125,8 +125,7 @@
                                 </span>
                             </div>
                         </div>
-
-                    </div>
+                    </div> -->
                     <div class="row mb-3">
                         <div class="form-group col-6">
                             <label for="fullnameInfo" class="form-label">Họ và tên</label>

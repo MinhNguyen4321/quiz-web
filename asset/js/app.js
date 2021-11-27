@@ -141,6 +141,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         $scope.editProfile = function () {
             $scope.profile.birthday = parser.setDate($scope.profile.birthday).getText();
             studentRef.child($scope.currentUser.$id).update({
+                username: $scope.profile.username,
                 fullname: $scope.profile.fullname,
                 birthday: $scope.profile.birthday,
                 email: $scope.profile.email,
@@ -371,7 +372,6 @@ app.controller('signInCtrl', function ($scope, auth, $location) {
                 toastr.success("Đăng nhập thành công!");
             }
         }
-
     }
 );
 
