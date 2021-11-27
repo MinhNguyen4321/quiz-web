@@ -75,14 +75,12 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     
     var studentRef = ref.child("students");
     var studentArray = $firebaseArray(studentRef);
-    setInterval(() => {
-        studentArray.$loaded().then(function (students) {
-            $scope.students = students;
-            if (Cookies.get('email')) {
-                $scope.currentUser = students.find(st => st.email === Cookies.get('email'));
-            }
-        });
-    }, 1000);
+    studentArray.$loaded().then(function (students) {
+        $scope.students = students;
+        if (Cookies.get('email')) {
+            $scope.currentUser = students.find(st => st.email === Cookies.get('email'));
+        }
+    });
 
     $scope.logout = function () {
         $scope.currentUser = null;
@@ -224,39 +222,42 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     $interval(function () {
         $scope.timer--;
         if ($scope.timer == 0) {
+            $scope.timer = 900;
             $scope.stop();
         }
     }, 1000);
+
+    var now = new Date();
 
     var ref = firebase.database().ref();
     var studentsRef = ref.child("students");
     var quizzesRef = ref.child("quizzes").child($scope.idSubject);
 
-    var students = $firebaseArray(studentsRef);
     var quizzes = $firebaseArray(quizzesRef);
 
-    quizzes.$loaded().then(function () {
-        console.log($scope.currentUser);
-        var currentStudentRef = studentsRef.child($scope.currentUser.$id);
-        // Kiểm tra xem có bài thi nào chưa được làm hay không
-        console.log(currentStudentRef.child("quiz-test"));
-
+    quizzes.$loaded().then(function (quizzesData) {
+        var currentUserRef = studentsRef.child($scope.currentUser.$id);
+        var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
+        $firebaseArray(examHistoryRef).$loaded().then(function (examHistory) {
+            console.log(examHistory);
+            console.log(Object.values(examHistory));
+        });
         // Random ngẫu nhiên 10 câu hỏi
-        $scope.quizzes = getRandomArray(quizzes, 10);
+        $scope.quizzes = getRandomArray(quizzesData, 10);
 
         // Lưu thông tin vào database
-        // var examHistory = currentStudentRef.child("exam-history").child($scope.idSubject);
-        // examHistory.push({
-        //     "time": new Date().getTime(),
-        //     "completed": "false"
-        // }).then(function (ref) {
-        //     $scope.quizzes.forEach(function (quiz) {
-        //         examHistory.child(ref.key).child("quiz-test").push({
-        //             "question-id": quiz.Id,
-        //             "answer-id": ""
-        //         });
-        //     });
-        // });
+        examHistoryRef.child(now.getTime()).update({
+            "time": now.getTime(),
+            "status": "Đang thi",
+            "score": "false"
+        }).then(function (ref) {
+            $scope.quizzes.forEach(function (quiz) {
+                examHistoryRef.child(ref.key).child("results").push({
+                    "question-id": quiz.Id,
+                    "answer-id": ""
+                });
+            });
+        });
     });
 
     $scope.results = [];
