@@ -222,11 +222,17 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             }
         }, 1000);
 
-        var quizzesRef = firebase.database().ref("quizzes").child($scope.idSubject);
-        var quizzes= $firebaseArray(quizzesRef);
 
-        quizzes.$loaded().then(function () {
-            $scope.quizzes = getRandomArray(quizzes, 10);
+        var ref = firebase.database().ref();
+        var subjectRef = ref.child("subjects");
+
+        var quizzesArray= $firebaseArray(ref.child("quizzes").child($scope.idSubject));
+
+        quizzesArray.$loaded().then(function () {
+            $scope.quizzes = getRandomArray(quizzesArray, 10);
+            // subjectRef.child($scope.currentUser.$id).update({
+                
+            // });
         });
         
         $scope.results = [];
