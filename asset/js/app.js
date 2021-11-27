@@ -58,14 +58,13 @@ app.config(function ($routeProvider) {
         });
 });
 
-app.factory("Auth", ["$firebaseAuth",
+app.factory("auth", ["$firebaseAuth",
     function ($firebaseAuth) {
         return $firebaseAuth();
     }
 ]);
 
-app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", "datetime",
-    function ($scope, $location, $window, $firebaseArray, datetime) {
+app.controller("homeCtrl", function ($scope, $location, $window, datetime, $firebaseArray, $firebaseObject) {
         var parser = datetime("dd/MM/yyyy");
         var ref = firebase.database().ref();
         
@@ -164,6 +163,7 @@ app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", 
         $scope.showWithPath = function (path) {
             return $location.path() == path;
         };
+        
         $scope.openQuiz = function (idSubject, nameSubject) {
             if ($scope.currentUser == null) {
                 toastr.error("Bạn cần đăng nhập để thực hiện chức năng này!");
@@ -203,9 +203,8 @@ app.controller("homeCtrl", ["$scope", "$location", "$window", "$firebaseArray", 
             }
         }
     }
-]);
-app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interval",
-    function ($scope, $routeParams, $firebaseArray, $interval) {
+);
+app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval) {
         $scope.idSubject = $routeParams.id;
         $scope.nameSubject = $routeParams.name;
         
@@ -214,12 +213,6 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interv
 
         $scope.indexQuiz = 1;
         $scope.timer = 900;
-
-        /* Khôi phục kết quả thi nếu có dữ liệu */
-        $scope.results = JSON.parse(localStorage.getItem($scope.idSubject));
-        if ($scope.results == null) {
-            $scope.results = [];
-        }
 
         $interval(function () {
             $scope.timer--;
@@ -235,6 +228,7 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interv
             $scope.quizzes = getRandomArray(quizzes, 10);
         });
         
+        $scope.results = [];
         $scope.checkAnswer = function (index, idAnswer) {
             $scope.results[index - 1] = idAnswer;
             localStorage.setItem($scope.idSubject, JSON.stringify($scope.results));
@@ -268,10 +262,9 @@ app.controller('quizCtrl', ["$scope", "$routeParams", "$firebaseArray", "$interv
             $scope.indexQuiz = $scope.quizzes.length;
         }
     }
-]);
+);
 
-app.controller('signUpCtrl', ["$scope", "datetime", "$location",
-    function ($scope, datetime, $location) {
+app.controller('signUpCtrl', function ($scope, datetime, $location) {
         var parser = datetime("dd/MM/yyyy");
 
         $scope.genderSignUp = "true";
@@ -296,10 +289,9 @@ app.controller('signUpCtrl', ["$scope", "datetime", "$location",
             }
         }
     }
-]);
+);
 
-app.controller('signInCtrl', ["$scope", "Auth", "$location",
-    function ($scope, Auth, $location) {
+app.controller('signInCtrl', function ($scope, auth, $location) {
         if (Cookies.get('remember') == 'true') {
             $scope.userLogin = Cookies.get('username');
             $scope.passLogin = Cookies.get('password');
@@ -308,7 +300,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$location",
 
         $scope.loginWithGoogle = function () {
             let provider = new firebase.auth.GoogleAuthProvider()
-            Auth.$signInWithPopup(provider)
+            auth.$signInWithPopup(provider)
                 .then((result) => {
                     var fullname = result.user.displayName;
                     var email = result.user.email;
@@ -381,7 +373,7 @@ app.controller('signInCtrl', ["$scope", "Auth", "$location",
         }
 
     }
-]);
+);
 
 app.directive("compareTo", function () {
     return {
