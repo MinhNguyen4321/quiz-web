@@ -46,7 +46,7 @@
             <div class="modal-body p-0">
                 <form id="change-pass-form" name="changePassForm" class="p-3"
                     ng-submit="changePassForm.$valid && changePassword(currentPass, newPass)" novalidate>
-                    <div class="form-group mb-3" ng-show="currentUser.password">
+                    <!-- <div class="form-group mb-3">
                         <label for="currentPass" class="form-label">Mật khẩu hiện tại</label>
                         <input type="password" class="form-control" id="currentPass" ng-model="currentPass"
                             name="currentPass" placeholder="Current Password" required>
@@ -56,7 +56,7 @@
                                 Vui lòng nhập mật khẩu hiện tại!
                             </span>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group mb-3">
                         <label for="newPass" class="form-label">Mật khẩu mới</label>
                         <input type="password" class="form-control" id="newPass" ng-model="newPass" name="newPass"
@@ -126,43 +126,58 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="row mb-3">
-                        <div class="form-group col-6">
-                            <label for="fullnameInfo" class="form-label">Họ và tên</label>
-                            <input type="text" class="form-control" id="fullnameInfo" name="fullnameInfo"
-                                ng-model="profile.fullname" placeholder="Fullname" required>
-                            <div ng-show="editProfileForm.$submitted || editProfileForm.fullnameInfo.$touched">
-                                <span class="badge bg-danger fst-italic"
-                                    ng-show="editProfileForm.fullnameInfo.$error.required">
-                                    Vui lòng nhập họ tên!
-                                </span>
-                            </div>
+                    <div class="form-group mb-3">
+                        <label for="fullnameInfo" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="fullnameInfo" name="fullnameInfo"
+                            ng-model="profile.fullname" placeholder="Fullname" required>
+                        <div ng-show="editProfileForm.$submitted || editProfileForm.fullnameInfo.$touched">
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.fullnameInfo.$error.required">
+                                Vui lòng nhập họ tên!
+                            </span>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="birthdayInfo" class="form-label">Ngày sinh</label>
-                            <input type="text" datetime="dd-MM-yyyy" class="form-control" id="birthdayInfo"
-                                name="birthdayInfo" ng-model="profile.birthday" required>
-                            <div ng-show="editProfileForm.$submitted || editProfileForm.birthdayInfo.$touched">
-                                <span class="badge bg-danger fst-italic"
-                                    ng-show="editProfileForm.birthdayInfo.$error.required">
-                                    Vui lòng nhập ngày sinh!
-                                </span>
-                            </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="birthdayInfo" class="form-label">Ngày sinh</label>
+                        <input type="text" datetime="dd-MM-yyyy" class="form-control" id="birthdayInfo"
+                            name="birthdayInfo" ng-model="profile.birthday" required>
+                        <div ng-show="editProfileForm.$submitted || editProfileForm.birthdayInfo.$touched">
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.birthdayInfo.$error.required">
+                                Vui lòng nhập ngày sinh!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="emailInfo" class="form-label">Địa chỉ Email</label>
+                        <input type="email" class="form-control" id="emailInfo" name="emailInfo"
+                            ng-model="profile.email" placeholder="Email" required>
+                        <div ng-show="editProfileForm.$submitted || editProfileForm.emailInfo.$touched">
+                            <span class="badge bg-danger fst-italic" ng-show="editProfileForm.emailInfo.$error.email">
+                                Địa chỉ email không hợp lệ!
+                            </span>
+                            <span class="badge bg-danger fst-italic"
+                                ng-show="editProfileForm.emailInfo.$error.required">
+                                Vui lòng nhập địa chỉ email!
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label me-3">Giới tính</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == 'true'"
-                                type="radio" name="genderInfo" id="maleInfo" value="true" required>
+                            <input class="form-check-input" ng-model="profile.gender"
+                                ng-checked="profile.gender == 'true'" type="radio" name="genderInfo" id="maleInfo"
+                                value="true" required>
                             <label class="form-check-label" for="maleInfo">Nam</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" ng-model="profile.gender" ng-checked="profile.gender == 'false'"
-                                type="radio" name="genderInfo" id="femaleInfo" value="false" required>
+                            <input class="form-check-input" ng-model="profile.gender"
+                                ng-checked="profile.gender == 'false'" type="radio" name="genderInfo" id="femaleInfo"
+                                value="false" required>
                             <label class="form-check-label" for="femaleInfo">Nữ</label>
                         </div>
-                        <div class="form-check-inline" ng-show="editProfileForm.$submitted || editProfileForm.genderInfo.$touched">
+                        <div class="form-check-inline"
+                            ng-show="editProfileForm.$submitted || editProfileForm.genderInfo.$touched">
                             <span class="badge bg-danger fst-italic"
                                 ng-show="editProfileForm.genderInfo.$error.required">
                                 Vui lòng chọn giới tính!

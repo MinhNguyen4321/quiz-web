@@ -1,28 +1,28 @@
 {
   "students": {
-    "-MpVXUalM9e22WeOCnJS": {
+    "ztqbjeJaeygg1zJrd4yPKTHwEaj1": {
+      "uid" : "ztqbjeJaeygg1zJrd4yPKTHwEaj1",
+      "username":"NoPT",
       "birthday": "15/05/1993",
       "email": "nopt@fpt.edu.vn",
       "fullname": "Phạm Thị Nở",
-      "gender": "false",
-      "password": "123456",
-      "username": "NoPT"
+      "gender": "false"
     },
-    "-MpVXUalM9e22eMKdJCD": {
+    "QxXJIgmDwfTzaB5RAJFZ5eBBKw13": {
+      "uid" : "QxXJIgmDwfTzaB5RAJFZ5eBBKw13",
+      "username":"TeoNV",
       "birthday": "03/06/2006",
       "email": "teonv@fpt.edu.vn",
       "fullname": "Nguyễn Văn Tèo",
-      "gender": "true",
-      "password": "123456",
-      "username": "TeoNV"
+      "gender": "true"
     },
-    "-MpVXUaUIHdDeCeXrsVS": {
+    "HnUm9bgMvxN1RzvuyIRRoFCG5WI3": {
+      "uid" : "HnUm9bgMvxN1RzvuyIRRoFCG5WI3",
+      "username":"PheoNVC",
       "birthday": "11/10/1985",
       "email": "pheonv@fpt.edu.vn",
       "fullname": "Nguyễn Văn Chí Phèo",
-      "gender": "true",
-      "password": "123456",
-      "username": "PheoNV"
+      "gender": "true"
     }
   },
   "subjects": [

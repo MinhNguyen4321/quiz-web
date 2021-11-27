@@ -64,71 +64,53 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", function ($scope, $location, $window, datetime, $firebaseArray) {
+app.controller("homeCtrl", function ($scope, $location, $window, datetime, $firebaseArray, Auth) {
     var parser = datetime("dd/MM/yyyy");
     var ref = firebase.database().ref();
 
     // Current User
-    $scope.currentUser = {};
-    $scope.students = [];
-
-    
     var studentRef = ref.child("students");
-    var studentArray = $firebaseArray(studentRef);
-    studentArray.$loaded().then(function (students) {
-        $scope.students = students;
-        if (Cookies.get('email')) {
-            $scope.currentUser = students.find(st => st.email === Cookies.get('email'));
-        }
+    $scope.students = $firebaseArray(studentRef);
+
+    $scope.students.$loaded().then(function () {
+        $scope.currentUser = $scope.students.$getRecord(Auth.$getAuth().uid);
+        $scope.currentUser.email = Auth.$getAuth().email;
     });
 
     $scope.logout = function () {
+        Auth.$signOut();
         $scope.currentUser = null;
-        Cookies.remove('email');
 
         $location.path("/");
         toastr.success("Đăng xuất thành công!");
     }
 
     $scope.forgotPassword = function (receiver) {
-        var student = $scope.students.filter(st => st.email == receiver)[0];
-        var password = generatePassword(8);
-
-        if (!student) {
-            toastr.error("Email chưa đăng ký!");
-            return;
-        }
-
-        Email.send({
-            SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
-            To: receiver,
-            From: "onlinetrainingfpoly@fpt.edu.vn",
-            Subject: "Đặt lại mật khẩu từ Online Training",
-            Body: "Xin chào, mật khẩu mới của bạn là: <b>" + password + "</b>"
-        }).then(
-            studentRef.child(student.$id).update({
-                password: password
-            }),
+        Auth.$sendPasswordResetEmail(receiver).then(function () {
             toastr.success("Gửi email thành công!"),
-            $("#forgot-pass-form").trigger("reset"),
-            $('#forgotPassModal').modal('hide')
-        );
-
+                $("#forgot-pass-form").trigger("reset"),
+                $('#forgotPassModal').modal('hide')
+        }).catch(function (error) {
+            if (error == "auth/user-not-found") {
+                toastr.error("Email không tồn tại!");
+            } else {
+                toastr.error("Gửi email thất bại!");
+            }
+        });
     }
 
     $scope.changePassword = function (oldPass, newPass) {
-        var student = $scope.students.filter(st => st.email == $scope.currentUser.email)[0];
-        if (student.password != oldPass) {
-            toastr.error("Mật khẩu hiện tại không đúng!");
-        } else if (oldPass == newPass) {
+        if (oldPass == newPass) {
             toastr.error("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
         } else {
-            studentRef.child(student.$id).update({
-                password: newPass
+            Auth.$updatePassword(newPass).then(function (result) {
+                toastr.success("Đổi mật khẩu thành công!");
+                $("#change-pass-form").trigger("reset");
+                $('#changePassModal').modal('hide');
+            }, function (error) {
+                console.error(error.code);
+                toastr.error(error.message);
             });
-            toastr.success("Đổi mật khẩu thành công!");
-            $("#change-pass-form").trigger("reset");
-            $('#changePassModal').modal('hide');
         }
     }
 
@@ -142,6 +124,12 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
 
     $scope.editProfile = function () {
         $scope.profile.birthday = parser.setDate($scope.profile.birthday).getText();
+        Auth.$updateEmail($scope.profile.email).then(function () {
+            $scope.currentUser.email = $scope.profile.email;
+        }, function (error) {
+            console.error(error.message);
+            toastr.error(error.message);
+        });
         studentRef.child($scope.currentUser.$id).update({
             username: $scope.profile.username,
             fullname: $scope.profile.fullname,
@@ -153,7 +141,8 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
             toastr.success("Cập nhật thông tin thành công!"),
             $('#editProfileModal').modal('hide')
         ).catch(function (error) {
-            toastr.error("Cập nhật thông tin thất bại!");
+            console.error(error.code);
+            toastr.error(error.message);
         });
     }
 
@@ -296,29 +285,41 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 }
 );
 
-app.controller('signUpCtrl', function ($scope, datetime, $location) {
+app.controller('signUpCtrl', function ($scope, datetime, $location, Auth) {
     var parser = datetime("dd/MM/yyyy");
-
     $scope.genderSignUp = "true";
 
     $scope.signUp = function () {
-        if ($scope.students.filter(st => st.email == $scope.emailSignUp).length > 0) {
-            toastr.error("Email đã tồn tại!");
-        } else if ($scope.students.filter(st => st.username == $scope.userSignUp).length > 0) {
+        var studentRef = firebase.database().ref("students");
+
+        if ($scope.students.filter(st => st.username == $scope.userSignUp).length != 0) {
             toastr.error("Tên đăng nhập đã tồn tại!");
-        } else {
-            $scope.students.$add({
-                username: $scope.userSignUp,
-                fullname: $scope.fullnameSignUp,
-                email: $scope.emailSignUp,
-                password: $scope.passSignUp,
-                birthday: parser.setDate($scope.birthdaySignUp).getText(),
-                gender: $scope.genderSignUp
-            }).then(function () {
-                $location.path("/");
-                toastr.success("Đăng ký thành công!");
-            });
+            return;
         }
+
+        Auth.$createUserWithEmailAndPassword($scope.emailSignUp, $scope.passSignUp)
+            .then(function (firebaseUser) {
+                studentRef.child(firebaseUser.uid).update({
+                    username: $scope.userSignUp,
+                    fullname: $scope.fullnameSignUp,
+                    email: $scope.emailSignUp,
+                    birthday: parser.setDate($scope.birthdaySignUp).getText(),
+                    gender: $scope.genderSignUp
+                }).then(function () {
+                    Email.send({
+                        SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
+                        To: $scope.emailSignUp,
+                        From: "onlinetrainingfpoly@fpt.edu.vn",
+                        Subject: "Welcome to Online Training",
+                        Body: "Chào mừng bạn đến với Online Training!"
+                    })
+                    $location.path("#!signin");
+                    toastr.success("Đăng ký thành công!");
+                });
+            }).catch(function (error) {
+                console.error(error.code + ": " + error.message);
+                toastr.error(error.message);
+            });
     }
 }
 );
@@ -331,21 +332,19 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
     }
 
     $scope.loginWithGoogle = function () {
+        let studentRef = firebase.database().ref("students");
         let provider = new firebase.auth.GoogleAuthProvider()
         Auth.$signInWithPopup(provider)
             .then((result) => {
                 var fullname = result.user.displayName;
                 var email = result.user.email;
                 var username = result.user.email.substring(0, result.user.email.indexOf('@'));
-
-                if ($scope.students.filter(student => student.email == email).length == 0) {
-                    $scope.students.$add({
+                var uid = result.user.uid;
+                if (!$scope.students.$getRecord(uid)) {
+                    studentRef.child(uid).update({
                         fullname: fullname,
-                        email: email,
                         username: username,
                     }).then(function () {
-                        Cookies.set('email', email, { expires: 7 });
-
                         Email.send({
                             SecureToken: "6a5ad7d3-98a6-401b-8d9e-9a4eb34adebe",
                             To: email,
@@ -357,10 +356,10 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
                 }
 
                 $scope.students.$loaded().then(function () {
-                    $scope.$parent.currentUser = $scope.students.filter(st => st.email == email)[0];
+                    $scope.$parent.currentUser = $scope.students.$getRecord(uid);
+                    $scope.$parent.currentUser.email = Auth.$getAuth().email;
                 });
 
-                Cookies.set('email', email, { expires: 7 });
                 removeCookies('username', 'password', 'remember');
                 $location.path("/");
                 toastr.success("Đăng nhập thành công!");
@@ -369,42 +368,46 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
             });
     }
 
+    console.log(Auth);
     $scope.login = function () {
-        var isUser = false;
-        var isPass = false;
-        var currentUser;
-        for (var i = 0; i < $scope.students.length; i++) {
-            if ($scope.students[i].username == $scope.userLogin || $scope.students[i].email == $scope.userLogin) {
-                isUser = true;
-                if ($scope.students[i].password == $scope.passLogin) {
-                    isPass = true;
-                    currentUser = $scope.students[i];
-                    break;
-                }
-            }
-        }
-        if (!isUser) {
-            toastr.warning("Tài khoản không tồn tại!");
-        } else if (!isPass) {
-            toastr.warning('Mật khẩu không đúng!');
-        } else {
-
-            Cookies.set('email', currentUser.email, { expires: 7 });
-            if ($scope.rememberLogin) {
-                Cookies.set('username', $scope.userLogin, { expires: 7 });
-                Cookies.set('password', $scope.passLogin, { expires: 7 });
-                Cookies.set('remember', $scope.rememberLogin, { expires: 7 });
+        var email = $scope.userLogin;
+        if (!checkEmail($scope.userLogin)) {
+            if ($scope.students.filter(st => st.username == $scope.userLogin).length == 0) {
+                toastr.error("Tên đăng nhập không tồn tại!");
             } else {
-                removeCookies('username', 'password', 'remember');
+                var email = $scope.students.find(st => st.username == $scope.userLogin).email;
             }
-
-            $scope.$parent.currentUser = currentUser;
-            $location.path("/");
-            toastr.success("Đăng nhập thành công!");
         }
+        Auth.$signInWithEmailAndPassword(email, $scope.passLogin)
+            .then(function (firebaseUser) {
+                $scope.students.$loaded().then(function () {
+                    $scope.$parent.currentUser = $scope.students.find(st => st.$id == firebaseUser.uid);
+                    $scope.$parent.currentUser.email = Auth.$getAuth().email;
+                });
+
+                if ($scope.rememberLogin) {
+                    Cookies.set('username', $scope.userLogin, { expires: 7 });
+                    Cookies.set('password', $scope.passLogin, { expires: 7 });
+                    Cookies.set('remember', $scope.rememberLogin, { expires: 7 });
+                } else {
+                    removeCookies('username', 'password', 'remember');
+                }
+                $location.path("/");
+                toastr.success("Đăng nhập thành công!");
+            }).catch(function (error) {
+                console.log(error.code);
+                if (error.code == "auth/user-not-found") {
+                    toastr.error("Tài khoản không tồn tại!");
+                } else if (error.code == "auth/wrong-password") {
+                    toastr.error("Sai mật khẩu!");
+                } else if (error.code == "auth/invalid-email") {
+                    toastr.error("Email không hợp lệ!");
+                } else {
+                    toastr.error(error.message);
+                }
+            });
     }
-}
-);
+});
 
 app.directive("compareTo", function () {
     return {
