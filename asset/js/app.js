@@ -58,7 +58,7 @@ app.config(function ($routeProvider) {
         });
 });
 
-app.factory("auth", ["$firebaseAuth",
+app.factory("Auth", ["$firebaseAuth",
     function ($firebaseAuth) {
         return $firebaseAuth();
     }
@@ -69,6 +69,8 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         var ref = firebase.database().ref();
         
         // Current User
+        $scope.currentUser = {};
+        
         var studentRef = ref.child("students");
         $scope.students = $firebaseArray(studentRef);
         
@@ -222,17 +224,27 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             }
         }, 1000);
 
-
         var ref = firebase.database().ref();
-        var subjectRef = ref.child("subjects");
+        var subjectRef = ref.child("students");
+        var quizzes= $firebaseArray(ref.child("quizzes").child($scope.idSubject));
+        quizzes.$loaded().then(function () {
+            // Kiểm tra xem có bài thi nào chưa được làm hay không
 
-        var quizzesArray= $firebaseArray(ref.child("quizzes").child($scope.idSubject));
-
-        quizzesArray.$loaded().then(function () {
-            $scope.quizzes = getRandomArray(quizzesArray, 10);
-            // subjectRef.child($scope.currentUser.$id).update({
-                
-            // });
+            // Random ngẫu nhiên 10 câu hỏi
+            $scope.quizzes = getRandomArray(quizzes, 10);
+            var quizCurrentUser = subjectRef.child($scope.currentUser.$id).child("subjects").child($scope.idSubject);
+            // Lưu thông tin vào database
+            quizCurrentUser.push({
+                "time" : new Date().getTime(),
+                "is-completed": "false"
+            }).then(function (ref) {
+                $scope.quizzes.forEach(function (quiz) {
+                    quizCurrentUser.child(ref.key).child("quizzes").push({
+                        "question-id" : quiz.Id,
+                        "answer-id" : ""
+                    });
+                });
+            });
         });
         
         $scope.results = [];
@@ -298,7 +310,7 @@ app.controller('signUpCtrl', function ($scope, datetime, $location) {
     }
 );
 
-app.controller('signInCtrl', function ($scope, auth, $location) {
+app.controller('signInCtrl', function ($scope, Auth, $location) {
         if (Cookies.get('remember') == 'true') {
             $scope.userLogin = Cookies.get('username');
             $scope.passLogin = Cookies.get('password');
@@ -307,7 +319,7 @@ app.controller('signInCtrl', function ($scope, auth, $location) {
 
         $scope.loginWithGoogle = function () {
             let provider = new firebase.auth.GoogleAuthProvider()
-            auth.$signInWithPopup(provider)
+            Auth.$signInWithPopup(provider)
                 .then((result) => {
                     var fullname = result.user.displayName;
                     var email = result.user.email;

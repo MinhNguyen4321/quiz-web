@@ -1,6 +1,6 @@
 {
-  "students": [
-    {
+  "students": {
+    "-MpVXUalM9e22WeOCnJS": {
       "birthday": "15/05/1993",
       "email": "nopt@fpt.edu.vn",
       "fullname": "Phạm Thị Nở",
@@ -8,7 +8,7 @@
       "password": "123456",
       "username": "NoPT"
     },
-    {
+    "-MpVXUalM9e22eMKdJCD": {
       "birthday": "03/06/2006",
       "email": "teonv@fpt.edu.vn",
       "fullname": "Nguyễn Văn Tèo",
@@ -16,7 +16,7 @@
       "password": "123456",
       "username": "TeoNV"
     },
-    {
+    "-MpVXUaUIHdDeCeXrsVS": {
       "birthday": "11/10/1985",
       "email": "pheonv@fpt.edu.vn",
       "fullname": "Nguyễn Văn Chí Phèo",
@@ -24,7 +24,7 @@
       "password": "123456",
       "username": "PheoNV"
     }
-  ],
+  },
   "subjects": [
     {
       "Id": "ADAV",
@@ -37864,6 +37864,5 @@
         ]
       }
     ]
-  },
-  "results": {}
+  }
 }
