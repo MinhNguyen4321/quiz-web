@@ -335,7 +335,7 @@ app.controller('signUpCtrl', function ($scope, datetime, $location, Auth) {
                         Subject: "Welcome to Online Training",
                         Body: "Chào mừng bạn đến với Online Training!"
                     })
-                    $location.path("#!signin");
+                    $location.path("/");
                     toastr.success("Đăng ký thành công!");
                 });
             }).catch(function (error) {
