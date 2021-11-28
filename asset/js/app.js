@@ -196,7 +196,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     }
 }
 );
-app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval) {
+app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval, $location) {
     $scope.idSubject = $routeParams.id;
     $scope.nameSubject = $routeParams.name;
 
@@ -208,14 +208,6 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     $scope.score = 0;
 
     $scope.timer = 900;
-    var timer = $interval(function () {
-        $scope.timer--;
-        if ($scope.timer == 0) {
-            $scope.timer = 900;
-            $scope.stop();
-        }
-    }, 1000);
-    $interval.cancel(timer);
 
     var now = new Date();
 
@@ -234,10 +226,11 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             if (examHistory[0]) {
                 if (examHistory[0].status == "Đang thi") {
                     $scope.quizzes = JSON.parse(examHistory[0].quiz)
+                    $scope.timer = examHistory[0].countdown_time;
                 }
 
                 if (examHistory[0].results) {
-                    $scope.results = JSON.parse(examHistory[0].results); // Lưu kết quả của bài thi
+                    $scope.results = JSON.parse(examHistory[0].results);
                 } else {
                     $scope.results = [];
                 }
@@ -260,6 +253,25 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 };
                 examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
             }
+
+            var stop = $interval(function () {
+                // Dừng thời gian khi thoát khỏi trang
+                if ($location.path() != "/quiz") {
+                    $interval.cancel(stop);
+                }
+                // Cập nhật thời gian mỗi một giây
+                $scope.timer--;
+                if ($scope.timer == 0) {
+                    $scope.timer = 900;
+                    $scope.stop();
+                }
+                // Lưu thời gian vào bảng exam-history
+                examHistoryRef.child(examHistory[0].$id).update({
+                    countdown_time: $scope.timer
+                });
+            }, 1000);
+
+
         });
     });
 
