@@ -205,6 +205,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
     $scope.indexQuiz = 1;
     $scope.results = [];
+    $scope.score = 0;
 
     $scope.timer = 900;
     var timer = $interval(function () {
@@ -227,15 +228,18 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     quizzes.$loaded().then(function (quizzesData) {
         var currentUserRef = studentsRef.child($scope.currentUser.$id);
         var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
-        // Kiểm tra bài thi cuối cùng đã hoàn thành hay chưa
-        // Nếu chưa tạo mới bài thi
+        
         $firebaseArray(examHistoryRef).$loaded().then(function (examHistory) {
             examHistory.sort((a, b) => b.time - a.time);
             if (examHistory[0]) {
-                console.log(examHistory[0].result);
                 if (examHistory[0].status == "Đang thi") {
                     $scope.quizzes = JSON.parse(examHistory[0].quiz)
-                    $scope.results = JSON.parse(examHistory[0].result);
+                }
+
+                if (examHistory[0].results) {
+                    $scope.results = JSON.parse(examHistory[0].results); // Lưu kết quả của bài thi
+                } else {
+                    $scope.results = [];
                 }
             } else {
                 $scope.quizzes = getRandomArray(quizzesData, 10);
@@ -245,16 +249,16 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     "status": "Đang thi",
                     "quiz": JSON.stringify($scope.quizzes)
                 }).then(function () {
-                    // for (var i = 0; i < $scope.quizzes.length; i++) {
-                    //     examHistoryRef.child(now.getTime()).child("results").child(i).set("Chưa trả lời");
-                    // }
                     examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
                 });
             }
 
-            $scope.checkAnswer = function (index, idAnswer) {
-                $scope.results[index - 1] = idAnswer;
-                console.log($scope.results);
+            $scope.checkAnswer = function (index, answerId, correctAnswerId) {
+                examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
+                $scope.results[index - 1] = {
+                    "answerId" : answerId
+                };
+                console.log($scope.results[index - 1]);
             }
         });
     });
@@ -267,19 +271,21 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
         if ($scope.start > 0) {
             $scope.start -= $scope.pageSize;
             $scope.indexQuiz -= 1;
-        } else {
-            $scope.start = $scope.quizzes.length - $scope.pageSize;
-            $scope.indexQuiz = $scope.quizzes.length;
-        }
+        } 
+        // else {
+        //     $scope.start = $scope.quizzes.length - $scope.pageSize;
+        //     $scope.indexQuiz = $scope.quizzes.length;
+        // }
     }
     $scope.nextQuiz = function () {
         if ($scope.start < $scope.quizzes.length - $scope.pageSize) {
             $scope.start += $scope.pageSize;
             $scope.indexQuiz += 1;
-        } else {
-            $scope.start = 0;
-            $scope.indexQuiz = 1;
-        }
+        } 
+        // else {
+        //     $scope.start = 0;
+        //     $scope.indexQuiz = 1;
+        // }
     }
     $scope.lastQuiz = function () {
         var soTrang = Math.ceil($scope.quizzes.length / $scope.pageSize);
@@ -372,7 +378,6 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
             });
     }
 
-    console.log(Auth);
     $scope.login = function () {
         var email = $scope.userLogin;
         if (!checkEmail($scope.userLogin)) {
@@ -399,7 +404,7 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
                 $location.path("/");
                 toastr.success("Đăng nhập thành công!");
             }).catch(function (error) {
-                console.log(error.code);
+                console.error(error.code);
                 if (error.code == "auth/user-not-found") {
                     toastr.error("Tài khoản không tồn tại!");
                 } else if (error.code == "auth/wrong-password") {
