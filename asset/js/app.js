@@ -256,9 +256,9 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             $scope.checkAnswer = function (index, answerId, correctAnswerId) {
                 examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
                 $scope.results[index - 1] = {
-                    "answerId" : answerId
+                    answerId : answerId,
+                    mark : answerId == correctAnswerId ? 1 : 0
                 };
-                console.log($scope.results[index - 1]);
             }
         });
     });
