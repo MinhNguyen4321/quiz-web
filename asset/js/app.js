@@ -254,7 +254,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
             }
 
-            $scope.endQuiz = function () {
+            $scope.stopQuiz = function () {
                 var totalScore = 0;
                 for (var i = 0; i < $scope.results.length; i++) {
                     totalScore += $scope.results[i].mark;
@@ -277,7 +277,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 $scope.timer--;
                 if ($scope.timer == 0) {
                     $scope.timer = 900;
-                    $scope.stop();
+                    $scope.stopQuiz();
                 }
                 // Lưu thời gian vào bảng exam-history
                 examHistoryRef.child(examHistory[0].$id).update({

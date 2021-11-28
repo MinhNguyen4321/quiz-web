@@ -1,5 +1,9 @@
 <div class="container p-3 p-md-4 h-100">
-    <div class="d-flex flex-column justify-content-between rounded bg-light bg-opacity-50 p-4 h-100">
+    
+    <div class="d-flex flex-column justify-content-between rounded bg-light bg-opacity-50 p-4 h-100 position-relative">
+        <div class="progress position-absolute top-0 start-0 end-0" style="height: 3px; background: rgba(0, 0, 0, 0);">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" ng-style="{'width': timer/900*100 + '%'}"></div>
+        </div>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="h5 m-0 fw-bolder">
                 <i class="fa-solid fa-book-open me-2"></i>{{nameSubject|uppercase}}
@@ -7,7 +11,6 @@
             <span class="h5 m-0 fw-bolder">
                 {{(timer-timer%60)/60 > 9 ? (timer-timer%60)/60 : '0' + (timer-timer%60)/60}}:{{timer%60 > 9 ? timer%60 : ('0' + timer%60)}}
             </span>
-
         </div>
         <div class="list-question mb-4 h-100" ng-repeat="quiz in quizzes|limitTo:pageSize:start">
             <div class="card bg-light bg-opacity-50 h-100">
@@ -27,7 +30,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
-                        <button class="fs-6 py-1 btn btn-danger" type="button">Kết thúc bài kiểm tra</button>
+                        <button class="fs-6 py-1 btn btn-danger" type="button" ng-click="stopQuiz()">Kết thúc bài kiểm tra</button>
                         <span class="text-muted fw-bold">Điểm:
                             <span class="fs-6 badge bg-info rounded-pill">0/{{quizzes.length}}</span>
                         </span>
