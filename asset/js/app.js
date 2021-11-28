@@ -103,12 +103,12 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         if (oldPass == newPass) {
             toastr.error("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
         } else {
-            Auth.$updatePassword(newPass).then(function (result) {
+            Auth.$updatePassword(newPass).then(function () {
                 toastr.success("Đổi mật khẩu thành công!");
                 $("#change-pass-form").trigger("reset");
                 $('#changePassModal').modal('hide');
             }, function (error) {
-                console.error(error.code);
+                console.error(error.code + ": " + error.message);
                 toastr.error(error.message);
             });
         }
@@ -197,8 +197,6 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
 }
 );
 app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval) {
-    $scope.quizzes = [];
-
     $scope.idSubject = $routeParams.id;
     $scope.nameSubject = $routeParams.name;
 
@@ -206,15 +204,17 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     $scope.start = 0;
 
     $scope.indexQuiz = 1;
-    $scope.timer = 900;
+    $scope.results = [];
 
-    $interval(function () {
+    $scope.timer = 900;
+    var timer = $interval(function () {
         $scope.timer--;
         if ($scope.timer == 0) {
             $scope.timer = 900;
             $scope.stop();
         }
     }, 1000);
+    $interval.cancel(timer);
 
     var now = new Date();
 
@@ -227,33 +227,37 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     quizzes.$loaded().then(function (quizzesData) {
         var currentUserRef = studentsRef.child($scope.currentUser.$id);
         var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
+        // Kiểm tra bài thi cuối cùng đã hoàn thành hay chưa
+        // Nếu chưa tạo mới bài thi
         $firebaseArray(examHistoryRef).$loaded().then(function (examHistory) {
-            console.log(examHistory);
-            console.log(Object.values(examHistory));
-        });
-        // Random ngẫu nhiên 10 câu hỏi
-        $scope.quizzes = getRandomArray(quizzesData, 10);
-
-        // Lưu thông tin vào database
-        examHistoryRef.child(now.getTime()).update({
-            "time": now.getTime(),
-            "status": "Đang thi",
-            "score": "false"
-        }).then(function (ref) {
-            $scope.quizzes.forEach(function (quiz) {
-                examHistoryRef.child(ref.key).child("results").push({
-                    "question-id": quiz.Id,
-                    "answer-id": ""
+            examHistory.sort((a, b) => b.time - a.time);
+            if (examHistory[0]) {
+                console.log(examHistory[0].result);
+                if (examHistory[0].status == "Đang thi") {
+                    $scope.quizzes = JSON.parse(examHistory[0].quiz)
+                    $scope.results = JSON.parse(examHistory[0].result);
+                }
+            } else {
+                $scope.quizzes = getRandomArray(quizzesData, 10);
+                // Lưu thông tin vào database
+                examHistoryRef.child(now.getTime()).update({
+                    "execution_time": now.getTime(),
+                    "status": "Đang thi",
+                    "quiz": JSON.stringify($scope.quizzes)
+                }).then(function () {
+                    // for (var i = 0; i < $scope.quizzes.length; i++) {
+                    //     examHistoryRef.child(now.getTime()).child("results").child(i).set("Chưa trả lời");
+                    // }
+                    examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
                 });
-            });
+            }
+
+            $scope.checkAnswer = function (index, idAnswer) {
+                $scope.results[index - 1] = idAnswer;
+                console.log($scope.results);
+            }
         });
     });
-
-    $scope.results = [];
-    $scope.checkAnswer = function (index, idAnswer) {
-        $scope.results[index - 1] = idAnswer;
-        localStorage.setItem($scope.idSubject, JSON.stringify($scope.results));
-    }
 
     $scope.firstQuiz = function () {
         $scope.start = 0;
