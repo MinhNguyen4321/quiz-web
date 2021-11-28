@@ -221,7 +221,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     quizzes.$loaded().then(function (quizzesData) {
         var currentUserRef = studentsRef.child($scope.currentUser.$id);
         var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
-        
+
         $firebaseArray(examHistoryRef).$loaded().then(function (examHistory) {
             examHistory.sort((a, b) => b.time - a.time);
             if (examHistory[0]) {
@@ -249,8 +249,8 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
             $scope.checkAnswer = function (index, answerId, correctAnswerId) {
                 $scope.results[index - 1] = {
-                    answerId : answerId,
-                    mark : answerId == correctAnswerId ? 1 : 0
+                    answerId: answerId,
+                    mark: answerId == correctAnswerId ? 1 : 0
                 };
                 examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
             }
@@ -261,12 +261,30 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     totalScore += $scope.results[i].mark;
                 }
                 $scope.score = totalScore;
-                examHistoryRef.child(examHistory[0].$id).update({
-                    "status": "Kết thúc",
-                    "timer": "10 phút",
-                    "results": JSON.stringify($scope.results),
-                    "score": totalScore
-                });
+                console.log($scope.score);
+                // examHistoryRef.child(examHistory[0].$id).update({
+                //     "status": "Kết thúc",
+                //     "timer": "10 phút",
+                //     "results": JSON.stringify($scope.results),
+                //     "score": totalScore
+                // });
+                Swal.fire({
+                    title: '<strong>HTML <u>example</u></strong>',
+                    icon: 'info',
+                    html:
+                        'You can use <b>bold text</b>, ' +
+                        '<a href="//sweetalert2.github.io">links</a> ' +
+                        'and other HTML tags',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText:
+                        '<i class="fa fa-thumbs-up"></i> Great!',
+                    confirmButtonAriaLabel: 'Thumbs up, great!',
+                    cancelButtonText:
+                        '<i class="fa fa-thumbs-down"></i>',
+                    cancelButtonAriaLabel: 'Thumbs down'
+                })
             }
 
             var stop = $interval(function () {
@@ -296,7 +314,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
         if ($scope.start > 0) {
             $scope.start -= $scope.pageSize;
             $scope.indexQuiz -= 1;
-        } 
+        }
         // else {
         //     $scope.start = $scope.quizzes.length - $scope.pageSize;
         //     $scope.indexQuiz = $scope.quizzes.length;
@@ -306,7 +324,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
         if ($scope.start < $scope.quizzes.length - $scope.pageSize) {
             $scope.start += $scope.pageSize;
             $scope.indexQuiz += 1;
-        } 
+        }
         // else {
         //     $scope.start = 0;
         //     $scope.indexQuiz = 1;
