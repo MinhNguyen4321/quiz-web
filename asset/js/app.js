@@ -271,22 +271,20 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 Swal.fire({
                     heightAuto: false,
                     background: 'rgba(255, 255, 255, 0.85)',
-                    title: '<strong>' + $scope.nameSubject + '</strong>',
-                    icon: 'info',
-                    html:
-                        'You can use <b>bold text</b>, ' +
-                        '<a href="//sweetalert2.github.io">links</a> ' +
-                        'and other HTML tags',
-                    showCloseButton: true,
+                    title: 'Kết thúc bài thi?',
+                    text: 'Kết quả sẽ được lưu và không thể hoàn tác',
+                    icon: 'warning',
                     showCancelButton: true,
-                    focusConfirm: false,
-                    confirmButtonText:
-                        '<i class="fa fa-thumbs-up"></i> Great!',
-                    confirmButtonAriaLabel: 'Thumbs up, great!',
-                    cancelButtonText:
-                        '<i class="fa fa-thumbs-down"></i>',
-                    cancelButtonAriaLabel: 'Thumbs down'
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Huỷ bỏ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showResult();
+                    }
                 })
+                
             }
 
             var stop = $interval(function () {
@@ -299,7 +297,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 if ($scope.timer == 0) {
                     $scope.timer = 900;
                     $interval.cancel(stop);
-                    $scope.stopQuiz();
+                    showResult();
                 }
                 // Lưu thời gian vào bảng exam-history
                 examHistoryRef.child(examHistory[0].$id).update({
@@ -307,6 +305,26 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 });
             }, 1000);
         });
+
+        var showResult = function () {
+            Swal.fire({
+                heightAuto: false,
+                background: 'rgba(255, 255, 255, 0.85)',
+                title: '<strong>' + $scope.nameSubject + '</strong>',
+                icon: 'info',
+                html:
+                    'Số điểm của bạn là ' + $scope.score,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText:
+                    '<i class="fa fa-thumbs-up"></i> Great!',
+                confirmButtonAriaLabel: 'Thumbs up, great!',
+                cancelButtonText:
+                    '<i class="fa fa-thumbs-down"></i>',
+                cancelButtonAriaLabel: 'Thumbs down'
+            })
+        }
     });
 
     $scope.firstQuiz = function () {
