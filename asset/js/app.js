@@ -162,6 +162,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         } else {
             Swal.fire({
                 title: 'Bạn đã sẵn sàng?',
+                background: 'rgba(255, 255, 255, 0.95)',
                 text: "Thời gian làm bài: 15 phút",
                 icon: 'warning',
                 heightAuto: false,
@@ -284,8 +285,6 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     timer: $scope.timer
                 });
             }, 1000);
-
-
         });
     });
 
