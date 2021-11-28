@@ -226,7 +226,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             if (examHistory[0]) {
                 if (examHistory[0].status == "Đang thi") {
                     $scope.quizzes = JSON.parse(examHistory[0].quiz)
-                    $scope.timer = examHistory[0].countdown_time;
+                    $scope.timer = examHistory[0].timer;
                 }
 
                 if (examHistory[0].results) {
@@ -238,7 +238,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 $scope.quizzes = getRandomArray(quizzesData, 10);
                 // Lưu thông tin vào database
                 examHistoryRef.child(now.getTime()).update({
-                    "execution_time": now.getTime(),
+                    "start_time": now.getTime(),
                     "status": "Đang thi",
                     "quiz": JSON.stringify($scope.quizzes)
                 }).then(function () {
@@ -267,7 +267,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 }
                 // Lưu thời gian vào bảng exam-history
                 examHistoryRef.child(examHistory[0].$id).update({
-                    countdown_time: $scope.timer
+                    timer: $scope.timer
                 });
             }, 1000);
 
