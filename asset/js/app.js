@@ -254,6 +254,20 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
             }
 
+            $scope.endQuiz = function () {
+                var totalScore = 0;
+                for (var i = 0; i < $scope.results.length; i++) {
+                    totalScore += $scope.results[i].mark;
+                }
+                $scope.score = totalScore;
+                examHistoryRef.child(examHistory[0].$id).update({
+                    "status": "Kết thúc",
+                    "timer": "10 phút",
+                    "results": JSON.stringify($scope.results),
+                    "score": totalScore
+                });
+            }
+
             var stop = $interval(function () {
                 // Dừng thời gian khi thoát khỏi trang
                 if ($location.path() != "/quiz") {
