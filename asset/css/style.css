@@ -347,19 +347,20 @@ main {
 }
 
 #feedback-form {
-    width: 650px;
+    max-width: 650px;
+    margin: 0 auto;
 }
 
-#nav-profile {
+#profile {
     font-weight: 500;
 }
 
-#nav-profile .fa-solid {
+#profile .fa-solid {
     width: 80px;
     font-size: 50px;
 }
 
-#nav-profile span {
+#profile span {
     font-style: oblique;
     color: #CA5010;
 }

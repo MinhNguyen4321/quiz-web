@@ -269,7 +269,9 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 //     "score": totalScore
                 // });
                 Swal.fire({
-                    title: '<strong>HTML <u>example</u></strong>',
+                    heightAuto: false,
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    title: '<strong>' + $scope.nameSubject + '</strong>',
                     icon: 'info',
                     html:
                         'You can use <b>bold text</b>, ' +
@@ -296,6 +298,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 $scope.timer--;
                 if ($scope.timer == 0) {
                     $scope.timer = 900;
+                    $interval.cancel(stop);
                     $scope.stopQuiz();
                 }
                 // Lưu thời gian vào bảng exam-history

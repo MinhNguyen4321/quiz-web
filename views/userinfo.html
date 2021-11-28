@@ -1,12 +1,12 @@
-<div class="container-lg container-md-fluid p-3 p-md-5 h-100">
-  <div class="user-info bg-light bg-opacity-50 rounded p-3 p-lg-4 h-100 d-flex flex-column">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4 class="heading border-0">Trang cá nhân</h4>
+<div class="container-lg container-md-fluid p-3 p-md-4 h-100">
+  <div class="user-info bg-light bg-opacity-50 rounded p-3 p-md-4 d-flex flex-column h-100">
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-3" style="border-bottom: 1px solid #ccc;">
+      <h3 class="m-0 text-uppercase">Trang cá nhân</h3>
       <a href="javascript:void(0)" class="text-decoration-none fw-bold" ng-click="openEditProfileModal()">
         Chỉnh sửa thông tin
       </a>
     </div>
-    <nav>
+    <!-- <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link fw-bold active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
           type="button" role="tab">Thông tin</button>
@@ -45,7 +45,33 @@
         </div>
       </div>
       <div class="tab-pane fade h-100" id="nav-activity" role="tabpanel">
-
+      </div>
+    </div> -->
+    <div id="profile" class="row row-cols-2 row-cols-lg-2 g-2 g-lg-3 p-lg-5 p-0">
+      <div class="col">
+        <div class="p-3 h-100 p-3 d-flex align-items-center">
+          <i class="fa-solid fa-circle-user"></i>Tên tài khoản:&nbsp;<span class="">{{currentUser.username}}</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="p-3 h-100 p-3 d-flex align-items-center">
+          <i class="fa-solid fa-address-card"></i>Họ và tên:&nbsp;<span class="">{{currentUser.fullname}}</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="p-3 h-100 p-3 d-flex align-items-center">
+          <i class="fa-solid fa-envelope"></i>Email:&nbsp;<span class="">{{currentUser.email}}</span>
+        </div>
+      </div>
+      <div class="col" ng-hide="!currentUser.birthday">
+        <div class="p-3 h-100 p-3 d-flex align-items-center">
+          <i class="fa-solid fa-cake-candles"></i></i>Ngày sinh:&nbsp;<span class="">{{currentUser.birthday}}</span>
+        </div>
+      </div>
+      <div class="col" ng-hide="currentUser.gender == undefined">
+        <div class="p-3 h-100 p-3 d-flex align-items-center">
+          <i class="fa-solid fa-venus-mars"></i>Giới tính:&nbsp;<span class="">{{currentUser.gender == 'true' ? 'Nam' : 'Nữ'}}</span>
+        </div>
       </div>
     </div>
   </div>
