@@ -346,7 +346,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     cancelButtonText: 'Về trang chủ'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $location.path('#!result?id=' + $scope.idSubject + '&name=' + $scope.nameSubject);
+                        window.location.href = '#!result?id=' + $scope.idSubject + '&name=' + $scope.nameSubject;
                     }
                     if (!result.isConfirmed) {
                         window.location.href = '#!home';

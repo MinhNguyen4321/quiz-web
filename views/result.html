@@ -7,14 +7,16 @@
                     <h3 class="m-0 text-uppercase">{{nameSubject}}</h3>
                     <span class="fw-bolder ">{{currentUser.email}}</span>
                 </div>
-                <table id="exam-history-table" class="table table-hover">
+                <table id="exam-history-table" class="table">
                     <thead>
                         <tr>
                             <th class="fw-bold text-center" scope="col">STT</th>
                             <th class="fw-bold text-center" scope="col">Thời gian</th>
-                            <th class="fw-bold text-center" scope="col">Số câu hỏi đã trả lời</th>
-                            <th class="fw-bold text-center" scope="col">Điểm số</th>
-                            <th class="fw-bold text-center" scope="col">Thống kê đáp án đúng</th>
+                            <th class="fw-bold text-center" scope="col">Số câu đã trả lời</th>
+                            <th class="fw-bold text-center" scope="col">Điểm</th>
+                            <th class="fw-bold text-center" scope="col">Quiz đạt</th>
+                            <th class="fw-bold text-center" scope="col">Kết quả</th>
+                            <th class="fw-bold text-center" scope="col">Trạng thái</th>
                             <th class="fw-bold text-center" scope="col"></th>
                         </tr>
                     </thead>
@@ -22,12 +24,20 @@
                         <tr ng-repeat="ex in examHistory">
                             <td class="text-center">{{$index + 1}}</td>
                             <td class="text-center">{{ex.start_time}}</td>
-                            <td class="text-center">{{ex.total_correct_answered}}</td>
+                            <td class="text-center">{{ex.total_answered}}</td>
                             <td class="text-center">{{ex.score}}</td>
-                            <td class="text-center">{{ex.total_answered / ex.total_question * 100}}%</td>
                             <td class="text-center">
-                                <a class="link link" href="javascript:void(0)">
+                                <span ng-show="ex.status == 'Đã hoàn thành'">{{ex.total_correct_answered / ex.total_question * 100}}%</span>
+                            </td>
+                            <td class="text-center">
+                                {{(ex.total_correct_answered / ex.total_question * 100) > 70 ? 'Đạt' : 'Không đạt'}}
+                            </td>
+                            <td class="text-center">
+                                <a ng-show="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" href="javascript:void(0)">
                                     Hiện chi tiết
+                                </a>
+                                <a ng-hide="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" href="#!quiz?id={{idSubject}}&name={{nameSubject}}">
+                                    Tiếp tục làm bài
                                 </a>
                             </td>
                         </tr>
