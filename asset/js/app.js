@@ -282,6 +282,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             }
 
             var correctAnswered = [];
+            var answered = [];
             $scope.checkAnswer = function (index, answerId, correctAnswerId, correctAnswerMark) {               
                 $scope.results[index - 1] = {
                     answerId: answerId,
@@ -289,22 +290,24 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 };
 
                 correctAnswered[index - 1] = answerId == correctAnswerId;
+                answered[index - 1] = true;
                 
                 examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
                 examHistoryRef.child(examHistory.$id).child("total_correct_answered").set(correctAnswered.filter(item => item).length);
+                examHistoryRef.child(examHistory.$id).child("total_answered").set(answered.filter(item => item).length);
             }
 
             $scope.stopQuiz = function () {
+                var totalScore = 0;
                 for (var i = 0; i < $scope.results.length; i++) {
                     if ($scope.results[i]) {
                         totalScore += $scope.results[i].mark;
                     }
                 }
-                console.log(totalAnswered);
                 $scope.score = totalScore;
                 Swal.fire({
                     heightAuto: false,
-                    background: 'rgba(255, 255, 255, 0.80)',
+                    background: 'rgba(255, 255, 255, 0.8)',
                     title: 'Kết thúc bài thi?',
                     text: 'Kết quả sẽ được lưu và không thể hoàn tác',
                     icon: 'warning',
