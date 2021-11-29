@@ -14,7 +14,7 @@
                             <th class="fw-bold text-center" scope="col">Thời gian</th>
                             <th class="fw-bold text-center" scope="col">Số câu hỏi đã trả lời</th>
                             <th class="fw-bold text-center" scope="col">Điểm số</th>
-                            <th class="fw-bold text-center" scope="col">Tỉ lệ trả lời đúng</th>
+                            <th class="fw-bold text-center" scope="col">Thống kê đáp án đúng</th>
                             <th class="fw-bold text-center" scope="col"></th>
                         </tr>
                     </thead>
@@ -22,9 +22,9 @@
                         <tr ng-repeat="ex in examHistory">
                             <td class="text-center">{{$index + 1}}</td>
                             <td class="text-center">{{ex.start_time}}</td>
-                            <td class="text-center">ex.total</td>
+                            <td class="text-center">{{ex.total_answered}}</td>
                             <td class="text-center">{{ex.score}}</td>
-                            <td class="text-center">@mdo</td>
+                            <td class="text-center">{{ex.total_answered / ex.total_question * 100}}%</td>
                             <td class="text-center">
                                 <a class="link link" href="javascript:void(0)">
                                     Hiện chi tiết
