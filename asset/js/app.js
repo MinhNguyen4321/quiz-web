@@ -68,24 +68,24 @@ app.factory("Auth", ["$firebaseAuth",
     }
 ]);
 
-app.controller("homeCtrl", function ($scope, $location, $window, datetime, $firebaseArray, Auth) {
+app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, datetime, $firebaseArray, Auth) {
     var parser = datetime("dd/MM/yyyy");
     var ref = firebase.database().ref();
 
     // Current User
     var studentRef = ref.child("students");
-    $scope.students = $firebaseArray(studentRef);
+    $rootScope.students = $firebaseArray(studentRef);
 
     setTimeout(() => {
-        $scope.students.$loaded().then(function () {
-            $scope.currentUser = $scope.students.$getRecord(Auth.$getAuth().uid);
-            $scope.currentUser.email = Auth.$getAuth().email;
+        $rootScope.students.$loaded().then(function () {
+            $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
+            $rootScope.currentUser.email = Auth.$getAuth().email;
         });
     }, 2000);
 
     $scope.logout = function () {
         Auth.$signOut();
-        $scope.currentUser = null;
+        $rootScope.currentUser = null;
 
         $location.path("/");
         toastr.success("Đăng xuất thành công!");
@@ -97,6 +97,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
                 $("#forgot-pass-form").trigger("reset"),
                 $('#forgotPassModal').modal('hide')
         }).catch(function (error) {
+            $("#forgot-pass-form").trigger("reset");
             if (error == "auth/user-not-found") {
                 toastr.error("Email không tồn tại!");
             } else {
@@ -114,6 +115,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
                 $("#change-pass-form").trigger("reset");
                 $('#changePassModal').modal('hide');
             }, function (error) {
+                $("#change-pass-form").trigger("reset");
                 console.error(error.code + ": " + error.message);
                 toastr.error(error.message);
             });
@@ -121,7 +123,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     }
 
     $scope.openEditProfileModal = function () {
-        $scope.profile = angular.copy($scope.currentUser);
+        $scope.profile = angular.copy($rootScope.currentUser);
         if ($scope.profile.birthday) {
             $scope.profile.birthday = parser.parse($scope.profile.birthday).getDate();
         }
@@ -131,7 +133,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     $scope.editProfile = function () {
         $scope.profile.birthday = parser.setDate($scope.profile.birthday).getText();
         Auth.$updateEmail($scope.profile.email).then(function () {
-            $scope.currentUser.email = $scope.profile.email;
+            $rootScope.currentUser.email = $scope.profile.email;
         }, function (error) {
             console.error(error.message);
             toastr.error(error.message);
@@ -143,10 +145,11 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
             email: $scope.profile.email,
             gender: $scope.profile.gender
         }).then(
-            $scope.currentUser = angular.copy($scope.profile),
+            $rootScope.currentUser = angular.copy($scope.profile),
             toastr.success("Cập nhật thông tin thành công!"),
             $('#editProfileModal').modal('hide')
         ).catch(function (error) {
+            $scope.profile = angular.copy($rootScope.currentUser);
             console.error(error.code);
             toastr.error(error.message);
         });
@@ -154,7 +157,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
 
     /* Subjects */
     var subjectRef = ref.child("subjects");
-    $scope.subjects = $firebaseArray(subjectRef);
+    $rootScope.subjects = $firebaseArray(subjectRef);
 
     $scope.pageSize = 6;
     $scope.start = 0;
@@ -164,7 +167,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
 
 
     $scope.openQuiz = function (idSubject, nameSubject) {
-        if ($scope.currentUser == null) {
+        if ($rootScope.currentUser == null) {
             toastr.error("Bạn cần đăng nhập để thực hiện chức năng này!");
         } else {
             var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history").child(idSubject));
@@ -213,7 +216,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         $scope.start = 0;
     }
     $scope.lastSubject = function () {
-        var soTrang = Math.ceil($scope.subjects.length / $scope.pageSize);
+        var soTrang = Math.ceil($rootScope.subjects.length / $scope.pageSize);
         $scope.start = (soTrang - 1) * $scope.pageSize;
     }
     $scope.prevSubject = function () {
@@ -222,7 +225,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         }
     }
     $scope.nextSubject = function () {
-        if ($scope.start < $scope.subjects.length - $scope.pageSize) {
+        if ($scope.start < $rootScope.subjects.length - $scope.pageSize) {
             $scope.start += $scope.pageSize;
         }
     }
@@ -391,15 +394,14 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     }
 }
 );
-
-app.controller('signUpCtrl', function ($scope, datetime, $location, Auth) {
+app.controller('signUpCtrl', function ($scope, $rootScope, datetime, $location, Auth) {
     var parser = datetime("dd/MM/yyyy");
     $scope.genderSignUp = "true";
 
     $scope.signUp = function () {
         var studentRef = firebase.database().ref("students");
 
-        if ($scope.students.filter(st => st.username == $scope.userSignUp).length != 0) {
+        if ($rootScope.students.filter(st => st.username == $scope.userSignUp).length != 0) {
             toastr.error("Tên đăng nhập đã tồn tại!");
             return;
         }
@@ -431,7 +433,7 @@ app.controller('signUpCtrl', function ($scope, datetime, $location, Auth) {
 }
 );
 
-app.controller('signInCtrl', function ($scope, Auth, $location) {
+app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
     if (Cookies.get('remember') == 'true') {
         $scope.userLogin = Cookies.get('username');
         $scope.passLogin = Cookies.get('password');
@@ -447,7 +449,7 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
                 var email = result.user.email;
                 var username = result.user.email.substring(0, result.user.email.indexOf('@'));
                 var uid = result.user.uid;
-                if (!$scope.students.$getRecord(uid)) {
+                if (!$rootScope.students.$getRecord(uid)) {
                     studentRef.child(uid).update({
                         fullname: fullname,
                         username: username,
@@ -462,9 +464,9 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
                     });
                 }
 
-                $scope.students.$loaded().then(function () {
-                    $scope.$parent.currentUser = $scope.students.$getRecord(uid);
-                    $scope.$parent.currentUser.email = Auth.$getAuth().email;
+                $rootScope.students.$loaded().then(function () {
+                    $rootScope.currentUser = $rootScope.students.$getRecord(uid);
+                    $rootScope.currentUser.email = Auth.$getAuth().email;
                 });
 
                 removeCookies('username', 'password', 'remember');
@@ -478,17 +480,17 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
     $scope.login = function () {
         var email = $scope.userLogin;
         if (!checkEmail($scope.userLogin)) {
-            if ($scope.students.filter(st => st.username == $scope.userLogin).length == 0) {
+            if ($rootScope.students.filter(st => st.username == $scope.userLogin).length == 0) {
                 toastr.error("Tên đăng nhập không tồn tại!");
             } else {
-                var email = $scope.students.find(st => st.username == $scope.userLogin).email;
+                var email = $rootScope.students.find(st => st.username == $scope.userLogin).email;
             }
         }
         Auth.$signInWithEmailAndPassword(email, $scope.passLogin)
             .then(function (firebaseUser) {
-                $scope.students.$loaded().then(function () {
-                    $scope.$parent.currentUser = $scope.students.find(st => st.$id == firebaseUser.uid);
-                    $scope.$parent.currentUser.email = Auth.$getAuth().email;
+                $rootScope.students.$loaded().then(function () {
+                    $rootScope.currentUser = $rootScope.students.find(st => st.$id == firebaseUser.uid);
+                    $rootScope.currentUser.email = Auth.$getAuth().email;
                 });
 
                 if ($scope.rememberLogin) {
@@ -517,11 +519,10 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
 
 app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
     var studentRef = firebase.database().ref("students");
-    
     // var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history"));
-    $scope.subjects.$loaded().then(function () {
-        console.log($scope.currentUser);
-        let firstSubject = $scope.subjects.sort((a, b) => a.Name.localeCompare(b.Name))[0];
+    $rootScope.subjects.$loaded().then(function () {
+        
+        let firstSubject = $rootScope.subjects.sort((a, b) => a.Name.localeCompare(b.Name))[0];
         $scope.id = !$location.search().id ? firstSubject.$id : $location.search().id;
         $scope.name = !$location.search().name ? firstSubject.Name : $location.search().name;
     });
