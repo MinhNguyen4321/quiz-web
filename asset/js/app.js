@@ -72,10 +72,12 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     var studentRef = ref.child("students");
     $scope.students = $firebaseArray(studentRef);
 
-    $scope.students.$loaded().then(function () {
-        $scope.currentUser = $scope.students.$getRecord(Auth.$getAuth().uid);
-        $scope.currentUser.email = Auth.$getAuth().email;
-    });
+    setTimeout(() => {
+        $scope.students.$loaded().then(function () {
+            $scope.currentUser = $scope.students.$getRecord(Auth.$getAuth().uid);
+            $scope.currentUser.email = Auth.$getAuth().email;
+        });
+    }, 2000);
 
     $scope.logout = function () {
         Auth.$signOut();
@@ -130,7 +132,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
             console.error(error.message);
             toastr.error(error.message);
         });
-        studentRef.child($scope.currentUser.$id).update({
+        studentRef.child(Auth.$getAuth().uid).update({
             username: $scope.profile.username,
             fullname: $scope.profile.fullname,
             birthday: $scope.profile.birthday,
@@ -156,26 +158,34 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         return $location.path() == path;
     };
 
+
     $scope.openQuiz = function (idSubject, nameSubject) {
         if ($scope.currentUser == null) {
             toastr.error("Bạn cần đăng nhập để thực hiện chức năng này!");
         } else {
-            Swal.fire({
-                title: 'Bạn đã sẵn sàng?',
-                background: 'rgba(255, 255, 255, 0.9)',
-                text: "Thời gian làm bài: 15 phút",
-                icon: 'warning',
-                heightAuto: false,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Có! Bắt đầu thi',
-                cancelButtonText: 'Huỷ bỏ',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
+            var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history").child(idSubject));
+            examHistory.$loaded().then(function () {
+                if (examHistory) {
+                    console.log(examHistory.find(item => item.status == "Chưa hoàn thành"));
+                } else {
+                    Swal.fire({
+                        title: 'Bạn đã sẵn sàng?',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        text: "Thời gian làm bài: 15 phút",
+                        icon: 'warning',
+                        heightAuto: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Có! Bắt đầu thi',
+                        cancelButtonText: 'Huỷ bỏ',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
+                        }
+                    })
                 }
-            })
+            });
         }
     };
     $scope.firstSubject = function () {
@@ -197,7 +207,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
     }
 }
 );
-app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval, $location) {
+app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval, $location, Auth) {
     $scope.idSubject = $routeParams.id;
     $scope.nameSubject = $routeParams.name;
 
@@ -219,11 +229,11 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
     var quizzes = $firebaseArray(quizzesRef);
 
     quizzes.$loaded().then(function (quizzesData) {
-        var currentUserRef = studentsRef.child($scope.currentUser.$id);
+        var currentUserRef = studentsRef.child(Auth.$getAuth().uid);
         var examHistoryRef = currentUserRef.child("exam_history").child($scope.idSubject);
 
         $firebaseArray(examHistoryRef).$loaded().then(function (examHistoryData) {
-            var examHistory = examHistoryData.find(item => item.status == "Đang thi");
+            var examHistory = examHistoryData.find(item => item.status == "Chưa hoàn thành");
             if (examHistory) {
                 $scope.quizzes = JSON.parse(examHistory.quiz)
                 $scope.timer = examHistory.timer;
@@ -237,12 +247,12 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 // Lưu thông tin vào database
                 examHistoryRef.child(now.getTime()).update({
                     "start_time": now.getTime(),
-                    "status": "Đang thi",
+                    "status": "Chưa hoàn thành",
                     "quiz": JSON.stringify($scope.quizzes),
-                    "timer" : 900
+                    "timer": 900
                 }).then(function () {
                     examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
-                    examHistory = examHistoryData.find(item => item.status == "Đang thi");
+                    examHistory = examHistoryData.find(item => item.status == "Chưa hoàn thành");
                 });
             }
 
@@ -277,11 +287,11 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                         $interval.cancel(timer);
 
                         examHistoryRef.child(examHistory.$id).update({
-                            "status": "Kết thúc",
+                            "status": "Đã hoàn thành",
                             "timer": "10 phút",
                             "results": JSON.stringify($scope.results),
                             "score": totalScore
-                        });                        
+                        });
                     }
                 })
 
@@ -293,7 +303,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     background: 'rgba(255, 255, 255, 0.80)',
                     title: "Số điểm của bạn là " + $scope.score,
                     icon: 'success',
-                    iconHtml : '<i class="fa-solid fa-check"></i>',
+                    iconHtml: '<i class="fa-solid fa-check"></i>',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -302,7 +312,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $location.path('#!result?id=' + $scope.idSubject + '&name=' + $scope.nameSubject);
-                    } 
+                    }
                     if (!result.isConfirmed) {
                         window.location.href = '#!home';
                     }
