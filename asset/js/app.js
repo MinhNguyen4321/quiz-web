@@ -57,6 +57,10 @@ app.config(function ($routeProvider) {
             templateUrl: 'views/result.html',
             controller: 'resultCtrl'
         })
+        .when('/resultdetail', {
+            templateUrl: 'views/resultdetail.html',
+            controller: 'resultDetailCtrl'
+        })
         .otherwise({
             redirectTo: '/'
         });
@@ -274,7 +278,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     "status": "Chưa hoàn thành",
                     "quiz": JSON.stringify($scope.quizzes),
                     "timer": 900,
-                    "total_question" : $scope.quizzes.length,
+                    "total_question": $scope.quizzes.length,
                 }).then(function () {
                     examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
                     examHistory = examHistoryData.find(item => item.status == "Chưa hoàn thành");
@@ -283,7 +287,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
             var correctAnswered = [];
             var answered = [];
-            $scope.checkAnswer = function (index, answerId, correctAnswerId, correctAnswerMark) {               
+            $scope.checkAnswer = function (index, answerId, correctAnswerId, correctAnswerMark) {
                 $scope.results[index - 1] = {
                     answerId: answerId,
                     mark: answerId == correctAnswerId ? correctAnswerMark : 0
@@ -291,7 +295,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
                 correctAnswered[index - 1] = answerId == correctAnswerId;
                 answered[index - 1] = true;
-                
+
                 examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
                 examHistoryRef.child(examHistory.$id).child("total_correct_answered").set(correctAnswered.filter(item => item).length);
                 examHistoryRef.child(examHistory.$id).child("total_answered").set(answered.filter(item => item).length);
@@ -536,15 +540,32 @@ app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseA
         $scope.nameSubject = !$location.search().name ? firstSubject.Name : $location.search().name;
 
         let studentRef = firebase.database().ref("students");
-        let examHistoryRef = studentRef.child(Auth.$getAuth().uid).child("exam_history").child($scope.idSubject);
-        let examHistory = $firebaseArray(examHistoryRef);
+        let examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history").child($scope.idSubject));
+
         examHistory.$loaded().then(function (examHistoryData) {
             $scope.examHistory = examHistoryData;
             console.log($scope.examHistory);
         });
-        
-    });
 
+    });
+});
+
+app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
+    $scope.idSubject = $location.search().id;
+    $scope.nameSubject = $location.search().name;
+    $scope.idDetail = $location.search().detail;
+
+    $rootScope.students.$loaded().then(function () {
+        let studentRef = firebase.database().ref("students");
+        let examDetailRef = studentRef.child(Auth.$getAuth().uid).child("exam_history").child($scope.idSubject).child($scope.idDetail);
+        let examDetail = $firebaseArray(examDetailRef);
+
+        examDetail.$loaded().then(function (examDetailData) {
+            $scope.examDetail = examDetailData;
+            $scope.quizDetail = JSON.parse($scope.examDetail.$getRecord("quiz").$value);
+            console.log($scope.quizDetail);
+        });
+    });
 });
 
 app.directive("compareTo", function () {

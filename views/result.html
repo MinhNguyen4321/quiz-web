@@ -32,11 +32,14 @@
                             <td class="text-center">
                                 {{(ex.total_correct_answered / ex.total_question * 100) > 70 ? 'Đạt' : 'Không đạt'}}
                             </td>
+                            <td class="text-center">{{ex.status}}</td>
                             <td class="text-center">
-                                <a ng-show="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" href="javascript:void(0)">
+                                <a ng-show="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" 
+                                    href="#!resultdetail?id={{idSubject}}&name={{nameSubject}}&detail={{ex.$id}}">
                                     Hiện chi tiết
                                 </a>
-                                <a ng-hide="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" href="#!quiz?id={{idSubject}}&name={{nameSubject}}">
+                                <a ng-hide="ex.status == 'Đã hoàn thành'" class="link-primary text-decoration-none" 
+                                    href="#!quiz?id={{idSubject}}&name={{nameSubject}}">
                                     Tiếp tục làm bài
                                 </a>
                             </td>
