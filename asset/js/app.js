@@ -84,6 +84,8 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
         $rootScope.students.$loaded().then(function () {
             $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
             $rootScope.currentUser.email = Auth.$getAuth().email;
+            $rootScope.currentUser.password = Cookies.get('password');
+            console.log($rootScope.currentUser.password);
         });
     }, 2000);
 
@@ -111,7 +113,9 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
     }
 
     $scope.changePassword = function (oldPass, newPass) {
-        if (oldPass == newPass) {
+        if (oldPass != $rootScope.currentUser.password) {
+            toastr.error("Mật khẩu cũ không đúng!");
+        } else if (oldPass == newPass) {
             toastr.error("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
         } else {
             Auth.$updatePassword(newPass).then(function () {
@@ -447,7 +451,6 @@ app.controller('signUpCtrl', function ($scope, $rootScope, datetime, $location, 
     }
 }
 );
-
 app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
     if (Cookies.get('remember') == 'true') {
         $scope.userLogin = Cookies.get('username');
@@ -484,7 +487,7 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
                     $rootScope.currentUser.email = Auth.$getAuth().email;
                 });
 
-                removeCookies('username', 'password', 'remember');
+                removeCookies('username', 'remember');
                 $location.path("/");
                 toastr.success("Đăng nhập thành công!");
             }).catch((error) => {
@@ -506,6 +509,7 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
                 $rootScope.students.$loaded().then(function () {
                     $rootScope.currentUser = $rootScope.students.find(st => st.$id == firebaseUser.uid);
                     $rootScope.currentUser.email = Auth.$getAuth().email;
+                    $rootScope.currentUser.password = $scope.passLogin;
                 });
 
                 if ($scope.rememberLogin) {
@@ -513,7 +517,7 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
                     Cookies.set('password', $scope.passLogin, { expires: 7 });
                     Cookies.set('remember', $scope.rememberLogin, { expires: 7 });
                 } else {
-                    removeCookies('username', 'password', 'remember');
+                    removeCookies('username', 'remember');
                 }
                 $location.path("/");
                 toastr.success("Đăng nhập thành công!");
@@ -531,7 +535,6 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
             });
     }
 });
-
 app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
     $scope.examHistory = [];
     $rootScope.students.$loaded().then(function () {
@@ -549,7 +552,6 @@ app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseA
 
     });
 });
-
 app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
     $scope.idSubject = $location.search().id;
     $scope.nameSubject = $location.search().name;
@@ -571,7 +573,6 @@ app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $fir
         });
     });
 });
-
 app.directive("compareTo", function () {
     return {
         require: "ngModel",
