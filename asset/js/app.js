@@ -168,15 +168,15 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
                 var unfinishedExam = examHistory.find(item => item.status == "Chưa hoàn thành");
                 if (unfinishedExam) {
                     Swal.fire({
-                        title: 'Tiếp tục thi?',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        text: "Thời gian làm bài còn: 15 phút",
-                        icon: 'warning',
                         heightAuto: false,
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        title: "Bạn có bài quiz chưa hoàn thành trước đó",
+                        text: "Bạn có muốn tiếp tục làm bài không?",
+                        icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Có! Bắt đầu thi',
+                        confirmButtonText: 'Xác nhận',
                         cancelButtonText: 'Huỷ bỏ',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -187,7 +187,8 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
                     Swal.fire({
                         title: 'Bạn đã sẵn sàng?',
                         background: 'rgba(255, 255, 255, 0.9)',
-                        text: "Thời gian làm bài: 15 phút",
+                        html: "Thời gian: 15 phút<br>"
+                            + "Số câu hỏi: 10 câu",
                         icon: 'warning',
                         heightAuto: false,
                         showCancelButton: true,
@@ -304,7 +305,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
                         examHistoryRef.child(examHistory.$id).update({
                             "status": "Đã hoàn thành",
-                            "timer": "10 phút",
+                            "timer": 900,
                             "results": JSON.stringify($scope.results),
                             "score": totalScore
                         });
