@@ -290,13 +290,16 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
             
             $scope.stopQuiz = function () {
-                console.log($scope.results);
                 var totalScore = 0;
+                var totalQuestion = $scope.quizzes.length;
+                var totalAnswered = 0;
                 for (var i = 0; i < $scope.results.length; i++) {
                     if ($scope.results[i]) {
+                        totalAnswered++;
                         totalScore += $scope.results[i].mark;
                     }
                 }
+                console.log(totalAnswered);
                 $scope.score = totalScore;
                 Swal.fire({
                     heightAuto: false,
@@ -318,7 +321,9 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                             "status": "Đã hoàn thành",
                             "timer": 900,
                             "results": JSON.stringify($scope.results),
-                            "score": totalScore
+                            "score": totalScore,
+                            "totalQuestion" : totalQuestion,
+                            "totalAnswered" : totalAnswered
                         });
                     }
                 })
