@@ -322,8 +322,8 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                             "timer": 900,
                             "results": JSON.stringify($scope.results),
                             "score": totalScore,
-                            "totalQuestion" : totalQuestion,
-                            "totalAnswered" : totalAnswered
+                            "total_question" : totalQuestion,
+                            "total_answered" : totalAnswered
                         });
                     }
                 })
