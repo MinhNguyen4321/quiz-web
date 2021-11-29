@@ -270,7 +270,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 $scope.quizzes = getRandomArray(quizzesData, 10);
                 // Lưu thông tin vào database
                 examHistoryRef.child(now.getTime()).update({
-                    "start_time": now.getTime(),
+                    "start_time": moment(now.getTime()).format('DD/MM/YYYY HH:mm:ss'),
                     "status": "Chưa hoàn thành",
                     "quiz": JSON.stringify($scope.quizzes),
                     "timer": 900
@@ -288,10 +288,14 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
             }
 
+            
             $scope.stopQuiz = function () {
+                console.log($scope.results);
                 var totalScore = 0;
                 for (var i = 0; i < $scope.results.length; i++) {
-                    totalScore += $scope.results[i].mark;
+                    if ($scope.results[i]) {
+                        totalScore += $scope.results[i].mark;
+                    }
                 }
                 $scope.score = totalScore;
                 Swal.fire({
@@ -518,14 +522,22 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
 });
 
 app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
-    var studentRef = firebase.database().ref("students");
-    // var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history"));
-    $rootScope.subjects.$loaded().then(function () {
-        
+    $scope.examHistory = [];
+    $rootScope.students.$loaded().then(function () {
         let firstSubject = $rootScope.subjects.sort((a, b) => a.Name.localeCompare(b.Name))[0];
-        $scope.id = !$location.search().id ? firstSubject.$id : $location.search().id;
-        $scope.name = !$location.search().name ? firstSubject.Name : $location.search().name;
+        $scope.idSubject = !$location.search().id ? firstSubject.Id : $location.search().id;
+        $scope.nameSubject = !$location.search().name ? firstSubject.Name : $location.search().name;
+
+        let studentRef = firebase.database().ref("students");
+        let examHistoryRef = studentRef.child(Auth.$getAuth().uid).child("exam_history").child($scope.idSubject);
+        let examHistory = $firebaseArray(examHistoryRef);
+        examHistory.$loaded().then(function (examHistoryData) {
+            $scope.examHistory = examHistoryData;
+            console.log($scope.examHistory);
+        });
+        
     });
+
 });
 
 app.directive("compareTo", function () {

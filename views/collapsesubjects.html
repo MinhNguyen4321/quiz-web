@@ -10,7 +10,7 @@
             data-bs-parent="#accordionSubjects">
             <div class="accordion-body p-0">
                 <div class="list-subjects list-group list-group-flush">
-                    <a href="#!quiz/{{s.Id}}/{{s.Name}}" class="list-group-item list-group-item-action py-2"
+                    <a href="#!result/{{s.Id}}/{{s.Name}}" class="list-group-item list-group-item-action py-2"
                         ng-repeat="s in subjects|orderBy:'Name'">
                         {{s.Name}}
                     </a>
@@ -20,11 +20,11 @@
     </div>
 </div> -->
 
-<div class="conllapse-subjects card bg-light bg-opacity-50" style="max-height: 579.6px;">
+<div class="conllapse-subjects card bg-light bg-opacity-50">
     <div class="card-header text-uppercase fw-bold">
         <i class="fa-solid fa-book me-2"></i> Danh sách môn học
     </div>
-    <ul class="list-group list-group-flush overflow-auto">
+    <ul class="list-group list-group-flush">
         <a href="#!result?id={{s.Id}}&name={{s.Name}}" class="list-group-item list-group-item-action py-2"
             ng-repeat="s in subjects|orderBy:'Name'">
             {{s.Name}}

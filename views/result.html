@@ -12,18 +12,18 @@
                         <tr>
                             <th class="fw-bold text-center" scope="col">STT</th>
                             <th class="fw-bold text-center" scope="col">Thời gian</th>
-                            <th class="fw-bold text-center" scope="col">Số câu hỏi</th>
+                            <th class="fw-bold text-center" scope="col">Số câu hỏi đã trả lời</th>
                             <th class="fw-bold text-center" scope="col">Điểm số</th>
                             <th class="fw-bold text-center" scope="col">Tỉ lệ trả lời đúng</th>
                             <th class="fw-bold text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">Mark</td>
-                            <td class="text-center">Mark</td>
-                            <td class="text-center">Otto</td>
-                            <td class="text-center">@mdo</td>
+                        <tr ng-repeat="ex in examHistory">
+                            <td class="text-center">{{$index + 1}}</td>
+                            <td class="text-center">{{ex.start_time}}</td>
+                            <td class="text-center"></td>
+                            <td class="text-center">{{ex.score}}</td>
                             <td class="text-center">@mdo</td>
                             <td class="text-center">
                                 <a class="link link" href="javascript:void(0)">
