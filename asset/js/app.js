@@ -165,8 +165,24 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         } else {
             var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history").child(idSubject));
             examHistory.$loaded().then(function () {
-                if (examHistory) {
-                    console.log(examHistory.find(item => item.status == "Chưa hoàn thành"));
+                var isUnfinished = examHistory.find(item => item.status == "Chưa hoàn thành");
+                if (isUnfinished) {
+                    Swal.fire({
+                        title: 'Bạn đã sẵn sàng?',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        text: "Thời gian làm bài: 15 phút",
+                        icon: 'warning',
+                        heightAuto: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Có! Bắt đầu thi',
+                        cancelButtonText: 'Huỷ bỏ',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
+                        }
+                    });
                 } else {
                     Swal.fire({
                         title: 'Bạn đã sẵn sàng?',
@@ -183,7 +199,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
                         if (result.isConfirmed) {
                             $window.location.href = '#!quiz?id=' + idSubject + '&name=' + nameSubject;
                         }
-                    })
+                    });
                 }
             });
         }
