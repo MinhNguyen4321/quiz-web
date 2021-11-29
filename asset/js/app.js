@@ -162,7 +162,7 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         } else {
             Swal.fire({
                 title: 'Bạn đã sẵn sàng?',
-                background: 'rgba(255, 255, 255, 0.95)',
+                background: 'rgba(255, 255, 255, 0.9)',
                 text: "Thời gian làm bài: 15 phút",
                 icon: 'warning',
                 heightAuto: false,
@@ -261,16 +261,9 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     totalScore += $scope.results[i].mark;
                 }
                 $scope.score = totalScore;
-                console.log($scope.score);
-                // examHistoryRef.child(examHistory[0].$id).update({
-                //     "status": "Kết thúc",
-                //     "timer": "10 phút",
-                //     "results": JSON.stringify($scope.results),
-                //     "score": totalScore
-                // });
                 Swal.fire({
                     heightAuto: false,
-                    background: 'rgba(255, 255, 255, 0.85)',
+                    background: 'rgba(255, 255, 255, 0.80)',
                     title: 'Kết thúc bài thi?',
                     text: 'Kết quả sẽ được lưu và không thể hoàn tác',
                     icon: 'warning',
@@ -282,21 +275,51 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 }).then((result) => {
                     if (result.isConfirmed) {
                         showResult();
+                        $interval.cancel(timer);
+
+                        examHistoryRef.child(examHistory[0].$id).update({
+                            "status": "Kết thúc",
+                            "timer": "10 phút",
+                            "results": JSON.stringify($scope.results),
+                            "score": totalScore
+                        });                        
                     }
                 })
-                
+
             }
 
-            var stop = $interval(function () {
+            var showResult = function () {
+                Swal.fire({
+                    heightAuto: false,
+                    background: 'rgba(255, 255, 255, 0.80)',
+                    title: "Số điểm của bạn là " + $scope.score,
+                    icon: 'success',
+                    iconHtml : '<i class="fa-solid fa-check"></i>',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Chi tiết kết quả',
+                    cancelButtonText: 'Về trang chủ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $location.path('#!result?id=' + $scope.idSubject + '&name=' + $scope.nameSubject);
+                    } 
+                    if (!result.isConfirmed) {
+                        window.location.href = '#!home';
+                    }
+                })
+            }
+
+            var timer = $interval(function () {
                 // Dừng thời gian khi thoát khỏi trang
                 if ($location.path() != "/quiz") {
-                    $interval.cancel(stop);
+                    $interval.cancel(timer);
                 }
                 // Cập nhật thời gian mỗi một giây
                 $scope.timer--;
                 if ($scope.timer == 0) {
                     $scope.timer = 900;
-                    $interval.cancel(stop);
+                    $interval.cancel(timer);
                     showResult();
                 }
                 // Lưu thời gian vào bảng exam-history
@@ -305,26 +328,6 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 });
             }, 1000);
         });
-
-        var showResult = function () {
-            Swal.fire({
-                heightAuto: false,
-                background: 'rgba(255, 255, 255, 0.85)',
-                title: '<strong>' + $scope.nameSubject + '</strong>',
-                icon: 'info',
-                html:
-                    'Số điểm của bạn là ' + $scope.score,
-                showCloseButton: true,
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText:
-                    '<i class="fa fa-thumbs-up"></i> Great!',
-                confirmButtonAriaLabel: 'Thumbs up, great!',
-                cancelButtonText:
-                    '<i class="fa fa-thumbs-down"></i>',
-                cancelButtonAriaLabel: 'Thumbs down'
-            })
-        }
     });
 
     $scope.firstQuiz = function () {
