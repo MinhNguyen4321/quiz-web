@@ -19,16 +19,15 @@
         </div>
     </div>
 </div> -->
-<div class="conllapse-subjects">
-    <div class="card bg-light bg-opacity-50" style="max-height: 563px;">
-        <div class="card-header text-uppercase fw-bold">
-            <i class="fa-solid fa-book me-2"></i> Danh sách môn học
-        </div>
-        <ul class="list-group list-group-flush overflow-auto">
-            <a href="#!quiz?id={{s.Id}}&name={{s.Name}}" class="list-group-item list-group-item-action py-2"
-                ng-repeat="s in subjects|orderBy:'Name'">
-                {{s.Name}}
-            </a>
-        </ul>
+
+<div class="conllapse-subjects card bg-light bg-opacity-50" style="max-height: 579.6px;">
+    <div class="card-header text-uppercase fw-bold">
+        <i class="fa-solid fa-book me-2"></i> Danh sách môn học
     </div>
+    <ul class="list-group list-group-flush overflow-auto">
+        <a href="#!quiz?id={{s.Id}}&name={{s.Name}}" class="list-group-item list-group-item-action py-2"
+            ng-repeat="s in subjects|orderBy:'Name'">
+            {{s.Name}}
+        </a>
+    </ul>
 </div>

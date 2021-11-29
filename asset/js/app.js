@@ -55,7 +55,7 @@ app.config(function ($routeProvider) {
         })
         .when('/result', {
             templateUrl: 'views/result.html',
-            controller: 'quizCtrl'
+            controller: 'resultCtrl'
         })
         .otherwise({
             redirectTo: '/'
@@ -513,6 +513,10 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
                 }
             });
     }
+});
+
+app.controller('resultCtrl', function ($scope) {
+
 });
 
 app.directive("compareTo", function () {
