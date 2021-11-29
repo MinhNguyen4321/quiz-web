@@ -220,7 +220,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
 
     quizzes.$loaded().then(function (quizzesData) {
         var currentUserRef = studentsRef.child($scope.currentUser.$id);
-        var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
+        var examHistoryRef = currentUserRef.child("exam_history").child($scope.idSubject);
 
         $firebaseArray(examHistoryRef).$loaded().then(function (examHistoryData) {
             var examHistory = examHistoryData.find(item => item.status == "Đang thi");
@@ -321,7 +321,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     $interval.cancel(timer);
                     showResult();
                 }
-                // Lưu thời gian vào bảng exam-history
+                // Lưu thời gian vào bảng exam_history
                 examHistoryRef.child(examHistory.$id).update({
                     timer: $scope.timer
                 });
