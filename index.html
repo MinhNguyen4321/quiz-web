@@ -28,7 +28,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#!" ng-click="firstSubject()"><i class="me-1 fa-solid fa-home"></i> Trang chủ</a>
+                        <a class="nav-link" href="#!" ng-click="firstSubject()"><i class="me-1 fa-solid fa-home"></i>
+                            Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#!introduce"><i class="me-1 fa-solid fa-circle-info"></i> Giới
@@ -61,19 +62,25 @@
                                 <li><a class="dropdown-item" href="#!signup">Đăng ký</a></li>
                                 <li><a class="dropdown-item" href="#!signin">Đăng nhập</a></li>
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#forgotPassModal" >Quên mật khẩu</a></li>
+                                        data-bs-target="#forgotPassModal">Quên mật khẩu</a></li>
                             </div>
                             <div ng-hide="currentUser == null">
-                                <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">
-                                    Đăng xuất
-                                </a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                <li>
+                                    <a class="dropdown-item" href="#!userinfo">
+                                        Trang cá nhân
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                         data-bs-target="#changePassModal">
-                                    Đổi mật khẩu
-                                </a></li>
-                                <li><a class="dropdown-item" href="#!userinfo">
-                                    Trang cá nhân
-                                </a></li>
+                                        Đổi mật khẩu
+                                    </a>
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" ng-click="logout()">
+                                        Đăng xuất
+                                    </a>
+                                </li>
                             </div>
                         </ul>
                     </li>
