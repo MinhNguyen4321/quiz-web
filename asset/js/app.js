@@ -165,12 +165,12 @@ app.controller("homeCtrl", function ($scope, $location, $window, datetime, $fire
         } else {
             var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history").child(idSubject));
             examHistory.$loaded().then(function () {
-                var isUnfinished = examHistory.find(item => item.status == "Chưa hoàn thành");
-                if (isUnfinished) {
+                var unfinishedExam = examHistory.find(item => item.status == "Chưa hoàn thành");
+                if (unfinishedExam) {
                     Swal.fire({
-                        title: 'Bạn đã sẵn sàng?',
+                        title: 'Tiếp tục thi?',
                         background: 'rgba(255, 255, 255, 0.9)',
-                        text: "Thời gian làm bài: 15 phút",
+                        text: "Thời gian làm bài còn: 15 phút",
                         icon: 'warning',
                         heightAuto: false,
                         showCancelButton: true,
