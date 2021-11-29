@@ -222,16 +222,13 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
         var currentUserRef = studentsRef.child($scope.currentUser.$id);
         var examHistoryRef = currentUserRef.child("exam-history").child($scope.idSubject);
 
-        $firebaseArray(examHistoryRef).$loaded().then(function (examHistory) {
-            examHistory.sort((a, b) => b.time - a.time);
-            if (examHistory[0]) {
-                if (examHistory[0].status == "Đang thi") {
-                    $scope.quizzes = JSON.parse(examHistory[0].quiz)
-                    $scope.timer = examHistory[0].timer;
-                }
-
-                if (examHistory[0].results) {
-                    $scope.results = JSON.parse(examHistory[0].results);
+        $firebaseArray(examHistoryRef).$loaded().then(function (examHistoryData) {
+            var examHistory = examHistoryData.find(item => item.status == "Đang thi");
+            if (examHistory) {
+                $scope.quizzes = JSON.parse(examHistory.quiz)
+                $scope.timer = examHistory.timer;
+                if (examHistory.results) {
+                    $scope.results = JSON.parse(examHistory.results);
                 } else {
                     $scope.results = [];
                 }
@@ -241,9 +238,11 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 examHistoryRef.child(now.getTime()).update({
                     "start_time": now.getTime(),
                     "status": "Đang thi",
-                    "quiz": JSON.stringify($scope.quizzes)
+                    "quiz": JSON.stringify($scope.quizzes),
+                    "timer" : 900
                 }).then(function () {
                     examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
+                    examHistory = examHistoryData.find(item => item.status == "Đang thi");
                 });
             }
 
@@ -252,7 +251,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     answerId: answerId,
                     mark: answerId == correctAnswerId ? 1 : 0
                 };
-                examHistoryRef.child(examHistory[0].$id).child("results").set(JSON.stringify($scope.results));
+                examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
             }
 
             $scope.stopQuiz = function () {
@@ -277,7 +276,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                         showResult();
                         $interval.cancel(timer);
 
-                        examHistoryRef.child(examHistory[0].$id).update({
+                        examHistoryRef.child(examHistory.$id).update({
                             "status": "Kết thúc",
                             "timer": "10 phút",
                             "results": JSON.stringify($scope.results),
@@ -323,7 +322,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     showResult();
                 }
                 // Lưu thời gian vào bảng exam-history
-                examHistoryRef.child(examHistory[0].$id).update({
+                examHistoryRef.child(examHistory.$id).update({
                     timer: $scope.timer
                 });
             }, 1000);
