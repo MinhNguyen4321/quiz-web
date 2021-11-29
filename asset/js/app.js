@@ -563,6 +563,10 @@ app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $fir
         examDetail.$loaded().then(function (examDetailData) {
             $scope.examDetail = examDetailData;
             $scope.quizDetail = JSON.parse($scope.examDetail.$getRecord("quiz").$value);
+            $scope.resultDetail = JSON.parse($scope.examDetail.$getRecord("results").$value);
+            for (let i = 0; i < $scope.quizDetail.length; i++) {
+                $scope.quizDetail[i].results = $scope.resultDetail[i];
+            }
             console.log($scope.quizDetail);
         });
     });

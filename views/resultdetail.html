@@ -20,11 +20,11 @@
                             <div class="accordion-body">
                                 <form>
                                     <div class="form-check mb-3" ng-repeat="answer in quiz.Answers">
-                                        <input class="form-check-input" type="radio" name="answer" id="{{answer.Id}}" ng-model="results[indexQuiz - 1].answerId"
-                                            ng-click="checkAnswer(indexQuiz, answer.Id, quiz.AnswerId, quiz.Marks)" ng-checked="results[indexQuiz - 1].answerId == answer.Id" value="{{answer.Id}}">
-                                        <label class="form-check-label" for="{{answer.Id}}">
-                                            {{answer.Text}}
-                                        </label>
+                                        <input class="form-check-input" type="radio" name="answer" id="{{answer.Id}}"
+                                            ng-checked="quiz.results.answerId == answer.Id" 
+                                            ng-disabled="quiz.results.answerId != answer.Id" value="{{answer.Id}}">
+                                        <!--  class="form-check-label" for="{{answer.Id}}" -->
+                                        <label ng-style="{'color' : (quiz.AnswerId == answer.Id) ? 'green' : 'red'}">{{answer.Text}}</label>
                                     </div>
                                 </form>
                             </div>
