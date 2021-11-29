@@ -53,6 +53,10 @@ app.config(function ($routeProvider) {
             templateUrl: 'views/quiz.html',
             controller: 'quizCtrl'
         })
+        .when('/result', {
+            templateUrl: 'views/result.html',
+            controller: 'quizCtrl'
+        })
         .otherwise({
             redirectTo: '/'
         });
