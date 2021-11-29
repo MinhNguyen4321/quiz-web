@@ -273,29 +273,30 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     "start_time": moment(now.getTime()).format('DD/MM/YYYY HH:mm:ss'),
                     "status": "Chưa hoàn thành",
                     "quiz": JSON.stringify($scope.quizzes),
-                    "timer": 900
+                    "timer": 900,
+                    "total_question" : $scope.quizzes.length,
                 }).then(function () {
                     examHistoryRef.child(now.getTime()).child("results").set(JSON.stringify($scope.results));
                     examHistory = examHistoryData.find(item => item.status == "Chưa hoàn thành");
                 });
             }
 
-            $scope.checkAnswer = function (index, answerId, correctAnswerId) {
+            var correctAnswered = [];
+            $scope.checkAnswer = function (index, answerId, correctAnswerId, correctAnswerMark) {               
                 $scope.results[index - 1] = {
                     answerId: answerId,
-                    mark: answerId == correctAnswerId ? 1 : 0
+                    mark: answerId == correctAnswerId ? correctAnswerMark : 0
                 };
+
+                correctAnswered[index - 1] = answerId == correctAnswerId;
+                
                 examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
+                examHistoryRef.child(examHistory.$id).child("total_correct_answered").set(correctAnswered.filter(item => item).length);
             }
 
-            
             $scope.stopQuiz = function () {
-                var totalScore = 0;
-                var totalQuestion = $scope.quizzes.length;
-                var totalAnswered = 0;
                 for (var i = 0; i < $scope.results.length; i++) {
                     if ($scope.results[i]) {
-                        totalAnswered++;
                         totalScore += $scope.results[i].mark;
                     }
                 }
@@ -322,8 +323,6 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                             "timer": 900,
                             "results": JSON.stringify($scope.results),
                             "score": totalScore,
-                            "total_question" : totalQuestion,
-                            "total_answered" : totalAnswered
                         });
                     }
                 })
