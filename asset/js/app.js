@@ -515,8 +515,16 @@ app.controller('signInCtrl', function ($scope, Auth, $location) {
     }
 });
 
-app.controller('resultCtrl', function ($scope) {
-
+app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
+    var studentRef = firebase.database().ref("students");
+    
+    // var examHistory = $firebaseArray(studentRef.child(Auth.$getAuth().uid).child("exam_history"));
+    $scope.subjects.$loaded().then(function () {
+        console.log($scope.currentUser);
+        let firstSubject = $scope.subjects.sort((a, b) => a.Name.localeCompare(b.Name))[0];
+        $scope.id = !$location.search().id ? firstSubject.$id : $location.search().id;
+        $scope.name = !$location.search().name ? firstSubject.Name : $location.search().name;
+    });
 });
 
 app.directive("compareTo", function () {

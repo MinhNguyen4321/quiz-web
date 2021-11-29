@@ -2,7 +2,37 @@
     <div class="row h-100">
         <div class="col-md-9">
             <div class="bg-light bg-opacity-50 rounded p-3 p-md-4 d-flex flex-column h-100">
-                
+                <div class="d-md-flex justify-content-between align-items-center mb-3 pb-3"
+                    style="border-bottom: 1px solid #ccc;">
+                    <h3 class="m-0 text-uppercase">{{nameSubject}}</h3>
+                    <span class="fw-bolder ">{{currentUser.email}}</span>
+                </div>
+                <table id="exam-history-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="fw-bold text-center" scope="col">STT</th>
+                            <th class="fw-bold text-center" scope="col">Thời gian</th>
+                            <th class="fw-bold text-center" scope="col">Số câu hỏi</th>
+                            <th class="fw-bold text-center" scope="col">Điểm số</th>
+                            <th class="fw-bold text-center" scope="col">Tỉ lệ trả lời đúng</th>
+                            <th class="fw-bold text-center" scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">Mark</td>
+                            <td class="text-center">Mark</td>
+                            <td class="text-center">Otto</td>
+                            <td class="text-center">@mdo</td>
+                            <td class="text-center">@mdo</td>
+                            <td class="text-center">
+                                <a class="link link" href="javascript:void(0)">
+                                    Hiện chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-md-3">
