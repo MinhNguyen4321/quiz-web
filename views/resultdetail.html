@@ -24,7 +24,9 @@
                                             ng-checked="quiz.results.answerId == answer.Id" 
                                             ng-disabled="quiz.results.answerId != answer.Id" value="{{answer.Id}}">
                                         <!--  class="form-check-label" for="{{answer.Id}}" -->
-                                        <label ng-style="{'color' : (quiz.AnswerId == answer.Id) ? 'green' : 'red'}">{{answer.Text}}</label>
+                                        <label ng-style="{'color' : (quiz.AnswerId == answer.Id) ? 'green' : 'red', 'font-weight' : '500'}">
+                                            {{answer.Text}}
+                                        </label>
                                     </div>
                                 </form>
                             </div>
