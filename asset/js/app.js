@@ -17,6 +17,9 @@ app.config(function ($routeProvider) {
         .when('/', {
             templateUrl: 'views/listsubjects.html',
         })
+        .when('/welcome', {
+            templateUrl: 'views/welcome.html',
+        })
         .when('/introduce', {
             templateUrl: 'views/introduce.html'
         })
@@ -85,7 +88,6 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
             $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
             $rootScope.currentUser.email = Auth.$getAuth().email;
             $rootScope.currentUser.password = Cookies.get('password');
-            console.log($rootScope.currentUser.password);
         });
     }, 2000);
 
@@ -93,7 +95,7 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
         Auth.$signOut();
         $rootScope.currentUser = null;
 
-        $location.path("/");
+        $location.path("/welcome");
         toastr.success("Đăng xuất thành công!");
     }
 
@@ -169,10 +171,9 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
 
     $scope.pageSize = 6;
     $scope.start = 0;
-    $scope.showWithPath = function (path) {
-        return $location.path() == path;
+    $scope.isPath = function (... path) {
+        return path.indexOf($location.path()) > -1;
     };
-
 
     $scope.openQuiz = function (idSubject, nameSubject) {
         if ($rootScope.currentUser == null) {

@@ -194,6 +194,46 @@ pre {
     opacity: 0.9;
 }
 
+.separator {
+    width: 10px;
+    height: 10px;
+    margin: 20px auto;
+    background: #fff;
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.separator:before {
+    position: absolute;
+    right: 5%;
+    bottom: 4px;
+    height: 1px;
+    width: 80px;
+    background: #eee;
+    content: "";
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.separator:after {
+    position: absolute;
+    left: 5%;
+    bottom: 4px;
+    height: 1px;
+    width: 80px;
+    background: #eee;
+    content: "";
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.overlay {
+    background-color: rgba(69, 90, 100, 0.95);
+    width: 100%;
+    height: 100%;
+}
+
 .zoom {
     transition: transform .2s;
     /* Animation */
@@ -363,6 +403,27 @@ main {
 #profile span {
     font-style: oblique;
     color: #CA5010;
+}
+
+#welcome {
+    background-image: url('../img/welcome.gif');
+    background-size: 100% 100%;
+    text-shadow: 0px 0px 1px #fff;
+    color: #fff;
+}
+
+#welcome .btn-group {
+    min-width: 300px;
+}
+
+#welcome .btn:hover {
+    color : #000 !important;
+}
+
+#welcome .title {
+    font-weight: bolder;
+    font-size: 5rem;
+    
 }
 
 .subject-item .card {

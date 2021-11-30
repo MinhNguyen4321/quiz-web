@@ -19,7 +19,7 @@
 <body ng-app="myApp" ng-controller="homeCtrl">
     <nav class="navbar navbar-expand-lg navbar-light py-2">
         <div class="container-fluid position-relative">
-            <a class="navbar-brand" href="#!" ng-click="firstSubject()">Online Training</a>
+            <a class="navbar-brand" href="#!listsubjects" ng-click="firstSubject()">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#!" ng-click="firstSubject()"><i class="me-1 fa-solid fa-home"></i>
+                        <a class="nav-link" href="#!listsubjects" ng-click="firstSubject()"><i class="me-1 fa-solid fa-home"></i>
                             Trang chủ
                         </a>
                     </li>
@@ -48,7 +48,7 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" ng-show="showWithPath('/')" ng-change="firstSubject()"
+                    <input class="form-control me-2" ng-show="isPath('/listsubjects')" ng-change="firstSubject()"
                         onclick="this.select()" ng-model="keyword" type="search" placeholder="Tìm kiếm môn học"
                         aria-label="Search">
                 </form>
