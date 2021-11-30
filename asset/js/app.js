@@ -83,13 +83,15 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
     var studentRef = ref.child("students");
     $rootScope.students = $firebaseArray(studentRef);
 
-    setTimeout(() => {
-        $rootScope.students.$loaded().then(function () {
-            $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
-            $rootScope.currentUser.email = Auth.$getAuth().email;
-            $rootScope.currentUser.password = Cookies.get('password');
-        });
-    }, 2000);
+
+    $rootScope.students.$loaded().then(function () {
+        $location.path("/welcome");
+        $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
+        $rootScope.currentUser.email = Auth.$getAuth().email;
+        $rootScope.currentUser.password = Cookies.get('password');
+        $location.path("/");
+    });
+
 
     $scope.logout = function () {
         Auth.$signOut();
@@ -171,7 +173,7 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
 
     $scope.pageSize = 6;
     $scope.start = 0;
-    $scope.isPath = function (... path) {
+    $scope.isPath = function (...path) {
         return path.indexOf($location.path()) > -1;
     };
 
