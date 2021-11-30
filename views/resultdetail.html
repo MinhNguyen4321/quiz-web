@@ -12,8 +12,9 @@
                         ng-repeat="quiz in quizDetail">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne{{quiz.Id}}" style="background-color: transparent; font-weight: 500;">
-                                {{quiz.Text}}
+                                data-bs-target="#collapseOne{{quiz.Id}}" style="background-color: transparent; font-weight: 500;"
+                                ng-style="{'color' : (quiz.results.answerId != quiz.AnswerId) ? 'red' : 'green'}">
+                                {{$index + 1}}. {{quiz.Text}}
                             </button>
                         </h2>
                         <div id="collapseOne{{quiz.Id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
