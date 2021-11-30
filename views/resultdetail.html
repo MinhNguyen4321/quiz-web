@@ -11,8 +11,8 @@
                     <div class="accordion-item" style="background-color: transparent;"
                         ng-repeat="quiz in quizDetail">
                         <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne{{quiz.Id}}" style="background-color: transparent;">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne{{quiz.Id}}" style="background-color: transparent; font-weight: 500;">
                                 {{quiz.Text}}
                             </button>
                         </h2>
@@ -24,8 +24,10 @@
                                             ng-checked="quiz.results.answerId == answer.Id" 
                                             ng-disabled="quiz.results.answerId != answer.Id" value="{{answer.Id}}">
                                         <!--  class="form-check-label" for="{{answer.Id}}" -->
-                                        <label ng-style="{'color' : (quiz.AnswerId == answer.Id) ? 'green' : 'red', 'font-weight' : '500'}">
-                                            {{answer.Text}}
+                                        <label ng-style="{'color' : (quiz.AnswerId == answer.Id) ? 'green' : '', 'font-weight' : '500'}">
+                                            {{answer.Text}} 
+                                            <i class="fa-solid fa-check" ng-show="quiz.AnswerId == quiz.results.answerId && quiz.results.answerId == answer.Id || quiz.AnswerId == answer.Id"></i> 
+                                            <i class="fa-solid fa-xmark" ng-show="quiz.AnswerId != quiz.results.answerId && quiz.results.answerId == answer.Id" ng-style="{'color' : (quiz.AnswerId == answer.Id) ? '' : 'red'}"></i>
                                         </label>
                                     </div>
                                 </form>
