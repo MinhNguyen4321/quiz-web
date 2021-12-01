@@ -1,7 +1,7 @@
 <div class="container-fluid d-flex align-items-center h-100">
-    <div class="subjects-list w-100 p-4">
+    <div id="subjects-list" class="w-100 p-4">
         <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 mb-4">
-            <div class="subject-item col zoom" ng-click="openQuiz(s.Id, s.Name)"
+            <div class="subject-item col zoom animate__animated animate__zoomIn animate__faster" ng-click="openQuiz(s.Id, s.Name)"
                 ng-repeat="s in subjects|orderBy:'Name'|filter:keyword:false|limitTo:pageSize:start">
                 <div class="card h-100 border-0 position-relative shadow p-3 m-0">
                     <div class="row g-0 h-100">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <nav>
-            <ul class="pagination text-center my-0 mx-auto">
+            <ul class="pagination text-center my-0 mx-auto animate__animated animate__fadeInUp animate__faster">
                 <li class="page-item" ng-click="firstSubject()"><a class="page-link" href="javascript:void(0)">
                         <i class="fa-solid fa-backward-step"></i>
                     </a></li>

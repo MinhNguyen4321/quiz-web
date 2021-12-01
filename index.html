@@ -17,7 +17,7 @@
 </head>
 
 <body ng-app="myApp" ng-controller="homeCtrl">
-    <nav class="navbar navbar-expand-lg navbar-light py-2" ng-hide="isPath('/welcome')">
+    <nav class="navbar navbar-expand-lg navbar-light py-2 animate__animated animate__fadeInDownBig" ng-hide="isPath('/welcome')">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="#!listsubjects" ng-click="firstSubject()">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -48,7 +48,7 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" ng-show="isPath('/listsubjects')" ng-change="firstSubject()"
+                    <input class="form-control me-2" ng-show="isPath('/')" ng-change="firstSubject()"
                         onclick="this.select()" ng-model="keyword" type="search" placeholder="Tìm kiếm môn học"
                         aria-label="Search">
                 </form>
@@ -99,7 +99,7 @@
         <div class="view h-100" ng-view></div>
     </main>
     <footer ng-hide="isPath('/welcome')">
-        <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center my-3 position-relative">
+        <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center my-3 position-relative animate__animated animate__fadeInUpBig">
             <div class="d-flex align-items-center">
                 <span class="content">&copy; 2021 FPT Polytechnic</span>
             </div>
