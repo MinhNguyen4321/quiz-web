@@ -194,6 +194,8 @@ pre {
     opacity: 0.9;
 }
 
+.pointer {cursor: pointer;}
+
 .separator {
     width: 10px;
     height: 10px;

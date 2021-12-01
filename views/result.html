@@ -11,9 +11,15 @@
                     <thead>
                         <tr>
                             <th class="fw-bold text-center" scope="col">STT</th>
-                            <th class="fw-bold text-center" scope="col">Thời gian</th>
-                            <th class="fw-bold text-center" scope="col">Số câu đã trả lời</th>
-                            <th class="fw-bold text-center" scope="col">Điểm</th>
+                            <th class="fw-bold text-center pointer" scope="col" ng-click="sortBy('start_time')">
+                                Thời gian <i class="ms-1 fa-solid fa-sort"></i>
+                            </th>
+                            <th class="fw-bold text-center pointer" scope="col" ng-click="sortBy('total_answered')">
+                                Số câu đã trả lời <i class="ms-1 fa-solid fa-sort"></i>
+                            </th>
+                            <th class="fw-bold text-center pointer" scope="col" ng-click="sortBy('score')">
+                                Điểm <i class="ms-1 fa-solid fa-sort"></i>
+                            </th>
                             <th class="fw-bold text-center" scope="col">Quiz đạt</th>
                             <th class="fw-bold text-center" scope="col">Kết quả</th>
                             <th class="fw-bold text-center" scope="col">Trạng thái</th>
@@ -21,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="ex in examHistory">
+                        <tr ng-repeat="ex in examHistory|orderBy:[sort]">
                             <td class="text-center">{{$index + 1}}</td>
                             <td class="text-center">{{ex.start_time | date : 'dd/MM/yyyy HH:mm:ss'}}</td>
                             <td class="text-center">{{ex.total_answered}}</td>
