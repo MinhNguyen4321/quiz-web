@@ -17,7 +17,7 @@
 </head>
 
 <body ng-app="myApp" ng-controller="homeCtrl">
-    <nav class="navbar navbar-expand-lg navbar-light py-2 animate__animated animate__fadeInDownBig animate__faster" ng-hide="isPath('/welcome')">
+    <nav class="navbar navbar-expand-lg navbar-light py-2" ng-hide="isPath('/welcome')">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="#!listsubjects" ng-click="firstSubject()">Online Training</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -98,7 +98,7 @@
     <main>
         <div class="view h-100" ng-view></div>
     </main>
-    <footer ng-hide="isPath('/welcome')" class="animate__animated animate__fadeInUpBig animate__faster">
+    <footer ng-hide="isPath('/welcome')">
         <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center my-3 position-relative">
             <div class="d-flex align-items-center">
                 <span class="content">&copy; 2021 FPT Polytechnic</span>
