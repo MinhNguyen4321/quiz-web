@@ -85,11 +85,13 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
 
 
     $rootScope.students.$loaded().then(function () {
-        $location.path("/welcome");
-        $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
-        $rootScope.currentUser.email = Auth.$getAuth().email;
-        $rootScope.currentUser.password = Cookies.get('password');
-        $location.path("/");
+        if (Auth.$getAuth()) {
+            $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
+            $rootScope.currentUser.email = Auth.$getAuth().email;
+            $rootScope.currentUser.password = Cookies.get('password');
+        } else {
+            $location.path('/welcome');
+        }
     });
 
 
