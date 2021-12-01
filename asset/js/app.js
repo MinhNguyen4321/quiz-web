@@ -68,13 +68,11 @@ app.config(function ($routeProvider) {
             redirectTo: '/'
         });
 });
-
 app.factory("Auth", ["$firebaseAuth",
     function ($firebaseAuth) {
         return $firebaseAuth();
     }
 ]);
-
 app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, datetime, $firebaseArray, Auth) {
     var parser = datetime("dd/MM/yyyy");
     var ref = firebase.database().ref();
@@ -283,7 +281,8 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                 $scope.quizzes = getRandomArray(quizzesData, 10);
                 // Lưu thông tin vào database
                 examHistoryRef.child(now.getTime()).update({
-                    "start_time": moment(now.getTime()).format('DD/MM/YYYY HH:mm:ss'),
+                    // "start_time": moment(now.getTime()).format('DD/MM/YYYY HH:mm:ss'),
+                    "start_time": now.getTime(),
                     "status": "Chưa hoàn thành",
                     "quiz": JSON.stringify($scope.quizzes),
                     "timer": 900,
