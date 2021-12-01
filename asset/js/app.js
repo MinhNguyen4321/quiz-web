@@ -302,7 +302,7 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
                     mark: answerId == correctAnswerId ? correctAnswerMark : 0
                 };
 
-                correctAnswered[index - 1] = answerId == correctAnswerId;
+                correctAnswered[index - 1] = (answerId == correctAnswerId);
                 answered[index - 1] = true;
 
                 examHistoryRef.child(examHistory.$id).child("results").set(JSON.stringify($scope.results));
@@ -541,6 +541,17 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
     }
 });
 app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
+    $scope.sortBy = function (field) {
+        if($scope.sort) {
+            var letter = $scope.sort.charAt(0);
+        }
+        if (letter == '-') {
+            $scope.sort = field;
+        } else {
+            $scope.sort = '-' + field;
+        }
+    }
+
     $scope.examHistory = [];
     $rootScope.students.$loaded().then(function () {
         let firstSubject = $rootScope.subjects.sort((a, b) => a.Name.localeCompare(b.Name))[0];
