@@ -395,20 +395,12 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
             $scope.start -= $scope.pageSize;
             $scope.indexQuiz -= 1;
         }
-        // else {
-        //     $scope.start = $scope.quizzes.length - $scope.pageSize;
-        //     $scope.indexQuiz = $scope.quizzes.length;
-        // }
     }
     $scope.nextQuiz = function () {
         if ($scope.start < $scope.quizzes.length - $scope.pageSize) {
             $scope.start += $scope.pageSize;
             $scope.indexQuiz += 1;
         }
-        // else {
-        //     $scope.start = 0;
-        //     $scope.indexQuiz = 1;
-        // }
     }
     $scope.lastQuiz = function () {
         var soTrang = Math.ceil($scope.quizzes.length / $scope.pageSize);
