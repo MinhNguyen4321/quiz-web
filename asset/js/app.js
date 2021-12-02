@@ -81,7 +81,6 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
     var studentRef = ref.child("students");
     $rootScope.students = $firebaseArray(studentRef);
 
-
     $rootScope.students.$loaded().then(function () {
         if (Auth.$getAuth()) {
             $rootScope.currentUser = $rootScope.students.$getRecord(Auth.$getAuth().uid);
@@ -91,7 +90,6 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
             $location.path('/welcome');
         }
     });
-
 
     $scope.logout = function () {
         Auth.$signOut();
