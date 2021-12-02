@@ -240,9 +240,17 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
             $scope.start += $scope.pageSize;
         }
     }
+    $scope.courseNavigation = function (keyEvent) {
+        if (keyEvent.which === 37) {
+            $scope.prevSubject();
+        }
+        else if (keyEvent.which === 39) {
+            $scope.nextSubject();
+        }
+    };
 }
 );
-app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $interval, $location, Auth) {
+app.controller('quizCtrl', function ($scope, $rootScope, $routeParams, $firebaseArray, $interval, $location, Auth) {
     $scope.idSubject = $routeParams.id;
     $scope.nameSubject = $routeParams.name;
 
@@ -407,6 +415,14 @@ app.controller('quizCtrl', function ($scope, $routeParams, $firebaseArray, $inte
         $scope.start = (soTrang - 1) * $scope.pageSize;
         $scope.indexQuiz = $scope.quizzes.length;
     }
+    $rootScope.quizNavigation = function (keyEvent) {
+        if (keyEvent.which === 37) {
+            $scope.prevQuiz();
+        }
+        else if (keyEvent.which === 39) {
+            $scope.nextQuiz();
+        }
+    };
 }
 );
 app.controller('signUpCtrl', function ($scope, $rootScope, datetime, $location, Auth) {
@@ -533,7 +549,7 @@ app.controller('signInCtrl', function ($scope, $rootScope, Auth, $location) {
 });
 app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
     $scope.sortBy = function (field) {
-        if($scope.sort) {
+        if ($scope.sort) {
             var letter = $scope.sort.charAt(0);
         }
         if (letter == '-') {

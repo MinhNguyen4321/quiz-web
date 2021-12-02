@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="asset/css/style.css">
 </head>
 
-<body ng-app="myApp" ng-controller="homeCtrl">
+<body ng-app="myApp" ng-controller="homeCtrl" ng-keydown="courseNavigation($event); quizNavigation($event);">
     <nav class="navbar navbar-expand-lg navbar-light py-2" ng-hide="isPath('/welcome')">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="#!listsubjects" ng-click="firstSubject()">Online Training</a>
