@@ -73,7 +73,7 @@ app.factory("Auth", ["$firebaseAuth",
         return $firebaseAuth();
     }
 ]);
-app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, datetime, $firebaseArray, Auth) {
+app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, datetime, $firebaseArray, Auth, $timeout) {
     var parser = datetime("dd/MM/yyyy");
     var ref = firebase.database().ref();
 
