@@ -562,9 +562,7 @@ app.controller('resultCtrl', function ($scope, $rootScope, $location, $firebaseA
 
         examHistory.$loaded().then(function (examHistoryData) {
             $scope.examHistory = examHistoryData;
-            console.log($scope.examHistory);
         });
-
     });
 });
 app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $firebaseArray, Auth) {
@@ -584,7 +582,6 @@ app.controller('resultDetailCtrl', function ($scope, $rootScope, $location, $fir
             for (let i = 0; i < $scope.quizDetail.length; i++) {
                 $scope.quizDetail[i].results = $scope.resultDetail[i];
             }
-            console.log($scope.quizDetail);
         });
     });
 });
