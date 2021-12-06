@@ -392,6 +392,11 @@ app.controller('quizCtrl', function ($scope, $rootScope, $routeParams, $firebase
         });
     });
 
+    $scope.chooseQuiz = function (index) {
+        $scope.start = index;
+        $scope.indexQuiz = index + 1;
+    }
+
     $scope.firstQuiz = function () {
         $scope.start = 0;
         $scope.indexQuiz = 1;
