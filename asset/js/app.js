@@ -246,8 +246,7 @@ app.controller("homeCtrl", function ($scope, $rootScope, $location, $window, dat
             $scope.nextSubject();
         }
     };
-}
-);
+});
 app.controller('quizCtrl', function ($scope, $rootScope, $routeParams, $firebaseArray, $interval, $location, Auth) {
     $scope.idSubject = $routeParams.id;
     $scope.nameSubject = $routeParams.name;
